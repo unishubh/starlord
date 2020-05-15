@@ -7,8 +7,5 @@ module.exports = (sequelize, DataTypes) => {
     }, 
     id:DataTypes.STRING 
     });
-  email_mapping.associate = function(models) {
-    // associations can be defined here
-  };
   return email_mapping;
 };

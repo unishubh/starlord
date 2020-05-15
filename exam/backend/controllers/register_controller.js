@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 async function hash_password( password ){
-    return await bcrypt.hash( password , process.env.SALT_ROUNDS ) ;
+    return await bcrypt.hash( password , 10 ) ;
 }
 async function validate_password( plain_password , hashed_password ){
     return  await bcrypt.compare( plain_password , hash_password ) ;
@@ -22,7 +22,7 @@ function validate_fields ( req ){
     const found_entry = db.email_mapping.findByPk(email).then( (email_mapping) =>{
         throw "User already exists" ;
     }).catch( (err) =>{
-        console.log('User does not exist ') ;
+        console.log(' Valid credentials OK') ;
     }) ;
 }
 exports.add_user = async( req , res , next ) => {
@@ -30,9 +30,9 @@ exports.add_user = async( req , res , next ) => {
         const t_name = req.body.name ;
         const t_email = req.body.email ;
         const t_role = req.body.role ;
-        const t_hashed_password = hash_password( req.body.password ) ;
+        const t_hashed_password = await hash_password( req.body.password ) ;
         validate_fields( req ) ;
-        const newUser = db.user.build({name:t_name , email:t_email , hashed_password:t_hashed_password , role:t_role }) ;
+        const newUser = db.user.build({name:t_name , email:t_email , password:t_hashed_password , role:t_role }) ;
         await newUser.save() ;
         const accessToken = jwt.sign({userId:newUser._id} , process.env.JWT_SECRET , {
             expiresIn : "1d"
@@ -46,7 +46,7 @@ exports.add_user = async( req , res , next ) => {
             accessToken
         })
     }catch(err){
-        console.log( 'Unable to create User' ) ;
+        console.log( '401 ' + err  ) ;
         // next can redirect to home page
         next(err) ;
     }

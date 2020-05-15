@@ -13,16 +13,15 @@ db.sequelize.sync({force:false}).then( () =>{
   console.log('Error' + err ) ;
 }) ;
 
-// testing addition of fields
-// const jane = db.user.create({name: 'Jane', email: 'Doelana' , password: 'HASH' , role:1   }).then( (user) =>{
+//testing addition of fields
+// const jane = db.user.build({name: 'Jane', email: 'Doelana' , password: 'HASH' , role:1   });
+// jane.save().then( () =>{
 //   console.log('done' ) ;
 // }).catch( (err) =>{
 //   console.error('There is an error ' + err ) ;
 // });
 
-const register_router = require('./routes/register') ;
-// const login_router = require('./routes/login')
-app.use('/register' , register_router ) ;
-// app.use('/login' , login_router ) ;
+const authentication_router = require('./routes/authentication') ;
+app.use('/authentication' , authentication_router ) ;
 app.listen(port,() => 
     {console.log(`Server is running on port : ${port}`)}) ;
