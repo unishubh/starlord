@@ -1,0 +1,32 @@
+{
+  "development": {
+    "username": "root",
+    "password": "ldapmysql",
+    "database": "dev_user",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "port": 3306 ,
+    "pool":10 ,
+    "operatorsAliases": false
+  },
+  "test": {
+    "username": "root",
+    "password": "ldapmysql",
+    "database": "test_user",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "port": 3306 ,
+    "pool":10 ,
+    "operatorsAliases": false
+  },
+  "production": {
+    "username": "root",
+    "password": "ldapmysql",
+    "database": "prod_user",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "port": 3306 ,
+    "pool":10 ,
+    "operatorsAliases": false
+  }
+}
