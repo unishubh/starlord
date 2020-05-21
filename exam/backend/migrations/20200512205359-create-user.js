@@ -4,9 +4,13 @@ module.exports = {
     return queryInterface.createTable('users', {
       id: {
         allowNull: true,
-        AUTO_INCREMENT = 1,
+        AUTO_INCREMENT : 1,
         primaryKey: true,
         type: Sequelize.INTEGER
+      },
+      userID: {
+        allowNull: false,
+        type : Sequelize.STRING,
       },
       name: {
         allowNull: true,
@@ -35,7 +39,7 @@ module.exports = {
       }
     });
   },
-  down: (queryInterface, Sequelize) => {
+  down: (queryInterface) => {
     return queryInterface.dropTable('users');
   }
 };
