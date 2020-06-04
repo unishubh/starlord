@@ -18,9 +18,28 @@ db.sequelize.sync({force:false}).then( () =>{
 
 
 let userRouter = require('./routes/user') ;
+let orgAdminRouter = require('./routes/org_admin') ;
 //app.use('/api', api);
 app.use('/user' , userRouter ) ;
-
-
+app.use('/' , orgAdminRouter ) ;
+let newAgency = db.agency.build( {agency_id:1 , name : "resonance" }) ;
+newAgency.save() ;
 app.listen(port,() => 
     {console.log(`Server is running on port : ${port}`)}) ;
+
+
+
+    // {
+    //   "agency_id" : "1" , 
+    //   "name" : "IIT" ,
+    //   "details" : "Mains + Adnaced" ,
+    //   "max_marks" : "360",
+    //   "time" : "240" ,
+    //   "avg_marks": "150" 
+    // }	
+    // {
+    //   "name": "Resonance" ,
+    //   "email": "resoran@resonance.com",
+    //   "role":"1",
+    //   "password":"bhakk"	
+    //   }
