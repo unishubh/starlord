@@ -5,13 +5,11 @@ module.exports = {
       id: {
         allowNull: false,
         autoIncrement: true,
-        type: Sequelize.INTEGER
-      },
-      agency_id: {
         type: Sequelize.INTEGER,
         primaryKey: true
       },
       name: {
+        allowNull:false,
         type: Sequelize.STRING
       },
       createdAt: {

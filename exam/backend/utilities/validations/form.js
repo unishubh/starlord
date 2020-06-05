@@ -3,7 +3,6 @@ const sequelize = require('sequelize') ;
 const validate_email = require('./email') ;
 const validate_password = require('./password') ;
 exports.register_form = async ( req , res ) => {
-    console.log('**********') ;
     await validate_email.register( req , res ) ;
     console.log('mark') ;
     validate_password.register( req , res ) ;

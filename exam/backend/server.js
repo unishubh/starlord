@@ -21,9 +21,7 @@ let userRouter = require('./routes/user') ;
 let orgAdminRouter = require('./routes/org_admin') ;
 //app.use('/api', api);
 app.use('/user' , userRouter ) ;
-app.use('/' , orgAdminRouter ) ;
-let newAgency = db.agency.build( {agency_id:1 , name : "resonance" }) ;
-newAgency.save() ;
+app.use('/admin' , orgAdminRouter ) ;
 app.listen(port,() => 
     {console.log(`Server is running on port : ${port}`)}) ;
 
@@ -38,8 +36,15 @@ app.listen(port,() =>
     //   "avg_marks": "150" 
     // }	
     // {
+    //   "name" : "MockPaper1" ,
+    //   "examId" : "1" ,
+    //   "totalQns" : "10"
+    // }
+    // {
     //   "name": "Resonance" ,
     //   "email": "resoran@resonance.com",
     //   "role":"1",
     //   "password":"bhakk"	
     //   }
+// let newAgency = db.agency.build( { name : "allen" }) ;
+// newAgency.save() ;

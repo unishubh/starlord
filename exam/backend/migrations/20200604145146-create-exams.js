@@ -12,7 +12,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING
       },
-      agency_id: {
+      agencyId: {
         allowNull: false,
         type: Sequelize.INTEGER
       },
@@ -21,10 +21,6 @@ module.exports = {
         type: Sequelize.STRING
       },
       max_marks: {
-        allowNull: false,
-        type: Sequelize.STRING
-      },
-      avg_marks: {
         allowNull: false,
         type: Sequelize.INTEGER
       },
