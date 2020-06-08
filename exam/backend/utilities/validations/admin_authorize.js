@@ -1,4 +1,6 @@
 const jwt = require('jsonwebtoken') ;
+const db = require('../../models') ;
+
 module.exports.basicAuth = async function (req, res, next) {
 
     // check for basic auth header
@@ -16,11 +18,42 @@ module.exports.basicAuth = async function (req, res, next) {
             return res.sendStatus(403);
         }
         req.user = user;
-        if (req.user.role == 1 )
+        if (req.user.role === 1 )
             next();
         else
             return res.status(401).json({ message: 'Admin access denied' });     
         console.log(user);
         
     });
+}
+
+module.exports.isAccessible = async (field, value, agencyID) => {
+    switch (field ){
+        case 'paperID' : {
+            try {
+                let dbAgencyId = await db.mockpapers.findOne({
+                    include: [
+                        {
+                            model: db.exams,
+                            include: [
+                                {
+                                    model: db.agency,
+                                }
+                            ]
+                        }
+                    ],
+                    where: {id:value},
+                });
+                return dbAgencyId === agencyID;
+            }
+            catch (e) {
+                console.log(e);
+                throw "no records found";
+            }
+        }
+        default : {
+            throw "invalid field to check authorization on";
+        }
+    }
+
 }

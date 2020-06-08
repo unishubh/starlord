@@ -1,10 +1,10 @@
-const db = require('../models') ;
-const sequelize = require('sequelize') ;
+const db = require('../../models') ;
+const uuid = require('uuid') ;
 const jwt = require('jsonwebtoken');
-const utilities = require('../helpers/utilities');
+const utilities = require('../../helpers/utilities');
 
 exports.createPaper = async ( req , res ) => {
-    let newExamId = req.body.examId ;
+    let newExamId = req.body.examID ;
     let newName = req.body.name ;
     let newTotalQns = req.body.totalQns ;
     
@@ -15,7 +15,7 @@ exports.createPaper = async ( req , res ) => {
             utilities.sendError("Exam does not exist", res);
             return 
         }
-        let newPaper = db.mockpapers.build({ examId:newExamId , name:newName , totalQns:newTotalQns }) ;
+        let newPaper = db.mockpapers.build({ id: uuid.v1(), examId:newExamId , name:newName , totalQns:newTotalQns }) ;
         await newPaper.save() ;
         utilities.sendSuccess(newPaper, res);
     }

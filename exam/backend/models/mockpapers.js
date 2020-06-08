@@ -1,12 +1,16 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const mockpapers = sequelize.define('mockpapers', {
+    id : {
+      type: DataTypes.UUID,
+      primaryKey: true
+    },
     name: {
       type:DataTypes.STRING,
       allowNull:false
     },
     examId :{
-      type:DataTypes.INTEGER,
+      type:DataTypes.UUID,
       allowNull:false
     },
     totalQns :{
