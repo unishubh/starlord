@@ -1,13 +1,13 @@
-const db = require('../models') ;
-const sequelize = require('sequelize') ;
+const db = require('../../models') ;
+const uuid = require('uuid') ;
 const jwt = require('jsonwebtoken');
-const utilities = require('../helpers/utilities');
+const utilities = require('../../helpers/utilities');
 
 exports.createExam = async ( req , res  ) =>{
-    let new_agency_id = req.body.agencyId ;
+    let new_agency_id = req.body.agencyID ;
     let new_name = req.body.name ;
     let new_details = req.body.details ;
-    let new_max_marks = req.body.max_marks ;    
+    let new_max_marks = req.body.maxMarks ;
     let new_time = req.body.time ;
     console.log(new_agency_id) ;
     try{
@@ -17,7 +17,7 @@ exports.createExam = async ( req , res  ) =>{
             utilities.sendError("Agency does not exist", res);
             return 
         }
-        let newExam = db.exams.build({ agencyId:new_agency_id , name:new_name , details:new_details , max_marks:new_max_marks , time:new_time }) ;
+        let newExam = db.exams.build({id: uuid.v1(), agencyId:new_agency_id , name:new_name , details:new_details , max_marks:new_max_marks , time:new_time }) ;
         await newExam.save() ;
         utilities.sendSuccess(newExam, res);
     }

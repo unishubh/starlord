@@ -1,7 +1,7 @@
-const db = require('../models') ;
+const db = require('../../models') ;
 const sequelize = require('sequelize') ;
 const jwt = require('jsonwebtoken');
-const utilities = require('../helpers/utilities');
+const utilities = require('../../helpers/utilities');
 
 exports.byAgency = async ( req , res ) =>{
     try{
