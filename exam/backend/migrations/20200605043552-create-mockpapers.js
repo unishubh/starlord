@@ -12,7 +12,7 @@ module.exports = {
         type:Sequelize.STRING,
         allowNull:false
       },
-      examId :{
+      examID :{
         type:Sequelize.INTEGER,
         allowNull:false
       },

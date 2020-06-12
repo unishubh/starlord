@@ -5,10 +5,10 @@ const utilities = require('../../helpers/utilities');
 
 exports.byExam = async ( req , res ) =>{
     try{
-        let newExamId = req.body.examId ;
+        let newExamID = req.body.examID ;
         let { count , rows } = await db.mockpapers.findAndCountAll({
             where :{
-                examId : newExamId
+                examID : newExamID
             },
             attributes: [ 'id' , 'name' ]
         });

@@ -1,32 +1,20 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('exams', {
+    return queryInterface.createTable('attemptedPapers', {
       id: {
         allowNull: false,
         autoIncrement: true,
-        primaryKey:true,
+        primaryKey: true,
         type: Sequelize.INTEGER
       },
-      name: {
+      userID: {
         allowNull: false,
-        type: Sequelize.STRING
+        type: Sequelize.UUID
       },
-      agencyID: {
+      paperID: {
         allowNull: false,
-        type: Sequelize.INTEGER
-      },
-      details: {
-        allowNull: false,
-        type: Sequelize.STRING
-      },
-      max_marks: {
-        allowNull: false,
-        type: Sequelize.INTEGER
-      },
-      time: {
-        allowNull: false,
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID
       },
       createdAt: {
         allowNull: false,
@@ -39,6 +27,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('exams');
+    return queryInterface.dropTable('attemptedPapers');
   }
 };

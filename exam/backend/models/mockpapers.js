@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
       type:DataTypes.STRING,
       allowNull:false
     },
-    examId :{
+    examID :{
       type:DataTypes.UUID,
       allowNull:false
     },
@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   });
   mockpapers.associate = function(models) {
-    mockpapers.belongsTo(models.exams , {foreignKey:'examId'})
+    mockpapers.belongsTo(models.exams , {foreignKey:'examID'})
   };
   return mockpapers;
 }; 

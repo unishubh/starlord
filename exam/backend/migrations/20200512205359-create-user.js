@@ -3,38 +3,37 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('users', {
       id: {
-        allowNull: true,
-        AUTO_INCREMENT : 1,
-        primaryKey: true,
-        type: Sequelize.INTEGER
-      },
-      userID: {
         allowNull: false,
-        type : Sequelize.STRING,
+        primaryKey: true,
+        type : Sequelize.UUID,
+      },
+      agencyID: {
+        allowNull: false,
+        type : Sequelize.UUID,
       },
       name: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.STRING
       },
       email: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.STRING
       },
       password: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.STRING
       },
       role: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.INTEGER
       },
       accessToken: Sequelize.STRING ,
       createdAt: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.DATE
       },
       updatedAt: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.DATE
       }
     });

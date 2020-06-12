@@ -4,18 +4,18 @@ const jwt = require('jsonwebtoken');
 const utilities = require('../../helpers/utilities');
 
 exports.createPaper = async ( req , res ) => {
-    let newExamId = req.body.examID ;
+    let newExamID = req.body.examID ;
     let newName = req.body.name ;
     let newTotalQns = req.body.totalQns ;
     
     try{
-        let exam = await db.exams.findOne({where: {id:newExamId}});
+        let exam = await db.exams.findOne({where: {id:newExamID}});
         if (!exam){
             console.log("Exam does not exist");
             utilities.sendError("Exam does not exist", res);
             return 
         }
-        let newPaper = db.mockpapers.build({ id: uuid.v1(), examId:newExamId , name:newName , totalQns:newTotalQns }) ;
+        let newPaper = db.mockpapers.build({ id: uuid.v1(), examID:newExamID , name:newName , totalQns:newTotalQns }) ;
         await newPaper.save() ;
         utilities.sendSuccess(newPaper, res);
     }

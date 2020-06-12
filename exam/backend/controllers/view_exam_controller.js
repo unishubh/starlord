@@ -5,9 +5,9 @@ const utilities = require('../helpers/utilities');
 
 exports.byExam = async(req,res) =>{
     try{
-        let examId = req.params.id ;
-        console.log(examId) ;
-        let exam = await db.exams.findOne({where: {id:examId}}) ;
+        let examID = req.params.examID ;
+        console.log(examID) ;
+        let exam = await db.exams.findOne({where: {id:examID}}) ;
         if (!exam){
             console.log("Exam does not exist");
             utilities.sendError("Exam does not exist", res);
