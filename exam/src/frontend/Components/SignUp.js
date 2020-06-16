@@ -55,8 +55,8 @@ export default function SignUp() {
 
   const handleSubmit = () => {
     this.props.history.replace('/');
-    fetch('https://localhost:3001/login',{
-        method: 'post',
+    fetch('https://localhost:3001/register',{
+        method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
           firstname : firstname,

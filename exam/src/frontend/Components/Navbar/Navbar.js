@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Layout, Header,Navigation,Drawer,Content } from 'react-mdl';
 import './Navbar.css';
 
+import {UserContext} from '../UserContext';
 function Navbar()
 {
+    const {user,setUser} = useContext(UserContext);
     return(
     //     <div className="demo-big-content" style={{position :"fixed"}}>
     //     <Layout>
@@ -86,6 +88,7 @@ function Navbar()
                                     </ul>
                                 </li> */}
                                 <li><a href="/contact">Contact</a></li>
+                                
                             </ul>
                         </nav>
                     </div>

@@ -45,7 +45,7 @@ export default function SignIn() {
 
   const handleSubmit = () => {
     fetch('https://localhost:3001/login',{
-      method: 'post',
+      method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         email: email,
@@ -62,6 +62,7 @@ export default function SignIn() {
 
 
   return (
+   
     <Container component="main" maxWidth="xs" id="SignInStudent">
       <CssBaseline />
       <div className={classes.paper}>

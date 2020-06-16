@@ -44,7 +44,7 @@ const [password,setPassword] = useState("");
 
 const handleSubmit = () => {
   fetch('https://localhost:3001/login',{
-    method: 'post',
+    method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({
       email: email,
