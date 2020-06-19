@@ -1,11 +1,22 @@
 import React, { useContext } from 'react';
 import { Layout, Header,Navigation,Drawer,Content } from 'react-mdl';
 import './Navbar.css';
-
+import {useHistory} from 'react-router-dom';
 import {UserContext} from '../UserContext';
 function Navbar()
 {
-    const {user,setUser} = useContext(UserContext);
+    const history = useHistory();
+    const {token,setToken} = useContext(UserContext);
+    // let token = localStorage.getItem("token");
+    const handleLogout = () =>{
+        localStorage.removeItem("token");
+        setToken(localStorage.getItem("token"));
+        console.log("hi");
+        console.log(token);
+        history.push('/');
+
+    };
+    
     return(
     //     <div className="demo-big-content" style={{position :"fixed"}}>
     //     <Layout>
@@ -36,10 +47,10 @@ function Navbar()
             {/* <!-- Left Social --> */}
             <div className="header-left-social">
                 <ul className="header-social">    
-                    <li><a href="#"><i class="fab fa-twitter"></i></a></li>
-                    <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
-                    <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
-                    <li> <a href="#"><i class="fab fa-google-plus-g"></i></a></li>
+                    <li><a href="#"><i className="fab fa-twitter"></i></a></li>
+                    <li><a href="#"><i className="fab fa-facebook-f"></i></a></li>
+                    <li><a href="#"><i className="fab fa-linkedin-in"></i></a></li>
+                    <li> <a href="#"><i className="fab fa-google-plus-g"></i></a></li>
                 </ul>
             </div>
             <div className="container">
@@ -47,14 +58,26 @@ function Navbar()
                     <div className="row d-flex justify-content-between align-items-center">
                         <div className="header-info-left">
                             <ul>     
-                                <li>onlineexam@gmail.com</li>
+                                <li>onlineexam@gmail.com </li>
                                 <li>+91-XXXXXXXXXX</li>
                             </ul>
                         </div>
                         <div className="header-info-right">
-                            <ul>    
-                                <li><a href="/studentsignin"><i class="ti-user"></i>Login</a></li>
-                                <li><a href="/register"><i class="ti-lock"></i>Register</a></li>
+                            <ul> 
+                                { !{token} ?
+                                ( 
+                                    <>
+                                    <li><a href="/signin"><i className="ti-user"></i>Login</a></li>
+                                    <li><a href="/register"><i className="ti-lock"></i>Register</a></li>
+                                    </>
+                                    
+        
+                                ) : (
+                                    <li>{token}<button onClick={handleLogout}><i className="ti-user"></i>Logout {token}</button></li>
+                                
+                                )
+
+                                }
                             </ul>
                         </div>
                     </div>
@@ -87,6 +110,7 @@ function Navbar()
                                         <li><a href="elements.html">Element</a></li>
                                     </ul>
                                 </li> */}
+                                <li><a href="/createexam">Create New Exam</a></li>
                                 <li><a href="/contact">Contact</a></li>
                                 
                             </ul>

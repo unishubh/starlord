@@ -1,10 +1,10 @@
 import React from 'react';
 
-import SignInStudent from './SignInStudent';
-import SignInAgency from './SignInAgency';
-import stu from '../images/students.jpg';
-import SignUp from './SignUp';
-import Navbar from './Navbar/Navbar'
+// import SignInStudent from './SignInStudent';
+// import SignInAgency from './SignInAgency';
+// import stu from '../images/students.jpg';
+// import SignUp from './SignUp';
+// import Navbar from './Navbar/Navbar'
 // import Navbar from './Navbar';
 function Main(){
     return(
