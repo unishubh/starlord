@@ -23,7 +23,7 @@ return(
                 <div class="row justify-content-center">
                     <div class="col-lg-8">
                         <div class="about-details-cap mb-50">
-                            <h4>Our Mission</h4>
+                            <h4>Our Goal</h4>
                             <p>Consectetur adipiscing elit, sued do eiusmod tempor ididunt udfgt labore et dolore magna aliqua. Quis ipsum suspendisces gravida. Risus commodo viverra sebfd dho eiusmod tempor maecenas accumsan lacus. Risus commodo viverra sebfd dho eiusmod tempor maecenas accumsan lacus.
                             </p>
                             <p> Risus commodo viverra sebfd dho eiusmod tempor maecenas accumsan lacus. Risus commodo viverra sebfd dho eiusmod tempor maecenas accumsan.</p>
