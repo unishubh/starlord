@@ -10,22 +10,30 @@ import Home from './frontend/Components/Home';
 import Navbar from './frontend/Components/Navbar/Navbar';
 import {UserContext} from './frontend/Components/UserContext';
 import About from './frontend/Components/About';
+import Admin from './frontend/Components/Admin';
+import CreateExam from './frontend/Components/CreateExam';
 function App() {
 
-    const [user,setUser] = useState("Arihant");
+    // localStorage.setItem("token",null)  
+    const [token,setToken] = useState(localStorage.getItem("token"));
+
+    console.log("token is ",token);
+    
 
   return (
     <div>
-      <UserContext.Provider value={{user,setUser}}>
+      <UserContext.Provider value={{token,setToken}}>
       <Navbar/>
      <Main/>
      <Switch>
        {/* <Route exact path='/' component={SignInStudent} /> */}
        <Route exact path='/' component={Home} />
        <Route exact path='/agencysignin' component={SignInAgency} />
-       <Route exact path='/studentsignin' component={SignInStudent} />
+       <Route exact path='/signin' component={SignInStudent} />
        <Route exact path='/register' component={SignUp} />
        <Route exact path='/about' component={About} />
+       <Route exact path='/admin' component={Admin} />
+       <Route exact path='/createexam' component={CreateExam} />
 
    
    </Switch> 

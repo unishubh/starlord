@@ -1,4 +1,4 @@
-import React ,{useState, useEffect} from 'react';
+import React ,{useState, useEffect, useContext} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,8 +12,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-
-
+import {useHistory} from 'react-router-dom';
+import {UserContext} from './UserContext';
+var jwtDecode = require('jwt-decode');
 
 
 const useStyles = makeStyles((theme) => ({
@@ -38,12 +39,23 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignIn() {
+  const history = useHistory();
   const classes = useStyles();
-
+  const {token,setToken} = useContext(UserContext);
   const [email,setEmail] = useState("");
   const [password,setPassword] = useState("");
 
   const handleSubmit = () => {
+
+    console.log("loginstarted");
+    history.push('/');
+    localStorage.setItem("token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImp0aSI6ImM1YTUxNjEyLWNkMDAtNGRkYS1hMWYzLTkyY2QwMjVjNjk1ZCIsImlhdCI6MTU5MjU3OTc2NywiZXhwIjoxNTkyNTgzMzY3fQ.toBG6c1OftJjRVwjXD6UK9djDSwddPCnYi8UP3s5P7k");
+    setToken(localStorage.getItem("token"));
+    // var decode = jwtDecode("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImp0aSI6ImM1YTUxNjEyLWNkMDAtNGRkYS1hMWYzLTkyY2QwMjVjNjk1ZCIsImlhdCI6MTU5MjU3OTc2NywiZXhwIjoxNTkyNTgzMzY3fQ.toBG6c1OftJjRVwjXD6UK9djDSwddPCnYi8UP3s5P7k");
+    console.log("yo ",token);
+    // console.log(decode.admin);
+    
+  
     fetch('https://localhost:3001/login',{
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
@@ -54,9 +66,13 @@ export default function SignIn() {
     })
       .then(response => response.json())
       .then(data => {
-        console.log(data)
+        console.log(data);
+        localStorage.setItem("token", data.token);
+
+       
       
     })    
+    console.log("Login Done");
 
   };
 
@@ -70,7 +86,7 @@ export default function SignIn() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Student Sign in
+                Sign in
         </Typography>
         <form className={classes.form} noValidate>
           <TextField
@@ -129,7 +145,7 @@ export default function SignIn() {
         </form>
       </div>
       <Box mt={8}>
-    
+{/*     
       <Link href="/agencysignin">
       <Button
             type="button"
@@ -139,7 +155,7 @@ export default function SignIn() {
           >
             If you are an Agency click here
           </Button>
-          </Link>
+          </Link> */}
       </Box>
     </Container>
   );
