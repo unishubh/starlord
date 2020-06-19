@@ -7,7 +7,7 @@ function Home(){
     return(
         <div>
         <div className="slider-area ">
-            <div className="slider-active">
+            {/* <div className="slider-active"> */}
                 {/* <!-- Single Slider --> */}
                 <div className="single-slider slider-height d-flex align-items-center">
                     <div className="container">
@@ -28,7 +28,7 @@ function Home(){
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    {/* </div> */}
                 </div>
                 {/* <!-- Single Slider --> */}
                 

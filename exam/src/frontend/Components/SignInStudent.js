@@ -14,7 +14,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {useHistory} from 'react-router-dom';
 import {UserContext} from './UserContext';
-
+var jwtDecode = require('jwt-decode');
 
 
 const useStyles = makeStyles((theme) => ({
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
 export default function SignIn() {
   const history = useHistory();
   const classes = useStyles();
-  const [token,setToken] = useContext(UserContext);
+  const {token,setToken} = useContext(UserContext);
   const [email,setEmail] = useState("");
   const [password,setPassword] = useState("");
 
@@ -49,8 +49,12 @@ export default function SignIn() {
 
     console.log("loginstarted");
     history.push('/');
-    localStorage.setItem("token", "loginn");
+    localStorage.setItem("token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImp0aSI6ImM1YTUxNjEyLWNkMDAtNGRkYS1hMWYzLTkyY2QwMjVjNjk1ZCIsImlhdCI6MTU5MjU3OTc2NywiZXhwIjoxNTkyNTgzMzY3fQ.toBG6c1OftJjRVwjXD6UK9djDSwddPCnYi8UP3s5P7k");
     setToken(localStorage.getItem("token"));
+    // var decode = jwtDecode("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImp0aSI6ImM1YTUxNjEyLWNkMDAtNGRkYS1hMWYzLTkyY2QwMjVjNjk1ZCIsImlhdCI6MTU5MjU3OTc2NywiZXhwIjoxNTkyNTgzMzY3fQ.toBG6c1OftJjRVwjXD6UK9djDSwddPCnYi8UP3s5P7k");
+    console.log("yo ",token);
+    // console.log(decode.admin);
+    
   
     fetch('https://localhost:3001/login',{
       method: 'POST',

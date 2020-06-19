@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { Layout, Header,Navigation,Drawer,Content } from 'react-mdl';
 import './Navbar.css';
 import {useHistory} from 'react-router-dom';
 import {UserContext} from '../UserContext';
@@ -13,7 +12,7 @@ function Navbar()
         setToken(localStorage.getItem("token"));
         console.log("hi");
         console.log(token);
-        history.push('/');
+        history.replace('/about');
 
     };
     
@@ -64,7 +63,7 @@ function Navbar()
                         </div>
                         <div className="header-info-right">
                             <ul> 
-                                { !{token} ?
+                                { !token ?
                                 ( 
                                     <>
                                     <li><a href="/signin"><i className="ti-user"></i>Login</a></li>
@@ -73,8 +72,9 @@ function Navbar()
                                     
         
                                 ) : (
-                                    <li>{token}<button onClick={handleLogout}><i className="ti-user"></i>Logout {token}</button></li>
-                                
+                                    <>
+                                    <li><a onClick={handleLogout} href="#"><i className="ti-user"></i>Logout </a></li>
+                                    </>
                                 )
 
                                 }
