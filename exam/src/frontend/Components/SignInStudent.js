@@ -1,4 +1,4 @@
-import React ,{useState, useEffect} from 'react';
+import React ,{useState, useEffect, useContext} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -13,7 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {useHistory} from 'react-router-dom';
-
+import {UserContext} from './UserContext';
 
 
 
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
 export default function SignIn() {
   const history = useHistory();
   const classes = useStyles();
-
+  const [token,setToken] = useContext(UserContext);
   const [email,setEmail] = useState("");
   const [password,setPassword] = useState("");
 
@@ -49,6 +49,8 @@ export default function SignIn() {
 
     console.log("loginstarted");
     history.push('/');
+    localStorage.setItem("token", "loginn");
+    setToken(localStorage.getItem("token"));
   
     fetch('https://localhost:3001/login',{
       method: 'POST',
