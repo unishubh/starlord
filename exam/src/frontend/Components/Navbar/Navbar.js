@@ -104,7 +104,7 @@ function Navbar()
                                 <li><Link to="/exams">Exams</Link></li>
                                 {/* <li><Link to="instructor.html">Instructors</Link></li> */} 
                                  <li><Link to="/admin">Admin</Link>
-                                    <ul class="submenu">
+                                    <ul className="submenu">
                                         <li><Link to="/createexam">Create Exam</Link></li>
                                         <li><Link to="/createpaper">Create Paper</Link></li>
                                         <li><Link to="/exams">See Exams</Link></li>

@@ -12,6 +12,7 @@ import {UserContext} from './frontend/Components/UserContext';
 import About from './frontend/Components/About';
 import Admin from './frontend/Components/Admin';
 import CreateExam from './frontend/Components/CreateExam';
+import CreatePaper from './frontend/Components/CreatePaper';
 function App() {
 
     // localStorage.setItem("token",null)  
@@ -33,7 +34,8 @@ function App() {
        <Route exact path='/register' component={SignUp} />
        <Route exact path='/about' component={About} />
        <Route exact path='/admin' component={Admin} />
-       <Route exact path='/createexam' component={CreateExam} />
+      { token ? <Route exact path='/createexam' component={CreateExam} /> : <></> }
+      { token ? <Route exact path='/createpaper' component={CreatePaper} /> : <></> }
 
    
    </Switch> 
