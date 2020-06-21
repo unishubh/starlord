@@ -1,8 +1,9 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const questions = sequelize.define('questions', {
-    paperID: DataTypes.STRING,
-    questions: DataTypes.JSON
+    id: {type : DataTypes.UUID , primaryKey : true , allowNull : false },
+    resonse: {type : DataTypes.JSON  , allowNull : true },
+    paperID: {type : DataTypes.UUID ,  allowNull : false }
   }, {});
   questions.associate = function(models) {
     // associations can be defined here

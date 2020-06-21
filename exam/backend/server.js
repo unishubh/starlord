@@ -19,9 +19,11 @@ db.sequelize.sync({force:false}).then( () =>{
 
 let userRouter = require('./routes/user') ;
 let orgAdminRouter = require('./routes/org_admin') ;
+let examRouter = require('./routes/exam') ;
 //app.use('/api', api);
 app.use('/user' , userRouter ) ;
 app.use('/admin' , orgAdminRouter ) ;
+app.use('/exam' , examRouter ) ;
 app.listen(port,() => 
     {console.log(`Server is running on port : ${port}`)}) ;
 

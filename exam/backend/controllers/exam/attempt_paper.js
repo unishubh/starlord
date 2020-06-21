@@ -10,9 +10,9 @@ exports.byPaperId = async ( req , res ) => {
     try{
         let today = new Date();
         let examStartTime = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-        let newUserID = getJwtCred.userID(req,res) ;
+        let newUserID = await getJwtCred.userID(req,res);
         let newPaperID = req.params.paperID ;
-        let paperExist = db.mockpapers.findOne({
+        let paperExist = await db.mockpapers.findOne({
             where:{
                 id : newPaperID
             }
@@ -33,11 +33,30 @@ exports.byPaperId = async ( req , res ) => {
         }
         let newAttempt = db.attemptedPapers.build({ id : uuid.v4() , userID : newUserID , paperID : newPaperID } ) ;
         await newAttempt.save() ;
-        let examineeResponse = createJSON.ofQns(req,res) ;
-        
+        let examineeResponse = await createJSON.ofQns(req,res) ;
+        let newResponse = db.userPaperResponse.build( { id : uuid.v4() , userID:newUserID , paperID:newPaperID , response:examineeResponse} ) ;
+        await newResponse.save() ;
+        let startPaperResponse = new Object() ;
+        startPaperResponse['userPaperResponse'] = newResponse ;
+        startPaperResponse['startTime'] = examStartTime ;
+        res.status(200) ;
+        res.send(startPaperResponse) ;
     }
     catch(err){
         console.log( '401 ' + err  ) ;
         utilities.sendError(err, res) ;
     }
 }
+
+
+
+// {
+//     "type" : "1" ,
+//       "question" : "To be or not to be" ,
+//       "correctAns" : "be" ,
+//       "posMark" : "1" ,
+//       "options" : [ "be" , "notbe" ] ,
+//       "negmark" : "0.5"
+//   }
+  
+  

@@ -1,17 +1,18 @@
 const jwt = require('jsonwebtoken');
-const utilities = require('utilities.js');
+const utilities = require('./utilities');
 
 exports.userID = async ( req , res ) => {
     const token =  req.headers.authorization.split(' ')[1];
     const credentials = Buffer.from(token, 'base64').toString('ascii');
-    console.log(credentials) ;
+    let userID ;
     jwt.verify(token, process.env.JWT_SECRET , (err, user) => {
         if(err){
             console.log('There was an error in getting the UserID from JWT') ;
             utilities.sendError(err, res);
         }    
-        return user.userID ;
+        userID = user.userID ;
     });
+    return userID ;
 }
 
 exports.agencyId = async ( req , res ) => {

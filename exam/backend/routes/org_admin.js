@@ -14,7 +14,8 @@ router.post('/create_exam' , sess_auth.basicAuth , admin_auth.basicAuth , create
 router.get('/get_exams' , sess_auth.basicAuth , admin_auth.basicAuth , getExamsController.byAgency ) ;
 router.post('/create_paper' , sess_auth.basicAuth , admin_auth.basicAuth , createPaperController.createPaper ) ;
 router.get('/get_papers' , sess_auth.basicAuth , admin_auth.basicAuth , getPapersController.byExam ) ;
-router.get('/create_agency/:name', sess_auth.basicAuth, admin_auth.basicAuth,  createAgencyController.createAgency);
+router.post('/create_agency/:name',   createAgencyController.createAgency);
 router.post('/add_questions/:paperID', sess_auth.basicAuth, admin_auth.basicAuth,  insertQuestions.InsertQuestions);
+
 
 module.exports = router ;
