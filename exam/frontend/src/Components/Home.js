@@ -1,15 +1,18 @@
-import React, { useContext } from 'react';
-import {Link} from 'react-router-dom';
+import React, { useContext  } from 'react';
+import {Link,useHistory} from 'react-router-dom';
 import { UserContext } from './UserContext';
 
 function Home(){
+    const history = useHistory();
     const {token,setToken} = useContext(UserContext);
     const handleLogout = () =>{
+        
         console.log("hi");
         localStorage.removeItem("token");
-        setToken(localStorage.getItem("token"));
+        setToken(null);
         
         console.log(token);
+        
         };
     return(
         <div>
@@ -25,8 +28,8 @@ function Home(){
                                     <h1 data-animation="fadeInLeft" data-delay=".4s">Experience the best way of Online Exams</h1>
                                     {/* <!-- Hero-btn --> */}
                                     <div className="hero__btn">
-                                       { !token ?  <Link to="/signin" className="btn hero-btn"  data-animation="fadeInLeft" data-delay=".8s">Login</Link>
-                                       : <Link  onClick={handleLogout} to="/signin" className="btn hero-btn"  data-animation="fadeInLeft" data-delay=".8s">Logout</Link>
+                                       { !token ?  <Link to="/signin"> <button className="btn hero-btn"  data-animation="fadeInLeft" data-delay=".8s">Login</button></Link>
+                                       : <button  onClick={handleLogout}  className="btn hero-btn"  data-animation="fadeInLeft" data-delay=".8s">Logout</button>
                                        }
                                     </div>
                                 </div>

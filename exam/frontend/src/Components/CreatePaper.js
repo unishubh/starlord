@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import {useHistory} from 'react-router-dom';
 import Select from 'react-select';
 
@@ -7,15 +7,19 @@ import Select from 'react-select';
 
 function CreatePaper(props){
 
+    useEffect(()=> {
+        console.log("USEEFFECT")
+        // fetch exams here first 
+    },[]);
 
-    const options = [
+    const [options,setOptions] = useState([
         { value: 'advanced', label: 'JEE-ADVANCED' },
         { value: 'main', label: 'JEE-MAIN' },
         { value: 'neet', label: 'NEET' },
-      ];
+      ]);
     const [name,setName] = useState("");
-    const [exam,setExam] = useState("");
-    const [description,setDescription] = useState("");
+    const [examID,setExamID] = useState("");
+    const [totalQns,setTotalQns] = useState(0);
     const history = useHistory();
   const handleSubmit = (event) => {
 
@@ -23,28 +27,30 @@ function CreatePaper(props){
     // history.push('/');
     
    console.log(name);
-   console.log(exam);
-   console.log(description);
+   console.log(examID);
+   console.log(totalQns);
     
   
-    // fetch('https://localhost:3001/createpaper',{
-    //   method: 'POST',
-    //   headers: {'Content-Type': 'application/json',
-    //             'token' : 'Bearer ' + " "   },
-    //   body: JSON.stringify({
-    //     name: name,
-    //     type: type,
-    //     description: description,
-    //   })
-    // })
-    //   .then(response => response.json())
-    //   .then(data => {
-    //     console.log(data);
-    //     localStorage.setItem("token", data.token);
+    fetch('https://localhost:3001/create_paper',{
+      method: 'POST',
+      headers: {'Content-Type': 'application/json',
+                'token' : 'Bearer ' + " "   },
+      body: JSON.stringify({
+        name: name,
+        examID: examID,
+        totalQns: totalQns,
+      })
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        localStorage.setItem("token", data.token);
 
        
       
-    // });    
+    });    
+    const paperID=1241;
+    history.push('addquestion/'+paperID);
     console.log("Create PAper done");
    
 
@@ -77,16 +83,16 @@ function CreatePaper(props){
                                 <div className="col-sm-6">
                                 <Select
                                     
-                                    onChange={e=> setExam(e.value)}
+                                    onChange={e=> setExamID(e.value)}
                                     options={options}
                                 />
                                 </div>
                                 <div className="col-12">
                                     <div className="form-group">
-                                        <textarea className="form-control" cols="30" rows="9" name="description" id="description" 
-                                        type="text" 
-                                         placeholder="Enter Description" value={description} 
-                                         onChange = {e => {setDescription(e.target.value); console.log(e.target.value)}}/>
+                                        <input className="form-control"  name="totalQns" id="totalQns" 
+                                        type="number" 
+                                         placeholder="Total Questions" value={totalQns} 
+                                         onChange = {e => {setTotalQns(e.target.value); console.log(e.target.value)}}/>
                                     </div>
                                 </div>
                             </div>

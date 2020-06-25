@@ -39,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignIn() {
+ 
   const history = useHistory();
   const classes = useStyles();
   const {token,setToken} = useContext(UserContext);
@@ -48,15 +49,16 @@ export default function SignIn() {
   const handleSubmit = () => {
 
     console.log("loginstarted");
-    history.push('/');
-    localStorage.setItem("token", "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImp0aSI6ImM1YTUxNjEyLWNkMDAtNGRkYS1hMWYzLTkyY2QwMjVjNjk1ZCIsImlhdCI6MTU5MjU3OTc2NywiZXhwIjoxNTkyNTgzMzY3fQ.toBG6c1OftJjRVwjXD6UK9djDSwddPCnYi8UP3s5P7k");
-    setToken(localStorage.getItem("token"));
+    // history.push('/');
+    
+   
     // var decode = jwtDecode("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImp0aSI6ImM1YTUxNjEyLWNkMDAtNGRkYS1hMWYzLTkyY2QwMjVjNjk1ZCIsImlhdCI6MTU5MjU3OTc2NywiZXhwIjoxNTkyNTgzMzY3fQ.toBG6c1OftJjRVwjXD6UK9djDSwddPCnYi8UP3s5P7k");
-    console.log("yo ",token);
+    
     // console.log(decode.admin);
     
+    
   
-    fetch('https://localhost:3001/login',{
+    fetch('http://www.mutualfundcalculator.in/starlord/user/login',{
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -67,11 +69,18 @@ export default function SignIn() {
       .then(response => response.json())
       .then(data => {
         console.log(data);
-        localStorage.setItem("token", data.token);
+        localStorage.setItem("token", data.message);
+        if(data.message!="invalid user" && data.message!="invalid password")
+        {var decoded = jwtDecode(data.message)
+        setToken(decoded);
+        history.push('/');  
+      }
+      else{
+        alert(data.message);
+      }
 
-       
-      
-    })    
+        
+      })    
     console.log("Login Done");
 
   };
@@ -121,11 +130,11 @@ export default function SignIn() {
             label="Remember me"
           /> */}
           <Button
-            type="submit"
+            
             fullWidth
             variant="contained"
             color="primary"
-            className={classes.submit}
+            
             onClick={handleSubmit}
           >
             Sign In

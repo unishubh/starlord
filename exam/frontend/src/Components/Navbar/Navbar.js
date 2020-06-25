@@ -9,7 +9,7 @@ function Navbar()
     // let token = localStorage.getItem("token");
     const handleLogout = () =>{
         localStorage.removeItem("token");
-        setToken(localStorage.getItem("token"));
+        setToken(null);
         console.log("hi");
         console.log(token);
         history.replace('/about');
@@ -58,7 +58,7 @@ function Navbar()
                         <div className="header-info-left">
                             <ul>     
                                 <li>onlineexam@gmail.com </li>
-                                <li>+91-XXXXXXXXXX</li>
+                                <li>+91-XXXXXXXXXX   : </li>
                             </ul>
                         </div>
                         <div className="header-info-right">

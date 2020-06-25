@@ -5,8 +5,9 @@ function CreateExam(){
 
 
     const [name,setName] = useState("");
-    const [number,setNumber] = useState(0);
-    const [description,setDescription] = useState("");
+    const [maxMarks,setMaxMarks] = useState(0);
+    const [details,setDetails] = useState("");
+    const [time,setTime] = useState("");
     const history = useHistory();
   const handleSubmit = () => {
 
@@ -14,18 +15,19 @@ function CreateExam(){
     history.push('/');
     
    console.log(name);
-   console.log(number);
-   console.log(description);
+   console.log(maxMarks);
+   console.log(time);
     
   
-    fetch('https://localhost:3001/createexam',{
+    fetch('https://localhost:3001/create_exam',{
       method: 'POST',
       headers: {'Content-Type': 'application/json',
                 'token' : 'Bearer ' + " "   },
       body: JSON.stringify({
         name: name,
-        number: number,
-        description: description,
+        maxMarks: maxMarks,
+        details: details,
+        time:time
       })
     })
       .then(response => response.json())
@@ -59,23 +61,30 @@ function CreateExam(){
                                 </div> */}
                                 <div className="col-sm-6">
                                     <div className="form-group">
-                                        <input className="form-control valid" name="name" id="name" 
-                                        type="text" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter exam name'" 
+                                        <input className="form-control"  
+                                        type="text"  
                                         placeholder="Enter exam name" value={name} onChange = {e => setName(e.target.value)} />
                                     </div>
                                 </div>
                                 <div className="col-sm-6">
                                     <div className="form-group">
-                                        <input className="form-control valid" name="number" id="number" 
-                                        type="number" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Number of questions'" 
-                                        placeholder="Number of Question" value={number} onChange = {e => setNumber(e.target.value)}/>
+                                        <input className="form-control"  
+                                        type="number"
+                                        placeholder="Maximum Marks" value={maxMarks} onChange = {e => setMaxMarks(e.target.value)}/>
+                                    </div>
+                                </div>
+                                <div className="col-sm-6">
+                                    <div className="form-group">
+                                        <input className="form-control"  
+                                        type="time"
+                                        placeholder="Time Limit" value={time} onChange = {e => setTime(e.target.value)}/>
                                     </div>
                                 </div>
                                 <div className="col-12">
                                     <div className="form-group">
-                                        <textarea className="form-control" cols="30" rows="9" name="description" id="description" 
-                                        type="text" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Description'"
-                                         placeholder="Enter Description" value={description} onChange = {e => setDescription(e.target.value)}/>
+                                        <textarea className="form-control" cols="30" rows="9" name="description"
+                                        type="text" 
+                                         placeholder="Enter Details" value={details} onChange = {e => setDetails(e.target.value)}/>
                                     </div>
                                 </div>
                             </div>
