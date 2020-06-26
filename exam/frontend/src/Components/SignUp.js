@@ -69,7 +69,7 @@ export default function SignUp() {
     event.preventDefault();
     console.log("Register Started");
 
-    fetch('http://www.mutualfundcalculator.in/starlord/user/register',{
+    fetch('https://www.mutualfundcalculator.in/starlord/user/register',{
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({

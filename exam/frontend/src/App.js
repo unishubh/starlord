@@ -42,6 +42,8 @@ function App() {
     useEffect (
       () => {
         console.log("token is " ,token);
+        if(token)
+        console.log("jab ", token.userId);
       },[token]
     );
    return (
