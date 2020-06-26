@@ -5,11 +5,10 @@ const utilities = require('../../helpers/utilities');
 const getJwtCred = require('../../helpers/get_jwt_credentials') ;
 const createJSON = require('../../helpers/createJSONresponse') ;
 const uuid = require('uuid') ;
-
+const paperAttempted = require('../../helpers/isAttempted') ;
 exports.byPaperId = async ( req , res ) => {
     try{
-        let today = new Date();
-        let examStartTime = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        let startTime = new Date();
         let newUserID = await getJwtCred.userID(req,res);
         let newPaperID = req.params.paperID ;
         let paperExist = await db.mockpapers.findOne({
@@ -21,24 +20,27 @@ exports.byPaperId = async ( req , res ) => {
             console.log('MockPaper with this paper ID does not exist') ;
             utilities.sendError('MockPaper with this paper ID does not exist' , res ) ;
         }
-        let attempted = await db.attemptedPapers.findOne({
-            where :{
-                userID : newUserID ,
-                paperID : newPaperID },
-        });
-        if ( attempted ){
-            // Add the response of answer JSON after creating tempsave table
-            console.log('Already attempted this paper') ;
-            utilities.sendError('Already attempted this paper' , res ) ;
+        let attemptExpired = await paperAttempted.byUser(req,res) ;
+        if( attemptExpired ){
+            throw "User has already finished the paper" ;
         }
-        let newAttempt = db.attemptedPapers.build({ id : uuid.v4() , userID : newUserID , paperID : newPaperID } ) ;
-        await newAttempt.save() ;
+        
         let examineeResponse = await createJSON.ofQns(req,res) ;
         let newResponse = db.userPaperResponse.build( { id : uuid.v4() , userID:newUserID , paperID:newPaperID , response:examineeResponse} ) ;
         await newResponse.save() ;
         let startPaperResponse = new Object() ;
+        let firstQuestion = await db.questions.findOne({
+            where:{
+                iid:1,
+                paperID: newPaperID
+            },
+            raw:true
+        }) ;
+        if ( !firstQuestion )
+            throw "There are no questions in this paper" ;
+        startPaperResponse['firstQuestion'] = firstQuestion ;
         startPaperResponse['userPaperResponse'] = newResponse ;
-        startPaperResponse['startTime'] = examStartTime ;
+        startPaperResponse['startTime'] = startTime ;
         res.status(200) ;
         res.send(startPaperResponse) ;
     }

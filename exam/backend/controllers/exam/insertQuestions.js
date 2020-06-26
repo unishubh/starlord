@@ -3,7 +3,7 @@ const utilities = require('../../helpers/utilities');
 const sequelize = require('sequelize')
 const db = require('../../models')
 const uuid = require('uuid') ;
-module.exports.InsertQuestions = async (req, res) => {
+module.exports.InsertQuestions = async (req, res) => { 
     let paperID = req.params.paperID;
     let options = req.body.options; //Frontend will provide this is an array of options
     let correctAns = req.body.correctAns;
@@ -24,7 +24,24 @@ module.exports.InsertQuestions = async (req, res) => {
         questionData['posMark'] = posMark ;
         questionData['negMark'] = negMark ;
         // await db.sequelize.query("UPDATE questions set questions = JSON_ARRAY_APPEND(questions, '$' , '" +JSON.stringify(data)+"') where paperID = '"+paperID+"';" );
-        let newData =  db.questions.build({ id : uuid.v4() , paperID, questions:questionData})
+        let lasQuestion = await db.questions.findAll({
+            limit:1,
+            where:{
+                paperID ,
+            },
+            order:[['createdAt' , 'DESC']],
+            raw:true
+        }) ;
+        console.log(lasQuestion) ;
+        let newIID ;
+        if (!(lasQuestion).length){
+            newIID = 1 ;
+        }
+        else{
+            newIID = lasQuestion[0].iid + 1 ;
+        }
+        console.log(newIID) ;
+        let newData =  db.questions.build({ id:uuid.v4(), iid : newIID , paperID, qnJSON:questionData}) ;
         await newData.save();
         utilities.sendSuccess(newData, res);
     }

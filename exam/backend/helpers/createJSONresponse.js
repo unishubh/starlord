@@ -8,12 +8,12 @@ exports.ofQns = async ( req , res ) => {
             where :{
                 paperID : newPaperID ,
             },
-            attributes: [ 'id'  ] ,
+            attributes: [ 'iid'  ] ,
             raw:true ,
         });
         let examineeResponse = new Object() ;
         for ( id in qns ){
-            examineeResponse[qns[id]["id"]] = "" ;
+            examineeResponse[qns[id]["iid"]] = "" ;
         }
         return examineeResponse ;    
     }

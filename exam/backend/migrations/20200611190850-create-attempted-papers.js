@@ -16,6 +16,14 @@ module.exports = {
         allowNull: false,
         type: Sequelize.UUID
       },
+      startTime: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      finished: {
+        allowNull: true,
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
