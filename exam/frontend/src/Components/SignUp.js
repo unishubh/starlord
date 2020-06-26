@@ -54,7 +54,7 @@ export default function SignUp() {
   var jwtDecode = require('jwt-decode');
   const options = [
     { value: '1', label: 'ADMIN' },
-    { value: '0', label: 'STUDENT' },
+    { value: '2', label: 'STUDENT' },
     
   ];
   const history = useHistory();
