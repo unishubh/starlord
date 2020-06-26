@@ -25,7 +25,7 @@ exports.login = async ( req , res, next  ) => {
             utilities.sendNotAllowed("invalid password", res);
             return
         }
-        let accessToken = jwt.sign({userId: user.dataValues.userID}, process.env.JWT_SECRET, {
+        let accessToken = jwt.sign({userID:user.id, role: user.role , agencyID: user.agencyID}, process.env.JWT_SECRET, {
             expiresIn: "1d"
         });
         utilities.sendSuccess( accessToken, res);

@@ -1,17 +1,11 @@
-const db = require('../../models') ;
+const db = require('../models') ;
 const sequelize = require('sequelize') ;
 const jwt = require('jsonwebtoken');
-const utilities = require('../../helpers/utilities');
+const utilities = require('../helpers/utilities');
 
-exports.byAgency = async ( req , res ) =>{
+exports.total = async ( req , res ) =>{
     try{
-        let newAgencyID = req.body.agencyID ;
-        let { count , rows } = await db.exams.findAndCountAll({
-            where :{
-                agencyID : newAgencyID
-            },
-            attributes: [ 'id' , 'name' ]
-        });
+        let { count , rows } = await db.exams.findAndCountAll();
         console.log(count) ;
         let exams = new Object() ;
         exams['examcount'] = count ;
