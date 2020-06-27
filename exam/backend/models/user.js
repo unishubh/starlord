@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     agencyID :{
       type: DataTypes.UUID,
-      allowNull: false
+      allowNull: true
     },
     name: {
       type:DataTypes.STRING ,
@@ -29,7 +29,10 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
   user.associate = function(models) {
-    user.belongsTo(models.agency , {foreignKey:'agencyID'})
+    user.belongsTo(models.agency , {foreignKey : {
+        allowNull: true,
+        name: 'agencyID',
+      }})
   };
   return user;
 };
