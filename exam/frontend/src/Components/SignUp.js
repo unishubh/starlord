@@ -15,7 +15,7 @@ import Container from '@material-ui/core/Container';
 import { UserContext } from './UserContext';
 import Select from 'react-select';
 import {useHistory} from 'react-router-dom';
-
+import swal from 'sweetalert';
 
 // function Copyright() {
 //   return (
@@ -57,6 +57,7 @@ export default function SignUp() {
     { value: '2', label: 'STUDENT' },
     
   ];
+  const [agencies,setAgencies] = useState([]); 
   const history = useHistory();
   const {token,setToken} = useContext(UserContext);
   const classes = useStyles();
@@ -65,9 +66,31 @@ export default function SignUp() {
   const [email,setEmail] = useState("");
   const [password,setPassword] = useState("");
   const [agencyID,setAgencyID] = useState("");
+  const [isagency,setIsagency]=useState(true);
+
+
+
+
+
+  useEffect(
+    () => {
+      console.log("USEEFFECT called isagency");
+      setAgencies([{ value: '', label: 'ALLEN' },
+      { value: '', label: 'FIITJEE' }])
+    },[isagency]
+  );
+  useEffect(()=>{console.log(agencies)},[agencies]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log("Register Started");
+    // console.log(JSON.stringify({
+    //   name : name,
+    //   email: email,
+    //   role: role,
+    //   password: password,
+    //   agencyID:agencyID
+    // }));
 
     fetch('https://www.mutualfundcalculator.in/starlord/user/register',{
         method: 'POST',
@@ -80,11 +103,18 @@ export default function SignUp() {
           agencyID:agencyID
         })
       })
-        .then(response => response.json())
+        .then(response => 
+          {
+            if(response.ok)
+            return response.json();
+            else{
+              throw new Error(response.status);
+            }
+          })
         .then(data => {
           console.log(data)
-          if(data.message.accessToken)
-         { console.log("data is ")
+         
+         console.log("data is ")
           
           console.log(data.message.accessToken)
           console.log(data.message.data.name)
@@ -92,13 +122,20 @@ export default function SignUp() {
           var decoded = jwtDecode(data.message.accessToken);
           setToken(decoded);
           // console.log(token.role);
-          history.push('/');}
-          else{
-            alert(data.message)
-          }
+          history.push('/');
+          
 
           
-      })
+      }).catch(
+        (error)=>{
+          swal({
+            title: "Oops",
+            text: "Incorrect Details",
+            icon: "error",
+            button: "Got it",
+          });
+        }
+      );
       console.log("Registration ",token)
     };
 
@@ -132,7 +169,17 @@ export default function SignUp() {
             <Grid item xs={12} sm={6}>
             <Select
                                     
-              onChange={e=> setRole(e.value)}
+              onChange={e=> 
+                {
+                  setRole(e.value);
+                  if(e.value==2){
+                    setIsagency(false);
+                  }
+                  else{
+                    setIsagency(true);
+                  }
+              
+                }}
               options={options}
             />
             </Grid>
@@ -163,7 +210,7 @@ export default function SignUp() {
                 onChange = {e => setPassword(e.target.value)}
               />
             </Grid>
-            <Grid item xs={12}>
+           { isagency==true? <Grid item xs={12}>
               <TextField
                 variant="outlined"
                 required
@@ -175,7 +222,20 @@ export default function SignUp() {
                 value={agencyID}
                 onChange = {e => setAgencyID(e.target.value)}
               />
+            </Grid> :
+            <Grid item xs={12} sm={6}>
+            <Select
+                                    
+              onChange={e=> 
+                {
+                  setAgencyID(e.value)
+              
+                }}
+              options={agencies}
+              placeholder="Select Your Agency"
+            />
             </Grid>
+          }
             <Grid item xs={12}>
               {/* <FormControlLabel
                 control={<Checkbox value="allowExtraEmails" color="primary" />}

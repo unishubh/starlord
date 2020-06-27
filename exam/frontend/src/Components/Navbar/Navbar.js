@@ -68,6 +68,7 @@ function Navbar()
                                     <>
                                     <li><Link to="/signin"><i className="ti-user"></i>Login</Link></li>
                                     <li><Link to="/register"><i className="ti-lock"></i>Register</Link></li>
+                                    <li><Link to="/createagency"><i className="ti-book"></i>Create Agency</Link></li>
                                     </>
                                     
         

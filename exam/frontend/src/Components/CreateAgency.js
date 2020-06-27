@@ -43,34 +43,26 @@ export default function SignIn() {
   const history = useHistory();
   const classes = useStyles();
   const {token,setToken} = useContext(UserContext);
-  const [email,setEmail] = useState("");
-  const [password,setPassword] = useState("");
+  const [agency,setAgency] = useState("");
+ 
 
-  const handleSubmit = () => {
-
-    console.log("loginstarted");
-    // history.push('/');
+  const handleSubmit = (event) => {
+    // event.preventDefault();
+    console.log("create agency");
     
-   
-    // var decode = jwtDecode("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImp0aSI6ImM1YTUxNjEyLWNkMDAtNGRkYS1hMWYzLTkyY2QwMjVjNjk1ZCIsImlhdCI6MTU5MjU3OTc2NywiZXhwIjoxNTkyNTgzMzY3fQ.toBG6c1OftJjRVwjXD6UK9djDSwddPCnYi8UP3s5P7k");
-    
-    // console.log(decode.admin);
-    
-    
-  
     fetch('https://www.mutualfundcalculator.in/starlord/user/login',{
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
-        email: email,
-        password: password
+        agency: agency,
+        
       })
     })
       .then(response => response.json())
       .then(data => {
         console.log(data);
         localStorage.setItem("token", data.message);
-        if(data.message!="invalid user" && data.message!="invalid password")
+        if(data.message!=="invalid user" && data.message!=="invalid password")
         {var decoded = jwtDecode(data.message)
         setToken(decoded);
         history.push('/');  
@@ -88,14 +80,14 @@ export default function SignIn() {
 
   return (
    
-    <Container component="main" maxWidth="xs" id="SignInStudent">
+    <Container component="main" maxWidth="xs" id="SignIn">
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-                Sign in
+               Create Agency
         </Typography>
         <form className={classes.form} noValidate>
           <TextField
@@ -103,28 +95,15 @@ export default function SignIn() {
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            value = {email}
+            id="agency"
+            label="Enter Agency Name"
+            name="agency"
+            // autoComplete="email"
+            value = {agency}
             autoFocus
-            onChange = {e => setEmail(e.target.value)}
+            onChange = {e => setAgency(e.target.value)}
           />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            value = {password}
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            onChange = {e => setPassword(e.target.value)}
           
-          />
           {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
@@ -137,20 +116,9 @@ export default function SignIn() {
             
             onClick={handleSubmit}
           >
-            Sign In
+            Create Agency
           </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="/register" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid>
+         
         </form>
       </div>
       <Box mt={8}>

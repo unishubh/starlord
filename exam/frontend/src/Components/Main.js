@@ -1,7 +1,7 @@
 import React from 'react';
 
-import SignInStudent from './SignInStudent';
-import SignInAgency from './SignInAgency';
+import SignIn from './SignIn';
+
 import stu from '../images/students.jpg';
 import SignUp from './SignUp';
 import Navbar from './Navbar/Navbar'

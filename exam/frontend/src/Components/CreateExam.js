@@ -5,24 +5,24 @@ function CreateExam(){
 
 
     const [name,setName] = useState("");
-    const [maxMarks,setMaxMarks] = useState(0);
+    const [maxMarks,setMaxMarks] = useState(null);
     const [details,setDetails] = useState("");
     const [time,setTime] = useState("");
     const history = useHistory();
-  const handleSubmit = () => {
+  const handleSubmit = (event) => {
 
     console.log("create exam");
-    history.push('/');
+    
     
    console.log(name);
    console.log(maxMarks);
    console.log(time);
     
-  
-    fetch('https://localhost:3001/create_exam',{
+    const accessToken = localStorage.getItem("token");
+    fetch('https://www.mutualfundcalculator.in/starlord/admin/create_exam',{
       method: 'POST',
       headers: {'Content-Type': 'application/json',
-                'token' : 'Bearer ' + " "   },
+                'Authorization' : 'Bearer ' + accessToken   },
       body: JSON.stringify({
         name: name,
         maxMarks: maxMarks,
@@ -33,12 +33,21 @@ function CreateExam(){
       .then(response => response.json())
       .then(data => {
         console.log(data);
-        localStorage.setItem("token", data.token);
+        console.log(data.message);
+        if(data.message == " Missing Authorization Header")
+        {
+            alert(data.message)
+        }
+        else{
+            console.log("Hello JI");
+            history.push('/');
+        }
 
        
       
-    })    
+    })  
     console.log("Login Done");
+    event.preventDefault();
 
   };
 

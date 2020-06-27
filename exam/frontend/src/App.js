@@ -3,8 +3,8 @@ import './App.css';
 import Main from './Components/Main';
 import {Switch , Route } from 'react-router-dom';
 
-import SignInAgency from './Components/SignInAgency';
-import SignInStudent from './Components/SignInStudent';
+
+import SignIn from './Components/SignIn';
 import SignUp from './Components/SignUp';
 import Home from './Components/Home';
 import Navbar from './Components/Navbar/Navbar';
@@ -18,6 +18,7 @@ import AddQuestion from './Components/AddQuestion';
 import Papers from './Components/Papers';
 import PreviewPapers from './Components/PreviewPaper';
 import NotValid from './Components/NotValid';
+import CreateAgency from './Components/CreateAgency';
 
 
 function App() {
@@ -54,16 +55,16 @@ function App() {
      <Switch>
        {/* <Route exact path='/' component={SignInStudent} /> */}
        <Route exact path='/' component={Home} />
-       <Route exact path='/agencysignin' component={SignInAgency} />
-       <Route exact path='/signin' component={SignInStudent} />
+       <Route exact path='/signin' component={SignIn} />
        <Route exact path='/register' component={SignUp} />
        <Route exact path='/about' component={About} />
        <Route exact path='/admin' component={Admin} />
-      { (token && token.role==="1")  ? <Route exact path='/createexam' component={CreateExam} /> : <Route exact path='/createexam' component={NotValid} /> }
+       {!token ?  <Route exact path='/createagency' component={CreateAgency} /> :  <Route exact path='/createagency' component={NotValid} />}
+      { (token )  ? <Route exact path='/createexam' component={CreateExam} /> : <Route exact path='/createexam' component={NotValid} /> }
       { (token && token.role==="1") ? <Route exact path='/createpaper' component={CreatePaper} /> : <Route exact path='/createpaper' component={NotValid} /> }
       { (token ) ? <Route exact path='/exams' component={Exams} /> : <Route exact path='/exams' component={NotValid} /> }
       { (token ) ? <Route exact path='/papers' component={Papers} /> : <Route exact path='/papers' component={NotValid} /> }
-      { (token && token.role==="1")? <Route exact path='/preview/:paperID' component={PreviewPapers} /> : <Route exact path='/preview/:paperID' component={NotValid} /> }
+      { (true)? <Route exact path='/preview/:paperID' component={PreviewPapers} /> : <Route exact path='/preview/:paperID' component={NotValid} /> }
       { (token && token.role==="1") ? <Route exact path='/addquestion/:paperID' component={AddQuestion} /> : <Route exact path='/addquestion/:paperID' component={NotValid} /> }
 
    

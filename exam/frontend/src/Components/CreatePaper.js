@@ -19,7 +19,7 @@ function CreatePaper(props){
       ]);
     const [name,setName] = useState("");
     const [examID,setExamID] = useState("");
-    const [totalQns,setTotalQns] = useState(0);
+    const [totalQns,setTotalQns] = useState(null);
     const history = useHistory();
   const handleSubmit = (event) => {
 
