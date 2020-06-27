@@ -5,7 +5,6 @@ require('dotenv').config() ;
 const app = express() ;
 const port = process.env.PORT || 5001 ;
 const uuid =  require('uuid') ;
-app.use(cors()) ;
 app.use(express.json()) ;
 
 const db = require('./models') ;
@@ -24,9 +23,8 @@ let examRouter = require('./routes/exam') ;
 app.use('/user' , userRouter ) ;
 app.use('/admin' , orgAdminRouter ) ;
 app.use('/exam' , examRouter ) ;
-app.listen(port,() => 
+app.listen(port,() =>
     {console.log(`Server is running on port : ${port}`)}) ;
-
 
 //358ab7f0-b758-11ea-97e5-87ba4b5fa945
 
