@@ -1,58 +1,122 @@
-import React, { useState ,useEffect} from 'react';
+import React, { useState ,useEffect, useContext} from 'react';
 import {useHistory} from 'react-router-dom';
 import Select from 'react-select';
+import { UserContext } from './UserContext';
+import swal from 'sweetalert';
 
 
 
 
 function CreatePaper(props){
+    const {token,setToken} = useContext(UserContext);
+    const [options,setOptions] = useState([]);
+    useEffect(
+        
+        ()=>{
+            
+            fetch('https://www.mutualfundcalculator.in/starlord/user/getallexams'
+                )
+                .then(response =>{
+                // console.log(response);
+                  if(response.ok)
+                  return response.json();
+                  else{
+                    alert(response.status)
+                    throw new Error(response.status);
+                  }
+                })
+                .then(data => {
+                  console.log(data);
+                  data.examdata.map((exam,key) => {
+                    
+                      if(exam.agencyID === token.agencyID){
+                        options.push({'value':exam.id,'label':exam.name})
+                       
+                        
+                      }
+                      
+                    });
+                
+                setIsLoading(false);
+              
+                }
+              ).catch(
+                (error) => {
+                  swal({
+                    title: "Oops",
+                    text: "Something went wrong " + error,
+                    icon: "success",
+                    button: "Got it",
+                  });
+                //   history.push('/');  
 
-    useEffect(()=> {
-        console.log("USEEFFECT")
-        // fetch exams here first 
-    },[]);
+                }
+              )
 
-    const [options,setOptions] = useState([
-        { value: 'advanced', label: 'JEE-ADVANCED' },
-        { value: 'main', label: 'JEE-MAIN' },
-        { value: 'neet', label: 'NEET' },
-      ]);
+              console.log(options);
+        },[]
+    );
+
+
+   
     const [name,setName] = useState("");
     const [examID,setExamID] = useState("");
     const [totalQns,setTotalQns] = useState(null);
     const history = useHistory();
+    const [isLoading,setIsLoading] = useState(true);
   const handleSubmit = (event) => {
-
+    event.preventDefault();
     console.log("create paper");
     // history.push('/');
     
    console.log(name);
    console.log(examID);
    console.log(totalQns);
-    
-  
-    fetch('https://localhost:3001/create_paper',{
-      method: 'POST',
-      headers: {'Content-Type': 'application/json',
-                'token' : 'Bearer ' + " "   },
-      body: JSON.stringify({
+   
+
+   
+   
+   const accessToken = localStorage.getItem("token");
+   fetch('https://www.mutualfundcalculator.in/starlord/admin/create_paper',{
+     method: 'POST',
+     headers: {'Content-Type': 'application/json',
+               'Authorization' : 'Bearer ' + accessToken   },
+     body: JSON.stringify({
         name: name,
         examID: examID,
         totalQns: totalQns,
-      })
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data);
-        localStorage.setItem("token", data.token);
+     })
+   })
+     .then(response =>{
+       if(response.ok)  
+       return response.json();
+       else{
+           throw new Error(response.status)
+       }
+     } )
+     .then(data => {
+       console.log(data);
+       console.log(data.message);
+       swal({
+           title: "Hey Yaayy !!",
+           text: "Paper Has Been Created",
+           icon: "success",
+           button: "Got it",
+         });
+         history.push('/createpaper');
 
-       
-      
-    });    
-    const paperID=1241;
-    history.push('addquestion/'+paperID);
-    console.log("Create PAper done");
-   
+   }).catch(
+       (error)=>{
+           swal({
+               title: "Oh Ohhh",
+               text: "Check your details",
+               icon: "error",
+               button: "Got it",
+             });
+       }
+   )
+  
+    
 
   };
  

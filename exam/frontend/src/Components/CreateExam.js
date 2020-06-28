@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {useHistory} from 'react-router-dom';
-
+import swal from 'sweetalert';
 function CreateExam(){
 
 
@@ -10,6 +10,7 @@ function CreateExam(){
     const [time,setTime] = useState("");
     const history = useHistory();
   const handleSubmit = (event) => {
+    event.preventDefault();
 
     console.log("create exam");
     
@@ -27,27 +28,39 @@ function CreateExam(){
         name: name,
         maxMarks: maxMarks,
         details: details,
-        time:time
+        time: time
       })
     })
-      .then(response => response.json())
+      .then(response =>{
+        if(response.ok)  
+        return response.json();
+        else{
+            throw new Error(response.status)
+        }
+      } )
       .then(data => {
         console.log(data);
         console.log(data.message);
-        if(data.message == " Missing Authorization Header")
-        {
-            alert(data.message)
-        }
-        else{
-            console.log("Hello JI");
-            history.push('/');
-        }
+        swal({
+            title: "Hey Yaayy !!",
+            text: "Exam Has Been Created",
+            icon: "error",
+            button: "Got it",
+          });
+          history.push('/createpaper');
 
-       
-      
-    })  
+    }).catch(
+        (error)=>{
+            swal({
+                title: "Oh Ohhh",
+                text: "Check your details",
+                icon: "error",
+                button: "Got it",
+              });
+        }
+    )  
     console.log("Login Done");
-    event.preventDefault();
+   
 
   };
 
@@ -85,8 +98,8 @@ function CreateExam(){
                                 <div className="col-sm-6">
                                     <div className="form-group">
                                         <input className="form-control"  
-                                        type="time"
-                                        placeholder="Time Limit" value={time} onChange = {e => setTime(e.target.value)}/>
+                                        type="number"
+                                        placeholder="Time Limit In Hours" value={time} onChange = {e => setTime(e.target.value)}/>
                                     </div>
                                 </div>
                                 <div className="col-12">

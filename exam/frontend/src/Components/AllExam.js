@@ -2,13 +2,12 @@ import React,{useEffect,useContext, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import { UserContext } from './UserContext';
 import swal from 'sweetalert';
-import { TableSortLabel } from '@material-ui/core';
 
 
 
 
 
-function Exams(){
+function AllExams(){
     const accessToken = localStorage.getItem("token");
     const {token,setToken} = useContext(UserContext);
     const history = useHistory();
@@ -22,7 +21,7 @@ function Exams(){
             fetch('https://www.mutualfundcalculator.in/starlord/user/getallexams'
                 )
                 .then(response =>{
-                // console.log(response);
+                console.log(response);
                   if(response.ok)
                   return response.json();
                   else{
@@ -32,15 +31,8 @@ function Exams(){
                 })
                 .then(data => {
                   console.log(data);
-                  data.examdata.map((exam,key) => {
-                    
-                      if(exam.agencyID === token.agencyID){
-                        exams.push(exam)
-                        setTotal(t=>t+1)
-                      }
-                      
-                    });
-                
+                  setTotal(data.examcount);
+                  setExams(data.examdata);
                 setIsLoading(false);
               
                 }
@@ -59,6 +51,7 @@ function Exams(){
         },[]
     );
 
+    
     return( 
     <div>
         <div className="slider-area">
@@ -67,7 +60,7 @@ function Exams(){
                     <div className="row">
                         <div className="col-xl-12">
                             <div className="hero-cap hero-cap2 text-center">
-                                    <h2>Your Exams {isLoading ? <>IS LOADING..</> : <>: {total}</>}</h2>
+                                <h2>All Exams {isLoading ? <>IS LOADING..</> : <> : {total}</>}</h2>
                             </div>
                         </div>
                     </div>
@@ -83,7 +76,7 @@ function Exams(){
                                 <div className="table-head">
                                     <div className="serial">#</div>
                                     <div className="country">Exam</div>
-                                    <div className="visit">Number of Questions</div>
+                                    <div className="visit">Max Marks</div>
                                     <div className="percentage">Description</div>
                                 </div>
                                { exams.map((exam,key)=>(
@@ -110,4 +103,4 @@ function Exams(){
     );
 }
 
-export default Exams;
+export default AllExams;

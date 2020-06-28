@@ -102,7 +102,7 @@ function Navbar()
                             <ul id="navigation">                                                                                          
                                 <li><Link to="/">Home</Link></li>
                                 <li><Link to="/about">About</Link></li>
-                                <li><Link to="/exams">Exams</Link></li>
+                                <li><Link to="/allexams">Exams</Link></li>
                                 {/* <li><Link to="instructor.html">Instructors</Link></li> */} 
                                  <li><Link to="/admin">Admin</Link>
                                     <ul className="submenu">
