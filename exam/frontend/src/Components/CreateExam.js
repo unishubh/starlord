@@ -44,7 +44,7 @@ function CreateExam(){
         swal({
             title: "Hey Yaayy !!",
             text: "Exam Has Been Created",
-            icon: "error",
+            icon: "success",
             button: "Got it",
           });
           history.push('/createpaper');
