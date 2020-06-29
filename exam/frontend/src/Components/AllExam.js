@@ -2,7 +2,7 @@ import React,{useEffect,useContext, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import { UserContext } from './UserContext';
 import swal from 'sweetalert';
-
+import {Spinner} from 'react-bootstrap';
 
 
 
@@ -54,6 +54,22 @@ function AllExams(){
     
     return( 
     <div>
+     { isLoading ?  
+     <div>
+         
+        <div className="preloader d-flex align-items-center justify-content-center">
+            <div className="preloader-inner position-relative">
+                <div className="preloader-circle"></div>
+                <div className="preloader-img pere-text">
+                    <img src="assets/img/logo/loder.png" alt=""/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+      :
+    <div>
+   
         <div className="slider-area">
             <div className="slider-height2 d-flex align-items-center">
                 <div className="container">
@@ -77,7 +93,8 @@ function AllExams(){
                                     <div className="serial">#</div>
                                     <div className="country">Exam</div>
                                     <div className="visit">Max Marks</div>
-                                    <div className="percentage">Description</div>
+                                    <div className="visit">Description</div>
+                                    <div className="visit">Subscribe</div>
                                 </div>
                                { exams.map((exam,key)=>(
                                 <div className="table-row" id={key}>
@@ -85,6 +102,53 @@ function AllExams(){
                                     <div className="country"> {exam.name}</div>
                                     <div className="visit">{exam.max_marks}</div>
                                     <div className="visit">{exam.details}</div>
+                                    <button onClick={()=>{
+                                        setIsLoading(true);
+                                        const accessToken = localStorage.getItem("token");
+                                        fetch('https://www.mutualfundcalculator.in/starlord/user/subscribe/'+exam.id,{
+                                          method: 'POST',
+                                          headers: {'Content-Type': 'application/json',
+                                                    'Authorization' : 'Bearer ' + accessToken   },
+                                        //   body: JSON.stringify({
+                                        //     name: name,
+                                        //     maxMarks: maxMarks,
+                                        //     details: details,
+                                        //     time: time
+                                        //   })
+                                        })
+                                          .then(response =>{
+                                            setIsLoading(false);
+                                            if(response.ok)  
+                                            return response.json();
+                                            else{
+                                                throw new Error(response.status)
+                                            }
+                                          } )
+                                          .then(data => {
+                                            console.log(data);
+                                            console.log(data.message);
+                                            swal({
+                                                title: "Hey Yaayy !!",
+                                                text: "Exam Has Been Subscribed",
+                                                icon: "success",
+                                                button: "Got it",
+                                              });
+                                            
+                                    
+                                        }).catch(
+                                            (error)=>{
+                                                swal({
+                                                    title: "Oh Ohhh",
+                                                    text: "Either you have already subscribed or Something went wrong",
+                                                    icon: "error",
+                                                    button: "Got it",
+                                                  });
+                                            }
+                                        )
+                                    }} 
+                                    className="genric-btn primary-border small" >
+                                    Subscribe
+                                    </button>
                                     {/* <div className="percentage">
                                         <div className="progress">
                                             <div className="progress-bar color-1" role="progressbar" style={{width: "80%"}}
@@ -99,7 +163,10 @@ function AllExams(){
                 </div>
             </div>
         </div> 
+        
     </div>
+     }
+</div>
     );
 }
 

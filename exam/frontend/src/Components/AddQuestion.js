@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import {useHistory,useParams} from 'react-router-dom';
+import swal from 'sweetalert';
+import Select from 'react-select';
 
 function AddQestion(){
-
+    const types = [
+        {value:'mcq',label:'MCQ'},
+        {value:'int',label:'INTEGER'}
+    ];
     const {paperID} = useParams();
     // console.log("Add Question PE aagye");
     // console.log(paperid);
@@ -19,9 +24,12 @@ function AddQestion(){
     const [type,setType] = useState("");
     const [posMark,setPosMark]=useState(null);
     const [negMark,setNegMark]=useState(null);
+    const [isLoading,setIsLoading] = useState(false);
     const history = useHistory();
     const handleSubmit = (event) => {
         console.log(question);
+        event.preventDefault();
+        setIsLoading(true);
     
         // questions.push({question,option1,option2,option3,option4,correct});
         // setCorrect("");
@@ -33,44 +41,85 @@ function AddQestion(){
        history.push('/preview/'+paperID);  
     };
     const handleAdd = (event) => {
+        event.preventDefault();
+    setIsLoading(true);
     console.log("/sjgjs/"+paperID);
     console.log("add question");
-    fetch('https://localhost:3001/add_questions/'+paperID,{
+    const accessToken = localStorage.getItem("token");
+    fetch('https://www.mutualfundcalculator.in/starlord/admin/add_questions/'+paperID,{
       method: 'POST',
       headers: {'Content-Type': 'application/json',
-                'token' : 'Bearer ' + " "   },
+                'Authorization' : 'Bearer ' + accessToken,   },
       body: JSON.stringify({
          question: question,
          options: options,
          correct: correct,
-         type:type
+         type:type,
+         posMark:posMark,
+         negMark:negMark
       })
     })
-      .then(response => response.json())
+      .then(response =>
+        {   setIsLoading(false);
+             if(response.ok) return response.json();
+            else{
+                throw new Error(response.status)
+            }
+        })
       .then(data => {
-        console.log(data);
-        localStorage.setItem("token", data.token);
-
+        console.log("reply",data);
+    
+        swal({
+            title: "Hayy",
+            text: "Question Has Been Added Successfully! " ,
+            icon: "success",
+            button: "Got it",
+          });
         setCorrect("");
         setOptions("");
-        setType({"1":"","2":"","3":"","4":""});
+        setType();
         setQuestion("");
-        setNegMark("-1");
-        setPosMark(1);
-        event.preventDefault();   
+        setNegMark(null);
+        setPosMark(null);
+        history.push("/addquestion/"+paperID);   
+ 
       
-    })    
+    }).catch(
+        error => {
+            swal({
+                title: "Oops",
+                text: "Something went wrong " + error,
+                icon: "error",
+                button: "Got it",
+              });
+        }
+    );    
     
 
     console.log("Add Question  ", paperID);
     
-    history.push("/addquestion/"+paperID);   
   };
 
 
     return(
         <div>
-            <section className="contact-section">
+           
+            { 
+    isLoading ?  
+    <div>
+         
+    <div className="preloader d-flex align-items-center justify-content-center">
+        <div className="preloader-inner position-relative">
+            <div className="preloader-circle"></div>
+            <div className="preloader-img pere-text">
+                <img src="assets/img/logo/loder.png" alt=""/>
+            </div>
+        </div>
+    </div>
+
+</div>
+      :
+        <section className="contact-section">
             <div className="container">
                 <div className="row">
                     <div className="col-12">
@@ -86,11 +135,18 @@ function AddQestion(){
                     <div className="col-lg-8">
                     <form className="form-contact contact_form"  id="contactForm" >
                             <div className="row">
-                                {/* <div class="col-12">
+                                <div class="col-6">
                                     <div class="form-group">
-                                        <textarea className="form-control w-100" name="message" id="message" cols="30" rows="9" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Message'" placeholder=" Enter Message"></textarea>
+                                    <Select
+                                    
+                                    onChange={e=> setType(e.value)}
+                                    options={types}
+                                />
+                                        {/* <textarea className="form-control w-100" name="message" id="message" cols="30" rows="9" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Message'" placeholder=" Enter Message"></textarea> */}
                                     </div>
-                                </div> */}
+                                </div>
+                               
+                            {/* </div> */}
                                 <div className="col-12">
                                     <div className="form-group">
                                         <textarea className="form-control" cols="30" rows="9" name="question"
@@ -98,6 +154,8 @@ function AddQestion(){
                                          placeholder="Enter Question" value={question} onChange = {e => setQuestion(e.target.value)}/>
                                     </div>
                                 </div>
+                            { type !=='int' ? 
+                                <>
                                 <div className="col-sm-6">
                                     <div className="form-group">
                                         <input className="form-control"  name="option1"
@@ -126,6 +184,8 @@ function AddQestion(){
                                         placeholder="Enter Option 4" value={options["4"]} onChange = {e => setOptions({"4":e.target.value})}/>
                                     </div>
                                 </div>
+                                </> : <></>
+                            }
                                 <div className="col-sm-6">
                                     <div className="form-group">
                                         <input className="form-control"  name="correct"
@@ -147,13 +207,16 @@ function AddQestion(){
                                         placeholder="Negative Mark" value={negMark} onChange = {e => setNegMark(e.target.value)}/>
                                     </div>
                                 </div>
-                                <div className="col-sm-6">
+                                {/* <div className="col-sm-6">
                                     <div className="form-group">
-                                        <input className="form-control"  name="type"
-                                        type="text"
-                                        placeholder="Enter Type" value={type} onChange = {e => setType(e.target.value)}/>
-                                    </div>
-                                </div>
+                                        <select className="form-control"  name="type"
+                                        placeholder="Enter Type" value={type} onChange = {e => {setType(e.target.value);console.log(e.target.value)}}>
+                                        <option value="mcq" selected>MCQ</option> 
+                                        <option value="int">INT</option>   
+                                        </select>
+
+                                    </div>*/}
+                                {/* </div>  */}
                                 
                             </div>
                             <div className=" mt-3">
@@ -166,7 +229,9 @@ function AddQestion(){
                 </div>
                 </div>
                 </section>
-                
+            
+            }
+            
         </div>
     );
 }

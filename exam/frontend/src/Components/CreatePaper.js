@@ -66,16 +66,12 @@ function CreatePaper(props){
     const [isLoading,setIsLoading] = useState(true);
   const handleSubmit = (event) => {
     event.preventDefault();
+    setIsLoading(true);
     console.log("create paper");
     // history.push('/');
-    
    console.log(name);
    console.log(examID);
    console.log(totalQns);
-   
-
-   
-   
    const accessToken = localStorage.getItem("token");
    fetch('https://www.mutualfundcalculator.in/starlord/admin/create_paper',{
      method: 'POST',
@@ -88,6 +84,7 @@ function CreatePaper(props){
      })
    })
      .then(response =>{
+       setIsLoading(false);
        if(response.ok)  
        return response.json();
        else{
@@ -103,7 +100,7 @@ function CreatePaper(props){
            icon: "success",
            button: "Got it",
          });
-         history.push('/createpaper');
+         history.push('/addquestion/' + data.message.id);
 
    }).catch(
        (error)=>{
@@ -122,7 +119,25 @@ function CreatePaper(props){
  
 
     return(
-        <div>
+    <div> 
+       <div>
+            { 
+    isLoading ?  
+     <div>
+         
+        <div className="preloader d-flex align-items-center justify-content-center">
+            <div className="preloader-inner position-relative">
+                <div className="preloader-circle"></div>
+                <div className="preloader-img pere-text">
+                    <img src="assets/img/logo/loder.png" alt=""/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+      : 
+      
+      <div>
        <section className="contact-section">
             <div className="container">
                 <div className="row">
@@ -172,6 +187,10 @@ function CreatePaper(props){
                 </section>
                                 
         </div>
+            }
+      </div>
+      </div>
+
     );
 }
 

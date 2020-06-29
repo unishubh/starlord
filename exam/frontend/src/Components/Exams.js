@@ -60,6 +60,23 @@ function Exams(){
     );
 
     return( 
+<div>
+{ 
+    isLoading ?  
+     <div>
+         
+        <div className="preloader d-flex align-items-center justify-content-center">
+            <div className="preloader-inner position-relative">
+                <div className="preloader-circle"></div>
+                <div className="preloader-img pere-text">
+                    <img src="assets/img/logo/loder.png" alt=""/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+      :
+
     <div>
         <div className="slider-area">
             <div className="slider-height2 d-flex align-items-center">
@@ -85,6 +102,7 @@ function Exams(){
                                     <div className="country">Exam</div>
                                     <div className="visit">Number of Questions</div>
                                     <div className="percentage">Description</div>
+                                    
                                 </div>
                                { exams.map((exam,key)=>(
                                 <div className="table-row" id={key}>
@@ -92,6 +110,7 @@ function Exams(){
                                     <div className="country"> {exam.name}</div>
                                     <div className="visit">{exam.max_marks}</div>
                                     <div className="visit">{exam.details}</div>
+                                    
                                     {/* <div className="percentage">
                                         <div className="progress">
                                             <div className="progress-bar color-1" role="progressbar" style={{width: "80%"}}
@@ -107,6 +126,8 @@ function Exams(){
             </div>
         </div> 
     </div>
+}
+</div>
     );
 }
 

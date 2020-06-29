@@ -20,12 +20,14 @@ import PreviewPapers from './Components/PreviewPaper';
 import NotValid from './Components/NotValid';
 import CreateAgency from './Components/CreateAgency';
 import AllExam from './Components/AllExam';
-
+import swal from 'sweetalert';
+import {useHistory} from 'react-router-dom';
+import YouLost from './Components/YouLost';
 function App() {
   
     // localStorage.setItem("token",null) 
     const [token,setToken] = useState(null);
-   
+    const history = useHistory();
     useEffect ( async () => {
       const istoken = await localStorage.getItem("token");
     if(istoken ){
@@ -54,6 +56,7 @@ function App() {
      <Main/>
      <Switch>
        {/* <Route exact path='/' component={SignInStudent} /> */}
+       
        <Route exact path='/' component={Home} />
        <Route exact path='/signin' component={SignIn} />
        <Route exact path='/register' component={SignUp} />
@@ -67,7 +70,7 @@ function App() {
       { (token ) ? <Route exact path='/papers' component={Papers} /> : <Route exact path='/papers' component={NotValid} /> }
       { (token && token.role===1)? <Route exact path='/preview/:paperID' component={PreviewPapers} /> : <Route exact path='/preview/:paperID' component={NotValid} /> }
       { (token && token.role===1) ? <Route exact path='/addquestion/:paperID' component={AddQuestion} /> : <Route exact path='/addquestion/:paperID' component={NotValid} /> }
-
+       <Route  component={YouLost}/>  
    
    </Switch> 
    </UserContext.Provider>

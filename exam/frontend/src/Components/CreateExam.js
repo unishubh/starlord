@@ -3,17 +3,17 @@ import {useHistory} from 'react-router-dom';
 import swal from 'sweetalert';
 function CreateExam(){
 
-
+    const [isLoading,setIsLoading] = useState(false);
     const [name,setName] = useState("");
     const [maxMarks,setMaxMarks] = useState(null);
     const [details,setDetails] = useState("");
     const [time,setTime] = useState("");
     const history = useHistory();
-  const handleSubmit = (event) => {
-    event.preventDefault();
+    const handleSubmit = (event) => {
 
+    event.preventDefault();
     console.log("create exam");
-    
+    setIsLoading(true);
     
    console.log(name);
    console.log(maxMarks);
@@ -32,6 +32,7 @@ function CreateExam(){
       })
     })
       .then(response =>{
+        setIsLoading(false);
         if(response.ok)  
         return response.json();
         else{
@@ -67,6 +68,21 @@ function CreateExam(){
 
     return(
         <div>
+            { 
+    isLoading ?  
+     <div>
+         
+        <div className="preloader d-flex align-items-center justify-content-center">
+            <div className="preloader-inner position-relative">
+                <div className="preloader-circle"></div>
+                <div className="preloader-img pere-text">
+                    <img src="assets/img/logo/loder.png" alt=""/>
+                </div>
+            </div>
+        </div>
+
+    </div>
+      :
              <section className="contact-section">
             <div className="container">
                 <div className="row">
@@ -120,6 +136,7 @@ function CreateExam(){
                 </div>
                 </div>
                 </section>
+            }
         </div>
     );
 }

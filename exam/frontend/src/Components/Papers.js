@@ -7,7 +7,9 @@ function Papers(){
     const {token,setToken} = useContext(UserContext);
     const [options,setOptions] = useState([]);
     const [examID,setExamID] = useState("");
-    const [isLoading,setIsLoading] =useState(true)
+    const [isLoading,setIsLoading] =useState(true);
+    const [examName,setExamName] = useState("");
+    const [papers,setPapers] = useState([]);
     useEffect(
         
         ()=>{
@@ -17,20 +19,29 @@ function Papers(){
                 )
                 .then(response =>{
                 // console.log(response);
+                  setIsLoading(false);
                   if(response.ok)
                   return response.json();
                   else{
-                    alert(response.status)
+                    // alert(response.status)
                     throw new Error(response.status);
                   }
                 })
                 .then(data => {
                   console.log(data);
+                  let f = 0;
                   data.examdata.map((exam,key) => {
                     
                       if(exam.agencyID === token.agencyID){
-                        options.push({'value':exam.id,'label':exam.name})
-                       
+                        options.push({'value':exam.id,'label':exam.name});
+                        if(f==0)
+                        {
+                          setExamID(exam.id);
+                          setExamName(exam.name);
+                          f=1;
+                        }
+
+                        
                         
                       }
                       
@@ -44,7 +55,7 @@ function Papers(){
                   swal({
                     title: "Oops",
                     text: "Something went wrong " + error,
-                    icon: "success",
+                    icon: "error",
                     button: "Got it",
                   });
                 //   history.push('/');  
@@ -58,29 +69,36 @@ function Papers(){
     useEffect(
         
         ()=>{
+            setIsLoading(true);
+          // console.log("token.role",token.role);
             const accessToken = localStorage.getItem("token");
-            fetch('https://www.mutualfundcalculator.in/starlord/admin/get_papers',{
+            // console.log("token " , accessToken);
+            fetch('https://www.mutualfundcalculator.in/starlord/admin/get_papers/',{
                 method : 'POST',
-                header : {'Content-Type': 'application/json',
-                'Authorization' : 'Bearer ' + accessToken   },
+                header : {
+                  
+                  'Content-Type': 'application/json',
+                  'Authorization' : 'Bearer ' + accessToken ,
+                },
                 body : JSON.stringify({
                     examID : examID
                 })
             }
                 )
                 .then(response =>{
-                // console.log(response);
+                  setIsLoading(false);
+                console.log(response.json());
                   if(response.ok)
                   return response.json();
                   else{
-                    alert(response.status)
+                    // alert(response.status)
                     throw new Error(response.status);
                   }
                 })
                 .then(data => {
                   console.log(data);
                   
-                
+                setPapers(data);
                 setIsLoading(false);
               
                 }
@@ -89,7 +107,7 @@ function Papers(){
                   swal({
                     title: "Oops",
                     text: "Something went wrong " + error,
-                    icon: "success",
+                    icon: "error",
                     button: "Got it",
                   });
                 //   history.push('/');  
@@ -97,10 +115,23 @@ function Papers(){
                 }
               )
 
-              console.log(options);
+            
         },[examID]
     );
     return( 
+   <div>   
+     { isLoading ? <div>
+         
+         <div className="preloader d-flex align-items-center justify-content-center">
+             <div className="preloader-inner position-relative">
+                 <div className="preloader-circle"></div>
+                 <div className="preloader-img pere-text">
+                     <img src="assets/img/logo/loder.png" alt=""/>
+                 </div>
+             </div>
+         </div>
+ 
+     </div> :
     <div>
         <div className="slider-area">
             <div className="slider-height2 d-flex align-items-center">
@@ -118,9 +149,11 @@ function Papers(){
         <br/><br/>
         <div className="col-sm-6">
                                 <Select
-                                    placeholder="Select Exam"
+                                    
                                     onChange={e=> setExamID(e.value)}
                                     options={options}
+                                    placeholder = {examName} 
+                                    // selected 
                                 />
                                 </div>
         <div className="whole-wrap"> 
@@ -137,7 +170,7 @@ function Papers(){
                                     <div className="visit">Preview</div>
                                     <div className="visit">Edit</div>
                                 </div>
-                               { options.map((paper,key)=>(
+                               { papers.map((paper,key)=>(
                                 <div className="table-row" id={key}>
                                     <div className="serial">{paper.sr}</div>
                                     <div className="country"> {paper.name}</div>
@@ -165,6 +198,8 @@ function Papers(){
                 </div>
             </div>
         </div> 
+    </div>
+     }
     </div>
     );
 }

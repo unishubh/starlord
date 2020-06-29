@@ -67,7 +67,7 @@ export default function SignUp() {
   const [password,setPassword] = useState("");
   const [agencyID,setAgencyID] = useState("");
   const [isagency,setIsagency]=useState(true);
-
+  const [confirmpassword,setConfirmPassword] = useState("");
 
 
 
@@ -84,27 +84,50 @@ export default function SignUp() {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log("Register Started");
-    // console.log(JSON.stringify({
-    //   name : name,
-    //   email: email,
-    //   role: role,
-    //   password: password,
-    //   agencyID:agencyID
-    // }));
+    console.log(JSON.stringify({
+      name : name,
+      email: email,
+      role: role,
+      password: password,
+      confirmpassword:confirmpassword
+    }));
+
+    let bodydata;
+    if(role==1)
+    {
+      bodydata = JSON.stringify({
+        name : name,
+        email: email,
+        role: role,
+        password: password,
+        confirmpassword:confirmpassword,
+        agencyID:agencyID
+      })
+      console.log("role is ", 1);
+    }
+    else{
+      bodydata = JSON.stringify({
+        name : name,
+        email: email,
+        role: role,
+        password: password,
+        confirmpassword:confirmpassword,
+        
+      })
+      console.log("role is ", 2);
+    }
 
     fetch('https://www.mutualfundcalculator.in/starlord/user/register',{
         method: 'POST',
+        mode : 'cors',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          name : name,
-          email: email,
-          role: role,
-          password: password,
-          agencyID:agencyID
-        })
+        
+        body: bodydata
+      
+     
       })
         .then(response => 
-          {
+          { console.log(response)
             if(response.ok)
             return response.json();
             else{
@@ -210,6 +233,20 @@ export default function SignUp() {
                 onChange = {e => setPassword(e.target.value)}
               />
             </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                name="confirmpassword"
+                label="Confirm Password"
+                type="text"
+                id="confirmpassword"
+                autoComplete="current-password"
+                value={confirmpassword}
+                onChange = {e => setConfirmPassword(e.target.value)}
+              />
+            </Grid>
            { isagency==true? <Grid item xs={12}>
               <TextField
                 variant="outlined"
@@ -224,7 +261,7 @@ export default function SignUp() {
               />
             </Grid> :
             <Grid item xs={12} sm={6}>
-            <Select
+            {/* <Select
                                     
               onChange={e=> 
                 {
@@ -233,7 +270,7 @@ export default function SignUp() {
                 }}
               options={agencies}
               placeholder="Select Your Agency"
-            />
+            /> */}
             </Grid>
           }
             <Grid item xs={12}>

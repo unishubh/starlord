@@ -16,6 +16,7 @@ function Home(){
         };
     return(
         <div>
+            
         <div className="slider-area ">
             <div className="slider-active">
                 {/* <!-- Single Slider --> */}
