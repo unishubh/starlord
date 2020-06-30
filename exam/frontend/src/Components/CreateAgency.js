@@ -14,7 +14,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import {useHistory} from 'react-router-dom';
 import {UserContext} from './UserContext';
-var jwtDecode = require('jwt-decode');
+import swal from 'sweetalert';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -44,42 +45,63 @@ export default function SignIn() {
   const classes = useStyles();
   const {token,setToken} = useContext(UserContext);
   const [agency,setAgency] = useState("");
+  const [isLoading,setIsLoading] =useState(false);
  
 
   const handleSubmit = (event) => {
-    // event.preventDefault();
+    event.preventDefault();
     console.log("create agency");
-    
-    fetch('https://www.mutualfundcalculator.in/starlord/user/login',{
+    setIsLoading(true);
+    fetch('https://www.mutualfundcalculator.in/starlord/user/create_agency/'+agency,{
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
-        agency: agency,
+        // agency: agency,
         
       })
     })
-      .then(response => response.json())
+      .then(response =>{
+        setIsLoading(false);
+        if(response.ok) return response.json();
+        else{
+          throw new Error(response.status);
+        }
+      })
       .then(data => {
         console.log(data);
-        localStorage.setItem("token", data.message);
-        if(data.message!=="invalid user" && data.message!=="invalid password")
-        {var decoded = jwtDecode(data.message)
-        setToken(decoded);
-        history.push('/');  
-      }
-      else{
-        alert(data.message);
-      }
-
-        
-      })    
-    console.log("Login Done");
+        swal({
+          title: "Yayyy",
+          text: "Agency Has Been Created ",
+          icon: "success",
+          button: "Got it",
+        });
+        }).catch(
+          error => {
+            swal({
+              title: "Oops",
+              text: "Something went wrong " + error,
+              icon: "error",
+              button: "Got it",
+            });
+          }
+        )    
+    console.log("agency created");
 
   };
 
 
   return (
-   
+   <div>
+     { isLoading ? <div>
+      <div className="preloader d-flex align-items-center justify-content-center">
+            <div className="preloader-inner position-relative">
+                <div className="preloader-circle"></div>
+                <div className="preloader-img pere-text">
+                    <img src="assets/img/logo/loder.png" alt=""/>
+                </div>
+            </div>
+        </div>
+     </div> :
     <Container component="main" maxWidth="xs" id="SignIn">
       <CssBaseline />
       <div className={classes.paper}>
@@ -113,7 +135,7 @@ export default function SignIn() {
             fullWidth
             variant="contained"
             color="primary"
-            
+            type="submit"
             onClick={handleSubmit}
           >
             Create Agency
@@ -135,5 +157,7 @@ export default function SignIn() {
           </Link> */}
       </Box>
     </Container>
+    }
+    </div>
   );
 }

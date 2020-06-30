@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import {useHistory} from 'react-router-dom';
 import swal from 'sweetalert';
 function CreateExam(){
@@ -7,11 +7,110 @@ function CreateExam(){
     const [name,setName] = useState("");
     const [maxMarks,setMaxMarks] = useState(null);
     const [details,setDetails] = useState("");
-    const [time,setTime] = useState("");
+    const [time,setTime] = useState(null);
     const history = useHistory();
+    const [nameError,setNameError] = useState("");
+    const [maxMarksError,setMaxMarksError] = useState("");
+    const [detailsError,setDetailsError] = useState("");
+    const [timeError,setTimeError] = useState("");
+    const [count,setCount] = useState(-1);
+  
+    // useEffect(
+    //   () => {
+  
+    //     console.log("USEEFFECT called isagency");
+    //     setAgencies([{ value: '', label: 'ALLEN' },
+    //     { value: '', label: 'FIITJEE' }])
+    //   },[isagency]
+    // );
+    // useEffect(()=>{console.log(agencies)},[agencies]);
+  
+  
+    useEffect(
+      ()=>{
+        
+        setCount(c=>c+1);
+        
+     let f = 0;
+      if(name=="")
+      {
+        setNameError("Write Exam Name");
+        f=1;
+      }
+      else{
+        setNameError("");
+      }
+      if(maxMarks<1)
+      {
+        setMaxMarksError("Please Provide Marks");
+        f=1;
+      }
+      else{
+        setMaxMarksError("");
+      }
+      if(details=="")
+      {
+        setDetailsError("Please provide details");
+        f=1;
+      }
+      else{
+        setDetailsError("");
+      }
+      if(time<=0)
+      {
+          setTimeError("Enter valid time");
+      }
+      else{
+          setTimeError("");
+      }
+      },[name,maxMarks,details,time]
+    );
+  
+  
+    const Validate = ()=>{
+      let f = 0;
+      if(name=="")
+      {
+        setNameError("Write Exam Name");
+        f=1;
+      }
+      else{
+        setNameError("");
+      }
+      if(maxMarks<1)
+      {
+        setMaxMarksError("Please Provide Marks");
+        f=1;
+      }
+      else{
+        setMaxMarksError("");
+      }
+      if(details=="")
+      {
+        setDetailsError("Please provide details");
+        f=1;
+      }
+      else{
+        setDetailsError("");
+      }
+      if(time<=0)
+      {
+          setTimeError("Enter valid time");
+      }
+      else{
+          setTimeError("");
+      }
+      if(f==1)
+        return false;
+      return true;
+    }
+// Submission Start Here//
     const handleSubmit = (event) => {
 
     event.preventDefault();
+    let  isValid = Validate();
+    setCount(1);
+    if(isValid){ 
     console.log("create exam");
     setIsLoading(true);
     
@@ -60,12 +159,12 @@ function CreateExam(){
               });
         }
     )  
-    console.log("Login Done");
-   
+    console.log("Exam Done");
+    }
 
   };
 
-
+// Submission Ends Here
     return(
         <div>
             { 
@@ -90,7 +189,7 @@ function CreateExam(){
                         <h2 className="contact-title">Create Exam</h2>
                     </div>
                     <div className="col-lg-8">
-                        <form className="form-contact contact_form"  id="contactForm" >
+                        <form className="form-contact contact_form"  id="contactForm" novalidate="novalidate" >
                             <div className="row">
                                 {/* <div class="col-12">
                                     <div class="form-group">
@@ -101,28 +200,45 @@ function CreateExam(){
                                     <div className="form-group">
                                         <input className="form-control"  
                                         type="text"  
-                                        placeholder="Enter exam name" value={name} onChange = {e => setName(e.target.value)} />
+                                        id="message"
+                                        placeholder="Enter exam name" value={name} onChange = {e => setName(e.target.value)} 
+                                        />
+                                        { count<=0 ? <></> : <div style={{fontSize :12,color:"red"}}>
+                                                    {nameError}
+                                                </div>}
                                     </div>
                                 </div>
                                 <div className="col-sm-6">
                                     <div className="form-group">
                                         <input className="form-control"  
                                         type="number"
-                                        placeholder="Maximum Marks" value={maxMarks} onChange = {e => setMaxMarks(e.target.value)}/>
+                                        placeholder="Maximum Marks" value={maxMarks} onChange = {e => setMaxMarks(e.target.value)}
+                                        />
+                                        { count<=0 ? <></> : <div style={{fontSize :12,color:"red"}}>
+                                                           {maxMarksError}
+                                                         </div>}
                                     </div>
                                 </div>
                                 <div className="col-sm-6">
                                     <div className="form-group">
                                         <input className="form-control"  
                                         type="number"
-                                        placeholder="Time Limit In Hours" value={time} onChange = {e => setTime(e.target.value)}/>
+                                        placeholder="Time Limit In Hours" value={time} onChange = {e => setTime(e.target.value)}
+                                        />
+                                        { count<=0 ? <></> : <div style={{fontSize :12,color:"red"}}>
+                                               {timeError}
+                                         </div>}
                                     </div>
                                 </div>
                                 <div className="col-12">
                                     <div className="form-group">
                                         <textarea className="form-control" cols="30" rows="9" name="description"
                                         type="text" 
-                                         placeholder="Enter Details" value={details} onChange = {e => setDetails(e.target.value)}/>
+                                         placeholder="Enter Details" value={details} onChange = {e => setDetails(e.target.value)}
+                                         />
+                                         { count<=0 ? <></> : <div style={{fontSize :12,color:"red"}}>
+                                               {detailsError}
+                                         </div>}
                                     </div>
                                 </div>
                             </div>

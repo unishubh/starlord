@@ -6,19 +6,20 @@ import Select from 'react-select';
 function Papers(){
     const {token,setToken} = useContext(UserContext);
     const [options,setOptions] = useState([]);
-    const [examID,setExamID] = useState("");
+    const [examID,setExamID] = useState(null);
     const [isLoading,setIsLoading] =useState(true);
     const [examName,setExamName] = useState("");
     const [papers,setPapers] = useState([]);
+    const [papercount,setPapercount] = useState(null);
     useEffect(
         
         ()=>{
-            const accessToken = localStorage.getItem("token");
+            
             fetch('https://www.mutualfundcalculator.in/starlord/user/getallexams',
                 
                 )
                 .then(response =>{
-                // console.log(response);
+                console.log(response);
                   setIsLoading(false);
                   if(response.ok)
                   return response.json();
@@ -28,7 +29,7 @@ function Papers(){
                   }
                 })
                 .then(data => {
-                  console.log(data);
+                  // console.log(data);
                   let f = 0;
                   data.examdata.map((exam,key) => {
                     
@@ -40,9 +41,6 @@ function Papers(){
                           setExamName(exam.name);
                           f=1;
                         }
-
-                        
-                        
                       }
                       
                     });
@@ -63,19 +61,26 @@ function Papers(){
                 }
               )
 
-              console.log(options);
+              // console.log(options);
         },[]
     );
     useEffect(
         
         ()=>{
+            console.log("it started fetching  ",examID);
             setIsLoading(true);
+            console.log(JSON.stringify({
+              examID : examID
+          }));
           // console.log("token.role",token.role);
             const accessToken = localStorage.getItem("token");
-            // console.log("token " , accessToken);
+            console.log("role is  ", token.role)
+            // const accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJiYWUyZjUzNi1jMGExLTQwNmUtOTRjMy1hNmUzN2NkMmZhZWUiLCJyb2xlIjoxLCJhZ2VuY3lJRCI6IjRiM2FkMDIwLWI4YWQtMTFlYS05NWQ3LWM3MDcyNWY1YzA3NSIsImlhdCI6MTU5MzUyOTE4MywiZXhwIjoxNTkzNjE1NTgzfQ.EVS7XB_pj-o7EJ2nxW_2O5DGO19-JQL7vyGV7TwxuuM"; 
+            console.log("token " , accessToken);
             fetch('https://www.mutualfundcalculator.in/starlord/admin/get_papers/',{
+                // mode : 'cors',
                 method : 'POST',
-                header : {
+                headers : {
                   
                   'Content-Type': 'application/json',
                   'Authorization' : 'Bearer ' + accessToken ,
@@ -87,8 +92,8 @@ function Papers(){
                 )
                 .then(response =>{
                   setIsLoading(false);
-                console.log(response.json());
-                  if(response.ok)
+                console.log(response);
+                  if(response.status == 200)
                   return response.json();
                   else{
                     // alert(response.status)
@@ -98,7 +103,8 @@ function Papers(){
                 .then(data => {
                   console.log(data);
                   
-                setPapers(data);
+                setPapers(data.paperdata);
+                setPapercount(data.papercount);
                 setIsLoading(false);
               
                 }
@@ -106,7 +112,7 @@ function Papers(){
                 (error) => {
                   swal({
                     title: "Oops",
-                    text: "Something went wrong " + error,
+                    text: "Something went wrong " ,
                     icon: "error",
                     button: "Got it",
                   });
@@ -139,7 +145,7 @@ function Papers(){
                     <div className="row">
                         <div className="col-xl-12">
                             <div className="hero-cap hero-cap2 text-center">
-                                <h2>Your Papers</h2>
+                                <h2>Your Papers : {papercount}</h2>
                             </div>
                         </div>
                     </div>
@@ -165,24 +171,24 @@ function Papers(){
                                 <div className="table-head">
                                     <div className="serial">#</div>
                                     <div className="country">Paper</div>
-                                    <div className="visit">Number of Questions</div>
-                                    <div className="visit">Description</div>
+                                    {/* <div className="visit">Number of Questions</div> */}
+                                    {/* <div className="visit">Description</div> */}
                                     <div className="visit">Preview</div>
                                     <div className="visit">Edit</div>
                                 </div>
                                { papers.map((paper,key)=>(
                                 <div className="table-row" id={key}>
-                                    <div className="serial">{paper.sr}</div>
+                                    <div className="serial">{key+1}</div>
                                     <div className="country"> {paper.name}</div>
-                                    <div className="visit">{paper.paperid}</div>
-                                    <div className="visit">{paper.description}</div>
+                                    {/* <div className="visit">{paper.paperid}</div> */}
+                                    {/* <div className="visit">{paper.description}</div> */}
                                     <div className="visit">
                                     <div className="button-group-area mt-10">
-                                    <Link to={"/preview/"+paper.paperid} className="genric-btn primary-border small" >Preview</Link></div>
+                                    <Link to={"/preview/"+paper.id} className="genric-btn primary-border small" >Preview</Link></div>
                                     </div>
                                     <div className="visit">
                                     <div className="button-group-area mt-10">
-                                    <Link to={"/addquestion/"+paper.paperid} className="genric-btn primary-border small" >Edit</Link></div>
+                                    <Link to={"/addquestion/"+paper.id} className="genric-btn primary-border small" >Edit</Link></div>
                                     </div>
                                     {/* <div className="percentage">
                                         <div className="progress">

@@ -47,9 +47,10 @@ export default function SignIn() {
   const {token,setToken} = useContext(UserContext);
   const [email,setEmail] = useState("");
   const [password,setPassword] = useState("");
-
+  const [isLoading,setIsLoading] = useState(false);
   const handleSubmit = (event) => {
     event.preventDefault();
+    setIsLoading(true);
     console.log("loginstarted");
     // history.push('/');
     
@@ -69,6 +70,7 @@ export default function SignIn() {
       })
     })
       .then(response =>{
+        setIsLoading(false);
         if(response.ok)
         return response.json();
         else{
@@ -101,7 +103,20 @@ export default function SignIn() {
 
 
   return (
-   
+   <div>
+     { isLoading ? 
+     <div>
+         
+     <div className="preloader d-flex align-items-center justify-content-center">
+         <div className="preloader-inner position-relative">
+             <div className="preloader-circle"></div>
+             <div className="preloader-img pere-text">
+                 <img src="assets/img/logo/loder.png" alt=""/>
+             </div>
+         </div>
+     </div>
+
+ </div> :
     <Container component="main" maxWidth="xs" id="SignIn">
       <CssBaseline />
       <div className={classes.paper}>
@@ -181,5 +196,7 @@ export default function SignIn() {
           </Link> */}
       </Box>
     </Container>
+    }
+    </div>
   );
 }

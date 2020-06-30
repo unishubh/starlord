@@ -94,7 +94,7 @@ function AllExams(){
                                     <div className="country">Exam</div>
                                     <div className="visit">Max Marks</div>
                                     <div className="visit">Description</div>
-                                    <div className="visit">Subscribe</div>
+                                     { token.role==2 ? <div className="visit">Subscribe</div> : <> </> }
                                 </div>
                                { exams.map((exam,key)=>(
                                 <div className="table-row" id={key}>
@@ -102,6 +102,7 @@ function AllExams(){
                                     <div className="country"> {exam.name}</div>
                                     <div className="visit">{exam.max_marks}</div>
                                     <div className="visit">{exam.details}</div>
+                                    { token.role==2 ?
                                     <button onClick={()=>{
                                         setIsLoading(true);
                                         const accessToken = localStorage.getItem("token");
@@ -149,6 +150,8 @@ function AllExams(){
                                     className="genric-btn primary-border small" >
                                     Subscribe
                                     </button>
+                                    :<></>
+                                    }
                                     {/* <div className="percentage">
                                         <div className="progress">
                                             <div className="progress-bar color-1" role="progressbar" style={{width: "80%"}}

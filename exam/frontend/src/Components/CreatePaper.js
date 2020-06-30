@@ -10,6 +10,7 @@ import swal from 'sweetalert';
 function CreatePaper(props){
     const {token,setToken} = useContext(UserContext);
     const [options,setOptions] = useState([]);
+
     useEffect(
         
         ()=>{
@@ -64,8 +65,81 @@ function CreatePaper(props){
     const [totalQns,setTotalQns] = useState(null);
     const history = useHistory();
     const [isLoading,setIsLoading] = useState(true);
+    const [nameError,setNameError] = useState("");
+    const [examError,setExamError] = useState("");
+    const [totalqError,setTotalqError] = useState("");
+    const [count,setCount]=useState(-1);
+  
+  
+    useEffect(
+      ()=>{
+        
+        setCount(c=>c+1);
+        
+        let f = 0;
+        if(name=="")
+        {
+          setNameError("Write Exam Name");
+          f=1;
+        }
+        else{
+          setNameError("");
+        }
+        if(totalQns<=0)
+        {
+          setTotalqError("Please provide no. of questions");
+          f=1;
+        }
+        else{
+          setTotalqError("");
+        }
+        if(examID=="")
+        {
+          setExamError("Please provide details");
+          f=1;
+        }
+        else{
+          setExamError("");
+        }
+      },[name,totalQns,examID]
+    );
+  
+  
+    const Validate = ()=>{
+      let f = 0;
+      if(name=="")
+      {
+        setNameError("Write Exam Name");
+        f=1;
+      }
+      else{
+        setNameError("");
+      }
+      if(totalQns<=0)
+      {
+        setTotalqError("Please provide no. of questions");
+        f=1;
+      }
+      else{
+        setTotalqError("");
+      }
+      if(examID=="")
+      {
+        setExamError("Please provide details");
+        f=1;
+      }
+      else{
+        setExamError("");
+      }
+      if(f==1)
+        return false;
+      return true;
+    }
   const handleSubmit = (event) => {
     event.preventDefault();
+    setCount(1);
+    let isValid = Validate();
+    if(isValid){
     setIsLoading(true);
     console.log("create paper");
     // history.push('/');
@@ -113,7 +187,7 @@ function CreatePaper(props){
        }
    )
   
-    
+      }
 
   };
  
@@ -156,7 +230,10 @@ function CreatePaper(props){
                                     <div className="form-group">
                                         <input className="form-control valid" name="name" id="name" 
                                         type="text"  
-                                        placeholder="Enter exam name" value={name} onChange = {e => setName(e.target.value)} />
+                                        placeholder="Enter paper name" value={name} onChange = {e => setName(e.target.value)} />
+                                  { count<=0 ? <></> : <div style={{fontSize :12,color:"red"}}>
+                                                    {nameError}
+                                                </div>}
                                     </div>
                                 </div>
                                 <div className="col-sm-6">
@@ -165,6 +242,9 @@ function CreatePaper(props){
                                     onChange={e=> setExamID(e.value)}
                                     options={options}
                                 />
+                                { count<=0 ? <></> : <div style={{fontSize :12,color:"red"}}>
+                                                    {examError}
+                                                </div>}
                                 </div>
                                 <div className="col-12">
                                     <div className="form-group">
@@ -172,6 +252,9 @@ function CreatePaper(props){
                                         type="number" 
                                          placeholder="Total Questions" value={totalQns} 
                                          onChange = {e => {setTotalQns(e.target.value); console.log(e.target.value)}}/>
+                                    { count<=0 ? <></> : <div style={{fontSize :12,color:"red"}}>
+                                                    {totalqError}
+                                                </div>}
                                     </div>
                                 </div>
                             </div>

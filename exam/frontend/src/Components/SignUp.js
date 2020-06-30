@@ -1,4 +1,4 @@
-import React , {useState, useEffect, useContext} from 'react';
+import React , {useState, useEffect, useContext, useLayoutEffect} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -62,27 +62,118 @@ export default function SignUp() {
   const {token,setToken} = useContext(UserContext);
   const classes = useStyles();
   const [name,setName] = useState("");
-  const [role,setRole] = useState("");
+  const [role,setRole] = useState(2);
   const [email,setEmail] = useState("");
   const [password,setPassword] = useState("");
   const [agencyID,setAgencyID] = useState("");
-  const [isagency,setIsagency]=useState(true);
+  // const [isagency,setIsagency]=useState(true);
   const [confirmpassword,setConfirmPassword] = useState("");
 
+  const [isLoading,setIsLoading] = useState(false);
+  const [nameError,setNameError] = useState("");
+  const [emailError,setEmailError] = useState("");
+  const [passwordError,setPasswordError] = useState("");
+  const [passwordMatchError,setPasswordMatchError]=useState("");
+  const [count,setCount] = useState(-1);
 
+  // useEffect(
+  //   () => {
+
+  //     console.log("USEEFFECT called isagency");
+  //     setAgencies([{ value: '', label: 'ALLEN' },
+  //     { value: '', label: 'FIITJEE' }])
+  //   },[isagency]
+  // );
+  // useEffect(()=>{console.log(agencies)},[agencies]);
 
 
   useEffect(
-    () => {
-      console.log("USEEFFECT called isagency");
-      setAgencies([{ value: '', label: 'ALLEN' },
-      { value: '', label: 'FIITJEE' }])
-    },[isagency]
+    ()=>{
+      let f = 0;
+      setCount(c=>c+1);
+      
+      if(name=="")
+      {
+        setNameError("Please write your name");
+        f=1;
+      }
+      else{
+        setNameError("");
+      }
+      if(!email.includes('@') || !email.includes('.'))
+      {
+        setEmailError("Please provide valid email");
+        f=1;
+      }
+      else{
+        setEmailError("");
+      }
+      if(password=="")
+      {
+        setPasswordError("Please provide a password");
+        f=1;
+      }
+      else{
+        setPasswordError("");
+      }
+      if(password!=confirmpassword)
+      {
+        setPasswordMatchError("Password did not match");
+        f=1;
+      }
+      else{
+        setPasswordMatchError("");
+      }
+    },[name,email,password,confirmpassword]
   );
-  useEffect(()=>{console.log(agencies)},[agencies]);
+
+
+  const Validate = ()=>{
+    let f = 0;
+    if(name=="")
+    {
+      setNameError("Please write your name");
+      f=1;
+    }
+    else{
+      setNameError("");
+    }
+    if(!email.includes('@') || !email.includes('.'))
+    {
+      setEmailError("Please provide valid email");
+      f=1;
+    }
+    else{
+      setEmailError("");
+    }
+    if(password=="")
+    {
+      setPasswordError("Please provide a password");
+      f=1;
+    }
+    else{
+      setPasswordError("");
+    }
+    if(password!=confirmpassword)
+    {
+      setPasswordMatchError("Password did not match");
+      f=1;
+    }
+    else{
+      setPasswordMatchError("");
+    }
+    if(f==1)
+      return false;
+    return true;
+  }
+
 
   const handleSubmit = (event) => {
+    let isValid = Validate();
+    setCount(1);
+    if(isValid){
     event.preventDefault();
+    setIsLoading(true);
     console.log("Register Started");
     console.log(JSON.stringify({
       name : name,
@@ -127,7 +218,8 @@ export default function SignUp() {
      
       })
         .then(response => 
-          { console.log(response)
+          { console.log(response);
+            setIsLoading(false);
             if(response.ok)
             return response.json();
             else{
@@ -153,17 +245,32 @@ export default function SignUp() {
         (error)=>{
           swal({
             title: "Oops",
-            text: "Incorrect Details",
+            text: "Incorrect Details or You are already registered",
             icon: "error",
             button: "Got it",
           });
         }
       );
       console.log("Registration ",token)
+      }
     };
 
 
   return (
+    <div>
+     { isLoading ? 
+     <div>
+         
+     <div className="preloader d-flex align-items-center justify-content-center">
+         <div className="preloader-inner position-relative">
+             <div className="preloader-circle"></div>
+             <div className="preloader-img pere-text">
+                 <img src="assets/img/logo/loder.png" alt=""/>
+             </div>
+         </div>
+     </div>
+
+ </div> :
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
@@ -188,9 +295,12 @@ export default function SignUp() {
                 value={name}
                 onChange = {e => setName(e.target.value)}
               />
+            { count<=0 ? <></> : <div style={{fontSize :12,color:"red"}}>
+                {nameError}
+              </div>}
             </Grid>
             <Grid item xs={12} sm={6}>
-            <Select
+            {/* <Select
                                     
               onChange={e=> 
                 {
@@ -204,7 +314,7 @@ export default function SignUp() {
               
                 }}
               options={options}
-            />
+            /> */}
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -218,6 +328,9 @@ export default function SignUp() {
                 value={email}
                 onChange = {e => setEmail(e.target.value)}
               />
+              { count<=0 ? <></> : <div style={{fontSize :12,color:"red"}}>
+                {emailError}
+              </div>}
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -232,6 +345,9 @@ export default function SignUp() {
                 value={password}
                 onChange = {e => setPassword(e.target.value)}
               />
+              { count<=0 ? <></> : <div style={{fontSize :12,color:"red"}}>
+                {passwordError}
+              </div>}
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -246,8 +362,11 @@ export default function SignUp() {
                 value={confirmpassword}
                 onChange = {e => setConfirmPassword(e.target.value)}
               />
+              { count<=0 ? <></> : <div style={{fontSize :12,color:"red"}}>
+                {passwordMatchError}
+              </div>}
             </Grid>
-           { isagency==true? <Grid item xs={12}>
+           { role==1? <Grid item xs={12}>
               <TextField
                 variant="outlined"
                 required
@@ -303,5 +422,7 @@ export default function SignUp() {
         {/* <Copyright /> */}
       </Box>
     </Container>
+     }
+     </div>
   );
 }
