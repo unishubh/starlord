@@ -1,28 +1,32 @@
 import React, { useState,useEffect, useContext } from 'react';
 import './App.css';
-import Main from './Components/Main';
+import Main from './Components/General/Main';
 import {Switch , Route } from 'react-router-dom';
 
 
-import SignIn from './Components/SignIn';
-import SignUp from './Components/SignUp';
-import Home from './Components/Home';
-import Navbar from './Components/Navbar/Navbar';
+import SignIn from './Components/General/SignIn';
+import SignUp from './Components/General/SignUp';
+import Home from './Components/General/Home';
+import Navbar from './Components/General/Navbar';
 import {UserContext} from './Components/UserContext';
-import About from './Components/About';
-import Admin from './Components/Admin';
-import CreateExam from './Components/CreateExam';
-import CreatePaper from './Components/CreatePaper';
-import Exams from './Components/Exams';
-import AddQuestion from './Components/AddQuestion';
-import Papers from './Components/Papers';
-import PreviewPapers from './Components/PreviewPaper';
-import NotValid from './Components/NotValid';
-import CreateAgency from './Components/CreateAgency';
+import About from './Components/General/About';
+import Admin from './Components/Admin/Admin';
+import CreateExam from './Components/Admin/CreateExam';
+import CreatePaper from './Components/Admin/CreatePaper';
+import Exams from './Components/Admin/Exams';
+import AddQuestion from './Components/Admin/AddQuestion';
+import Papers from './Components/Admin/Papers';
+import PreviewPapers from './Components/Admin/PreviewPaper';
+import NotValid from './Components/General/NotValid';
+import CreateAgency from './Components/General/CreateAgency';
 import AllExam from './Components/AllExam';
 import swal from 'sweetalert';
 import {useHistory} from 'react-router-dom';
-import YouLost from './Components/YouLost';
+import YouLost from './Components/General/YouLost';
+import MyExams from './Components/User/MyExams'
+import MyAttemptedPapers from './Components/User/MyAttemptedPapers';
+import UserPapers from './Components/User/UserPapers';
+import AttemptPaper from './Components/User/AttemptPaper';
 function App() {
   
     // localStorage.setItem("token",null) 
@@ -70,6 +74,11 @@ function App() {
       { (token ) ? <Route exact path='/papers' component={Papers} /> : <Route exact path='/papers' component={NotValid} /> }
       { (token && token.role===1)? <Route exact path='/preview/:paperID' component={PreviewPapers} /> : <Route exact path='/preview/:paperID' component={NotValid} /> }
       { (token && token.role===1) ? <Route exact path='/addquestion/:paperID' component={AddQuestion} /> : <Route exact path='/addquestion/:paperID' component={NotValid} /> }
+      { (token && token.role===2) ? <Route exact path='/myexams' component={MyExams} /> : <Route exact path='/myexams' component={NotValid} /> }
+      { (token && token.role===2) ? <Route exact path='/myattemptedpapers' component={MyAttemptedPapers} /> : <Route exact path='/myexams' component={NotValid} /> }
+      { (token && token.role===2) ? <Route exact path='/mypapers/:examID' component={UserPapers} /> : <Route exact path='/mypapers/:examID' component={NotValid} /> }
+      { (token && token.role===2) ? <Route exact path='/attemptpaper/:paperID' component={AttemptPaper} /> : <Route exact path='/attemptpaper/:paperID' component={NotValid} /> }
+
        <Route  component={YouLost}/>  
    
    </Switch> 

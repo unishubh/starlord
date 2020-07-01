@@ -1,6 +1,6 @@
 import React, { useContext  } from 'react';
 import {Link,useHistory} from 'react-router-dom';
-import { UserContext } from './UserContext';
+import { UserContext } from '../UserContext';
 
 function Home(){
     const history = useHistory();

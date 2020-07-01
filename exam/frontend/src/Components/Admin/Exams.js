@@ -1,6 +1,6 @@
 import React,{useEffect,useContext, useState} from 'react';
 import {useHistory} from 'react-router-dom';
-import { UserContext } from './UserContext';
+import { UserContext } from '../UserContext';
 import swal from 'sweetalert';
 import { TableSortLabel } from '@material-ui/core';
 
@@ -26,7 +26,7 @@ function Exams(){
                   if(response.ok)
                   return response.json();
                   else{
-                    alert(response.status)
+                    // alert(response.status)
                     throw new Error(response.status);
                   }
                 })
@@ -100,7 +100,7 @@ function Exams(){
                                 <div className="table-head">
                                     <div className="serial">#</div>
                                     <div className="country">Exam</div>
-                                    <div className="visit">Number of Questions</div>
+                                    <div className="visit">Max Marks</div>
                                     <div className="percentage">Description</div>
                                     
                                 </div>

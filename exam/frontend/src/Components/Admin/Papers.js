@@ -1,6 +1,6 @@
 import React,{useContext,useEffect,useState} from 'react';
 import {Link} from 'react-router-dom';
-import {UserContext} from './UserContext';
+import {UserContext} from '../UserContext';
 import swal from 'sweetalert';
 import Select from 'react-select';
 function Papers(){

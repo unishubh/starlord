@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import {UserContext} from './UserContext';
+import {UserContext} from '../UserContext';
 
 function Admin()
 {
@@ -13,7 +13,7 @@ function Admin()
                     <div className="row">
                         <div className="col-xl-12">
                             <div className="hero-cap hero-cap2 text-center">
-                                <h2>HI {token ? <>Admin</> : <>Sign In</>} </h2>
+                                <h2>You are not a valid user </h2>
                                 
                             </div>
                         </div>

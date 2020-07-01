@@ -1,7 +1,7 @@
 import React, { useState ,useEffect, useContext} from 'react';
 import {useHistory} from 'react-router-dom';
 import Select from 'react-select';
-import { UserContext } from './UserContext';
+import { UserContext } from '../UserContext';
 import swal from 'sweetalert';
 
 

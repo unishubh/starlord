@@ -118,8 +118,7 @@ function Navbar()
                                     <ul className="submenu">
                                         <li><Link to="/myexams">My Exams</Link></li>
                                         <li><Link to="/myattemptedpapers">Attemped Paper</Link></li>
-                                        <li><Link to="/exams">See Exams</Link></li>
-                                        <li><Link to="/papers">See Papers</Link></li>
+                                      
                                     </ul>
                                 </li>
                                 }

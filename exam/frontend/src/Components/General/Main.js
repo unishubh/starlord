@@ -2,9 +2,9 @@ import React from 'react';
 
 import SignIn from './SignIn';
 
-import stu from '../images/students.jpg';
+// import stu from '../images/students.jpg';
 import SignUp from './SignUp';
-import Navbar from './Navbar/Navbar'
+// import Navbar from './Navbar/Navbar'
 // import Navbar from './Navbar';
 function Main(){
     return(

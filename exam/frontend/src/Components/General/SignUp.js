@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { UserContext } from './UserContext';
+import { UserContext } from '../UserContext';
 import Select from 'react-select';
 import {useHistory} from 'react-router-dom';
 import swal from 'sweetalert';
@@ -169,10 +169,11 @@ export default function SignUp() {
 
 
   const handleSubmit = (event) => {
+    event.preventDefault();
     let isValid = Validate();
     setCount(1);
     if(isValid){
-    event.preventDefault();
+ 
     setIsLoading(true);
     console.log("Register Started");
     console.log(JSON.stringify({
@@ -404,7 +405,7 @@ export default function SignUp() {
             fullWidth
             variant="contained"
             color="primary"
-            
+            type="submit"
             onClick={handleSubmit}
           >
             Sign Up
