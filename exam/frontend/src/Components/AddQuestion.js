@@ -211,6 +211,15 @@ function AddQestion(){
           setCorrectError("");
         }
       }
+      if(type=="mcq" && finishAddQuestion==false)
+      {
+        setOptionsError("Please provide atleast 2 options");
+        f=1;
+      }
+      if(type=="mcq" && finishAddQuestion==true)
+      {
+        setOptionsError("");
+      }
      
       console.log(type)
       if(f==1)
@@ -398,7 +407,11 @@ function AddQestion(){
                                     }} >Add Option</button>
                                     <button  className="genric-btn primary-border small" onClick ={(e)=>{
                                         e.preventDefault();
+                                        if(options.length>=2)
                                         setFinishAddQuestion(true);
+                                        else{
+                                          setOptionsError("Please provide atleast 2 options")
+                                        }
                                     }} >Finish Add Option</button>
                                     </div>
                                     </div>
