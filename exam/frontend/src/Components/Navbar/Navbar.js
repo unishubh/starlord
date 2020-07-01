@@ -102,9 +102,10 @@ function Navbar()
                             <ul id="navigation">                                                                                          
                                 <li><Link to="/">Home</Link></li>
                                 <li><Link to="/about">About</Link></li>
-                                <li><Link to="/allexams">Exams</Link></li>
+                                <li><Link to="/allexams">All Exams</Link></li>
                                 {/* <li><Link to="instructor.html">Instructors</Link></li> */} 
-                                 <li><Link to="/admin">Admin</Link>
+                                {token && token.role===1? 
+                                <li><Link to="/admin">Admin</Link>
                                     <ul className="submenu">
                                         <li><Link to="/createexam">Create Exam</Link></li>
                                         <li><Link to="/createpaper">Create Paper</Link></li>
@@ -112,6 +113,16 @@ function Navbar()
                                         <li><Link to="/papers">See Papers</Link></li>
                                     </ul>
                                 </li>
+                                :
+                                <li><Link to="#">Options</Link>
+                                    <ul className="submenu">
+                                        <li><Link to="/myexams">My Exams</Link></li>
+                                        <li><Link to="/myattemptedpapers">Attemped Paper</Link></li>
+                                        <li><Link to="/exams">See Exams</Link></li>
+                                        <li><Link to="/papers">See Papers</Link></li>
+                                    </ul>
+                                </li>
+                                }
                                 {/* <li><Link to="/createexam">Create New Exam</Link></li> */}
                                 <li><Link to="/contact">Contact</Link></li>
                                 

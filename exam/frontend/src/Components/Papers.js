@@ -156,7 +156,7 @@ function Papers(){
         <div className="col-sm-6">
                                 <Select
                                     
-                                    onChange={e=> setExamID(e.value)}
+                                    onChange={e=> {setExamID(e.value);setExamName(e.label)}}
                                     options={options}
                                     placeholder = {examName} 
                                     // selected 

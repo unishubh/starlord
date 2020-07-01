@@ -2,6 +2,7 @@ import React, { useState,useEffect } from 'react';
 import {useHistory,useParams} from 'react-router-dom';
 import swal from 'sweetalert';
 import Select from 'react-select';
+import AsyncSelect from 'react-select';
 
 function AddQestion(){
     const types = [
@@ -34,15 +35,17 @@ function AddQestion(){
     const [negMarkError,setNegMarkError] = useState("");
     const [typeError,setTypeError] = useState("");
     const [count,setCount]=useState(-1);
+    const [finishAddQuestion,setFinishAddQuestion] = useState(false);
   
     
     useEffect(
       ()=>{
-        
+        console.log(options);
+        console.log(optionsfake);
         setCount(c=>c+1);
         
         let f = 0;
-      if(question=="")
+      if(question=="" || question==null)
       {
         setQuestionError("Write a question");
         f=1;
@@ -58,11 +61,11 @@ function AddQestion(){
       else{
         setOptionsError("");
       }
-      if(correct=="")
+      if(correct=="" || correct==null)
       {
         setCorrectError("Choose a correct option");
         if(type=='int')
-        setCorrectError("write the correct answer");
+        setCorrectError("write the int value");
         f=1;
       }
       else{
@@ -92,7 +95,37 @@ function AddQestion(){
       else{
         setNegMarkError("");
       }
-      },[question,type,correct,options,posMark,negMark,option]
+      if(type=="mcq")
+      { 
+        let found =0;
+        for (let index = 0; index < options.length; index++) {
+          if(options[index]==correct)
+          {
+            found =1;
+            break;
+          }
+          
+        }
+        if(found==0)
+          {
+            setCorrectError("Select Correct Answer from options");
+        f=1;
+        }
+        else{
+          setCorrectError("");
+        }
+      }
+      else{
+        if(correct==null || Number(correct)==NaN)
+        {
+          setCorrectError("write the int value");
+          f=1;
+        }
+        else{
+          setCorrectError("");
+        }
+      } 
+      },[question,type,correct,options,posMark,negMark,option,optionsfake]
     );
   
   
@@ -114,11 +147,11 @@ function AddQestion(){
       else{
         setOptionsError("");
       }
-      if(correct=="")
+      if(correct=="" || correct==null)
       {
         setCorrectError("Choose a correct option");
         if(type=='int')
-        setCorrectError("write the correct answer");
+        setCorrectError("write the int value");
         f=1;
       }
       else{
@@ -148,6 +181,38 @@ function AddQestion(){
       else{
         setNegMarkError("");
       }
+      if(type=="mcq")
+      { 
+        let found =0;
+        for (let index = 0; index < options.length; index++) {
+          if(options[index]==correct)
+          {
+            found =1;
+            break;
+          }
+          
+        }
+        if(found==0)
+          {
+            setCorrectError("Select Correct Answer from options");
+        f=1;
+        }
+        else{
+          setCorrectError("");
+        }
+      }
+      else{
+        if(correct==null || Number(correct)==NaN)
+        {
+          setCorrectError("write the int value");
+          f=1;
+        }
+        else{
+          setCorrectError("");
+        }
+      }
+     
+      console.log(type)
       if(f==1)
         return false;
       return true;
@@ -169,7 +234,7 @@ function AddQestion(){
 
     const handleAdd = (event) => {
      event.preventDefault();
-    
+      setCount(1);
     let isValid = Validate();
     if(isValid){
     setIsLoading(true);
@@ -201,6 +266,7 @@ function AddQestion(){
     setPosMark(null);
     setNegMark(null);
     setCount(-1);
+    setFinishAddQuestion(false);
     console.log(bodydata);
     const accessToken = localStorage.getItem("token");
     fetch('https://www.mutualfundcalculator.in/starlord/admin/add_questions/'+paperID,{
@@ -218,6 +284,7 @@ function AddQestion(){
         })
       .then(data => {
         console.log("reply",data);
+         
         swal({
             title: "Hayy",
             text: "Question Has Been Added Successfully! " ,
@@ -225,7 +292,7 @@ function AddQestion(){
             button: "Got it",
           });
         
-        history.push("/addquestion/"+paperID);   
+          
  
       
     }).catch(
@@ -266,13 +333,14 @@ function AddQestion(){
             <div className="container">
                 <div className="row">
                     <div className="col-12">
-                        <h1 className="contact-title"> Question Paper </h1>
-                        <div className=" mt-3">
+                    <div className=" mt-3">
                                 <button 
                                 className="button button-contactForm boxed-btn"
                                 onClick={handleSubmit}>Preview Papaer</button>
                             </div>
                             <br/>
+                        <h1 className="contact-title"> Add Question </h1>
+                        
                         {/* <h2 className="contact-title"> Total Questions to be added : {questions.length}</h2> */}
                     </div>
                     <div className="col-lg-8">
@@ -281,7 +349,7 @@ function AddQestion(){
                                 <div class="col-6">
                                     <div class="form-group">
                                     <Select
-                                    
+                                    placeholder="Select Type of Question"
                                     onChange={e=> setType(e.value)}
                                     options={types}
                                 />
@@ -303,7 +371,7 @@ function AddQestion(){
                                                 </div>}
                                     </div>
                                 </div>
-                            { type !=='int' ? 
+                            { type !=='int' && finishAddQuestion===false ? 
                                 <>
                                 <div className="col-sm-6">
                                     <div className="form-group">
@@ -317,16 +385,21 @@ function AddQestion(){
                                     <button  className="genric-btn primary-border small" onClick ={(e)=>{
                                         e.preventDefault();
                                         if(option!='')
+                                        {
                                         options.push(option);
-                                        console.log(options);
-                                        if(option!='')
-                                        optionsfake.push({'value':option,'label':option})
+                                        optionsfake.push({'value':option,'label':option});
+                                      }
                                         else{
                                             setCount(1);
                                             setOptionsError("Option Can't be null");
                                         }
+                                        console.log(optionsfake);
                                         setOption("");
                                     }} >Add Option</button>
+                                    <button  className="genric-btn primary-border small" onClick ={(e)=>{
+                                        e.preventDefault();
+                                        setFinishAddQuestion(true);
+                                    }} >Finish Add Option</button>
                                     </div>
                                     </div>
 
@@ -342,19 +415,22 @@ function AddQestion(){
                                    { count<=0 ? <></> : <div style={{fontSize :12,color:"red"}}>
                                                     {correctError}
                                                 </div>}
-                                    </div> :
+                          </div> :<></> }
+                                   
+                            {type==="mcq" && finishAddQuestion ===true ?
+                            <>
                                 <Select
-                                    
                                 onChange={e=> setCorrect(e.value)}
                                 options={optionsfake}
                                 placeholder="select correct option"
-                            > 
-                            { count<=0 ? <></> : <div style={{fontSize :12,color:"red"}}>
+                            /> 
+                            { count<=0 ? <div></div> : <div style={{fontSize :12,color:"red"}}>
                                                     {correctError}
                                                 </div>}
-                            </Select>
                             
-                                }
+                            </>
+                            :<></>
+                                     }
                                 </div>
                                 <div className="col-sm-6">
                                     <div className="form-group">
