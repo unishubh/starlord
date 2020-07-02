@@ -271,6 +271,7 @@ function AddQestion(){
     }
     setCorrect(null);
     setOptions([]);
+    setOptionsfake([]);
     setQuestion(null);
     setPosMark(null);
     setNegMark(null);

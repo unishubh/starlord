@@ -118,7 +118,7 @@ function UserPapers(){
                                     <div className="visit">{paper.totalMarks}</div>
                                     <div className="visit">
                                     <div className="button-group-area mt-10">
-                                    <Link to={"/attemptpaper/"+paper.id} className="genric-btn primary-border small" >Attempt Now</Link></div>
+                                    <Link to={"/attemptpaper/"+paper.id+"/"+paper.name} className="genric-btn primary-border small" >Attempt Now</Link></div>
                                     </div>
                                     
                                     {/* <div className="percentage">

@@ -77,7 +77,7 @@ function App() {
       { (token && token.role===2) ? <Route exact path='/myexams' component={MyExams} /> : <Route exact path='/myexams' component={NotValid} /> }
       { (token && token.role===2) ? <Route exact path='/myattemptedpapers' component={MyAttemptedPapers} /> : <Route exact path='/myexams' component={NotValid} /> }
       { (token && token.role===2) ? <Route exact path='/mypapers/:examID' component={UserPapers} /> : <Route exact path='/mypapers/:examID' component={NotValid} /> }
-      { (token && token.role===2) ? <Route exact path='/attemptpaper/:paperID' component={AttemptPaper} /> : <Route exact path='/attemptpaper/:paperID' component={NotValid} /> }
+      { (token && token.role===2) ? <Route exact path='/attemptpaper/:paperID/:paperName' component={AttemptPaper} /> : <Route exact path='/attemptpaper/:paperID/:paperName' component={NotValid} /> }
 
        <Route  component={YouLost}/>  
    

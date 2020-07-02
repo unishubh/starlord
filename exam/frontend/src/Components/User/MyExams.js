@@ -23,13 +23,9 @@ function MyExams(){
             fetch('https://www.mutualfundcalculator.in/starlord/user/my_exams',{
                 method: 'GET',
                 headers: {'Content-Type': 'application/json',
-                          'Authorization' : 'Bearer ' + accessToken   },
-               
-              
-            }
-               
-            
-                )
+                          'Authorization' : 'Bearer ' + accessToken   }
+                        }
+                )   
                 .then(response =>{
                 // console.log(response);
                 setIsLoading(false);
@@ -42,8 +38,7 @@ function MyExams(){
                 })
                 .then(data => {
                   console.log(data);
-                  setExams(data.message);
-                  setTotal(data.message.length);
+                  
                 
                 setIsLoading(false);
               
@@ -52,7 +47,7 @@ function MyExams(){
                 (error) => {
                   swal({
                     title: "Oops",
-                    text: "Either you have no exam subscribed or Something went wrong ",
+                    text: "Something went wrong ",
                     icon: "error",
                     button: "Got it",
                   });
