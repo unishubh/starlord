@@ -48,8 +48,65 @@ export default function SignIn() {
   const [email,setEmail] = useState("");
   const [password,setPassword] = useState("");
   const [isLoading,setIsLoading] = useState(false);
+  const [emailError,setEmailError] = useState("");
+  const [passwordError,setPasswordError] =useState("");
+  const [count,setCount] = useState(-1);
+  useEffect(
+    ()=>{
+      let f = 0;
+      setCount(c=>c+1);
+      
+      if(!email.includes('@') || !email.includes('.'))
+      {
+        setEmailError("Please provide valid email");
+        f=1;
+      }
+      else{
+        setEmailError("");
+      }
+      if(password=="")
+      {
+        setPasswordError("Please provide a password");
+        f=1;
+      }
+      else{
+        setPasswordError("");
+      }
+     
+    },[email,password]
+  );
+
+
+  const Validate = ()=>{
+    let f = 0;
+   
+    if(!email.includes('@') || !email.includes('.'))
+    {
+      setEmailError("Please provide valid email");
+      f=1;
+    }
+    else{
+      setEmailError("");
+    }
+    if(password=="")
+    {
+      setPasswordError("Please provide a password");
+      f=1;
+    }
+    else{
+      setPasswordError("");
+    }
+
+    if(f==1)
+      return false;
+    return true;
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault();
+    setCount(c=>c+1);
+    const isValid = Validate();
+    if(isValid){
     setIsLoading(true);
     console.log("loginstarted");
     // history.push('/');
@@ -89,6 +146,8 @@ export default function SignIn() {
       }
     ).catch(
       (error) => {
+        setEmail("");
+        setPassword("");
         swal({
           title: "Oops",
           text: "Invalid Username or Password",
@@ -98,6 +157,7 @@ export default function SignIn() {
       }
     )    
     console.log("Login Done");
+    }
 
   };
 
@@ -127,6 +187,7 @@ export default function SignIn() {
                 Sign in
         </Typography>
         <form className={classes.form} noValidate>
+          <>
           <TextField
             variant="outlined"
             margin="normal"
@@ -140,6 +201,11 @@ export default function SignIn() {
             autoFocus
             onChange = {e => setEmail(e.target.value)}
           />
+          { count<=0 ? <></> : <div style={{fontSize :12,color:"red"}}>
+                {emailError}
+              </div>}
+          </>
+          <>
           <TextField
             variant="outlined"
             margin="normal"
@@ -154,6 +220,10 @@ export default function SignIn() {
             onChange = {e => setPassword(e.target.value)}
           
           />
+          { count<=0 ? <></> : <div style={{fontSize :12,color:"red"}}>
+                {passwordError}
+              </div>}
+          </>
           {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
