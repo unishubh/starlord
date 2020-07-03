@@ -1,6 +1,4 @@
 const db = require('../../models') ;
-const sequelize = require('sequelize') ;
-const jwt = require('jsonwebtoken');
 const utilities = require('../../helpers/utilities');
 const getJwtCred = require('../../helpers/get_jwt_credentials') ;
 const createJSON = require('../../helpers/createJSONresponse') ;
@@ -12,6 +10,7 @@ exports.byPaperId = async ( req , res ) => {
         let newUserID = await getJwtCred.userID(req,res);
         let newPaperID = req.params.paperID ;
         let paperExist = await db.mockpapers.findOne({
+            include : db.exams,
             where:{
                 id : newPaperID
             }
@@ -28,7 +27,7 @@ exports.byPaperId = async ( req , res ) => {
         let examineeResponse = await createJSON.ofQns(req,res) ;
         let newResponse = db.userPaperResponse.build( { id : uuid.v4() , userID:newUserID , paperID:newPaperID , response:examineeResponse} ) ;
         await newResponse.save() ;
-        let startPaperResponse = new Object() ;
+        let startPaperResponse = {} ;
         let firstQuestion = await db.questions.findOne({
             where:{
                 iid:1,
@@ -41,6 +40,8 @@ exports.byPaperId = async ( req , res ) => {
         startPaperResponse['firstQuestion'] = firstQuestion ;
         startPaperResponse['userPaperResponse'] = newResponse ;
         startPaperResponse['startTime'] = startTime ;
+        startPaperResponse['duration'] = paperExist.exam.time ;
+
         res.status(200) ;
         res.send(startPaperResponse) ;
     }

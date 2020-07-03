@@ -11,7 +11,7 @@ exports.ofQns = async ( req , res ) => {
             attributes: [ 'iid'  ] ,
             raw:true ,
         });
-        let examineeResponse = new Object() ;
+        let examineeResponse = {} ;
         for ( id in qns ){
             examineeResponse[qns[id]["iid"]] = "" ;
         }

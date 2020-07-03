@@ -29,6 +29,11 @@ module.exports.byIID = async (req,res)=>{
             throw "Question does not exist" ;
         let userID = await getJwtCred.userID(req,res) ;
         let attempt = await db.attemptedPapers.findOne({
+            include : {
+                model : db.mockpapers,
+                include : [db.exams],
+
+            },
             where:{
                 paperID ,
                 userID
@@ -38,6 +43,7 @@ module.exports.byIID = async (req,res)=>{
         let response = new Object() ;
         response['question'] = qnToSend ;
         response['startTime'] = attempt.startTime ;
+        response['duration'] = attempt["mockpaper.exam.time"];
         let userResponse = await updateResponse.ofUser(req,res) ;
         response['userResponse'] = userResponse ;
         res.status(200) ;

@@ -16,7 +16,7 @@ module.exports.InsertQuestions = async (req, res) => {
         if(!validators.isAccessible('paperID',paperID,"")) { //todo:send agency id after taking it from jwt
             utilities.sendNotAllowed("Admin not allowed for this exam", res);
         }
-        let questionData = new Object() ;
+        let questionData = {} ;
         questionData['type'] = type ;
         questionData['options'] = options ;
         questionData['correctAns'] = correctAns ;
