@@ -60,6 +60,7 @@ function AttemptPaper(){
                   setType(data.firstQuestion.qnJSON.type);
                   setPosMark(data.firstQuestion.qnJSON.posMark);
                   setNegMark(data.firstQuestion.qnJSON.negMark);
+                  if(data.firstQuestion.qnJSON.options)
                   setOptions(data.firstQuestion.qnJSON.options);
                   setStartTime(data.firstQuestion.startTime);
                   var size = Object.keys(data.userPaperResponse.response).length;
@@ -262,7 +263,13 @@ function AttemptPaper(){
                                                                         //   setType(data.firstQuestion.qnJSON.type);
                                                                           setPosMark(data.question.posMark);
                                                                           setNegMark(data.question.negMark);
-                                                                          setOptions(data.question.options);
+                                                                          if(data.question.options)
+                                                                          {setOptions(data.question.options);
+                                                                            setType('mcq');
+                                                                        }
+                                                                          else{
+                                                                              setType("int");
+                                                                          }
                                                                           setStartTime(data.startTime);
                                                                           setAnswer(null);
                                                                           setMove(false);
@@ -343,7 +350,14 @@ function AttemptPaper(){
                                                                         //setType(data.firstQuestion.qnJSON.type);
                                                                           setPosMark(data.question.posMark);
                                                                           setNegMark(data.question.negMark);
-                                                                          setOptions(data.question.options);
+
+                                                                          if(data.question.options)
+                                                                         { setOptions(data.question.options);
+                                                                            setType('mcq');
+                                                                        }
+                                                                          else{
+                                                                              setType("int");
+                                                                          }
                                                                           setStartTime(data.startTime);
                                                                           setAnswer(null);
                                                                           setMove(false);
