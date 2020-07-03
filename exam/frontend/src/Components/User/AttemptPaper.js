@@ -1,10 +1,12 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useContext } from 'react';
 import {useHistory,useParams} from 'react-router-dom';
 import swal from 'sweetalert';
 import { Next } from 'react-bootstrap/PageItem';
+import { UserContext } from '../UserContext';
 
 function AttemptPaper(){
     const history = useHistory();
+    const {token,setToken,isExamStarted,setIsExamStarted} = useContext(UserContext);
     const {paperID,paperName} = useParams();
     const [isLoading, setIsLoading] = useState(false);
     const [exam_ended,setExam_ended] = useState(false);
@@ -44,7 +46,7 @@ function AttemptPaper(){
             { 
               if(endTime!=null && now!=null)
               {console.log("hi")
-              // setExam_ended(true);
+              setExam_ended(true);
               clearInterval(interval.current);
               }
            
@@ -74,6 +76,8 @@ function AttemptPaper(){
         }
       },[exam_ended])
     const StartExam = () =>{
+            // localStorage.setItem("exam",true);
+            setIsExamStarted(true);
             setIsLoading(true);
             setIsStarted(true);
             fetch('https://www.mutualfundcalculator.in/starlord/exam/attempt_paper/'+paperID,{
@@ -167,6 +171,7 @@ function AttemptPaper(){
     };
     const EndExam = () => {
       setIsLoading(true);
+      setIsExamStarted(false);
       // console.log("key ",key);
       console.log(JSON.stringify({
             

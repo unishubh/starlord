@@ -91,18 +91,20 @@ function AllExams(){
                             <div className="progress-table">
                                 <div className="table-head">
                                     <div className="serial">#</div>
-                                    <div className="country">Exam</div>
+                                    <div className="percentage">Exam</div>
                                     <div className="visit">Max Marks</div>
-                                    <div className="visit">Description</div>
+                                    <div className="percentage">Description</div>
                                      { token.role==2 ? <div className="visit">Subscribe</div> : <> </> }
                                 </div>
                                { exams.map((exam,key)=>(
                                 <div className="table-row" id={key}>
                                     <div className="serial">{key+1}</div>
-                                    <div className="country"> {exam.name}</div>
+                                    <div className="percentage"> {exam.name}</div>
                                     <div className="visit">{exam.max_marks}</div>
-                                    <div className="visit">{exam.details}</div>
+                                    <div className="percentage">{exam.details}</div>
+                                    
                                     { token.role==2 ?
+                                    <div className="visit">
                                     <button onClick={()=>{
                                         setIsLoading(true);
                                         const accessToken = localStorage.getItem("token");
@@ -150,6 +152,7 @@ function AllExams(){
                                     className="genric-btn primary-border small" >
                                     Subscribe
                                     </button>
+                                    </div>
                                     :<></>
                                     }
                                     {/* <div className="percentage">

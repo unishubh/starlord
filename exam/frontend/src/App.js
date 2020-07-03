@@ -31,6 +31,11 @@ function App() {
   
     // localStorage.setItem("token",null) 
     const [token,setToken] = useState(null);
+    const [isExamStarted,setIsExamStarted] = useState(null);
+    if(localStorage.getItem("exam"))
+    {
+      setIsExamStarted(true);
+    }
     const history = useHistory();
     useEffect ( async () => {
       const istoken = await localStorage.getItem("token");
@@ -55,11 +60,12 @@ function App() {
     );
    return (
     <div>
-      <UserContext.Provider value={{token,setToken}}>
-      <Navbar/>
+      <UserContext.Provider value={{token,setToken,isExamStarted,setIsExamStarted}}>
+    {isExamStarted ? <></> : <Navbar/> }
      <Main/>
      <Switch>
        {/* <Route exact path='/' component={SignInStudent} /> */}
+       { (token && token.role===2) ? <Route exact path='/attemptpaper/:paperID/:paperName' component={AttemptPaper} /> : <Route exact path='/attemptpaper/:paperID/:paperName' component={NotValid} /> }
        
        <Route exact path='/' component={Home} />
        <Route exact path='/signin' component={SignIn} />
@@ -77,7 +83,7 @@ function App() {
       { (token && token.role===2) ? <Route exact path='/myexams' component={MyExams} /> : <Route exact path='/myexams' component={NotValid} /> }
       { (token && token.role===2) ? <Route exact path='/myattemptedpapers' component={MyAttemptedPapers} /> : <Route exact path='/myattemptedpapers' component={NotValid} /> }
       { (token && token.role===2) ? <Route exact path='/mypapers/:examID' component={UserPapers} /> : <Route exact path='/mypapers/:examID' component={NotValid} /> }
-      { (token && token.role===2) ? <Route exact path='/attemptpaper/:paperID/:paperName' component={AttemptPaper} /> : <Route exact path='/attemptpaper/:paperID/:paperName' component={NotValid} /> }
+      
 
        <Route  component={YouLost}/>  
    
