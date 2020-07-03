@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {useHistory,useParams} from 'react-router-dom';
 import swal from 'sweetalert';
+import { Next } from 'react-bootstrap/PageItem';
 
 function AttemptPaper(){
     const history = useHistory();
@@ -8,21 +9,41 @@ function AttemptPaper(){
     const [isLoading, setIsLoading] = useState(false);
     const [isStarted,setIsStarted] = useState(false);
     const accessToken = localStorage.getItem("token");
+    const [startTime,setStartTime] = useState(null);
+    const [totalQns,setTotalQns] = useState(0);
+
+    const [question_no,setQuestion_no] = useState(null);
+    const [question,setQuestion] = useState("");
+    const [options,setOptions] = useState([]);
+    const [posMark,setPosMark] = useState(null);
+    const [negMark,setNegMark] = useState(null);
+    const [type,setType] = useState(null);
+    const [userPaperResponse,setUserPaperResponse] = useState({});
+    const [userResponse,setUserResponse] = useState([]);
+    const [move,setMove] = useState(false);
+    
+    const [answer,setAnswer] = useState(null);
+    
+
     useEffect(
         () => {
+            
+            
 
-        },[isStarted]
+            console.log("fkj",userResponse);
+        },[isLoading]
     );
     const StartExam = () =>{
             setIsLoading(true);
             setIsStarted(true);
-            fetch('https://www.mutualfundcalculator.in/exam/attempt_paper/'+paperID,{
+            fetch('https://www.mutualfundcalculator.in/starlord/exam/attempt_paper/'+paperID,{
+                
                 method : 'POST',
                 headers: {'Content-Type': 'application/json',
                 'Authorization' : 'Bearer ' + accessToken   },
             })
             .then(response =>{
-                // console.log(response);
+                console.log(response);
                 setIsLoading(false);
                   if(response.ok)
                   return response.json();
@@ -32,17 +53,39 @@ function AttemptPaper(){
                   }
                 })
                 .then(data => {
-                  console.log(data);
-                  
                 
-                setIsLoading(false);
+                  console.log(data);
+                  setQuestion_no(data.firstQuestion.iid);
+                  setQuestion(data.firstQuestion.qnJSON.question);
+                  setType(data.firstQuestion.qnJSON.type);
+                  setPosMark(data.firstQuestion.qnJSON.posMark);
+                  setNegMark(data.firstQuestion.qnJSON.negMark);
+                  setOptions(data.firstQuestion.qnJSON.options);
+                  setStartTime(data.firstQuestion.startTime);
+                  var size = Object.keys(data.userPaperResponse.response).length;
+                  if(size>0)
+                  setUserPaperResponse(data.userPaperResponse.response);
+                 
+                  setTotalQns(size);
+                //   Object.entries(data.userPaperResponse.response).map(([key, value]) => {
+                //     userResponse.push(value);
+                   
+                //     // Pretty straightforward - use key for the key and value for the value.
+                //     // Just to clarify: unlike object destructuring, the parameter names don't matter here.
+                // })
+
+                
+  
+  
+  
+                  setIsLoading(false);
               
                 }
               ).catch(
                 (error) => {
                   swal({
                     title: "Oops",
-                    text: "Something went wrong ",
+                    text: "Something went wrong " + error,
                     icon: "error",
                     button: "Got it",
                   });
@@ -54,6 +97,14 @@ function AttemptPaper(){
     const EndExam = () => {
 
     };
+
+    useEffect(
+        ()=>{
+            console.log(answer);
+        },[answer]
+    );
+
+    
 
     return(
     <div>
@@ -100,50 +151,269 @@ function AttemptPaper(){
         <div class="whole-wrap">
             <div class="container box_1170">
                 <div className="section-top-border">
-                        <h3 className="mb-30">Question No.</h3>
+                        <h3 className="mb-30">Question No.{question_no}</h3>
                         <div className="row">
                             <div className="col-lg-12">
                                 <blockquote className="generic-blockquote">
-                                    “Recently, the US Federal government banned online casinos from operating in America by
-                                    making it illegal to
-                                    transfer money to them through any US bank or payment system. As a result of this law, most
-                                    of the popular
-                                    online casino networks such as Party Gaming and PlayTech left the United States. Overnight,
-                                    online casino
-                                    players found themselves being chased by the Federal government. But, after a fortnight, the
-                                    online casino
-                                    industry came up with a solution and new online casinos started taking root. These began to
-                                    operate under a
-                                    different business umbrella, and by doing that, rendered the transfer of money to and from
-                                    them legal. A major
-                                    part of this was enlisting electronic banking systems that would accept this new
-                                    clarification and start doing
-                                    business with me. Listed in this article are the electronic banking”
+                                {question}
                                 <br/><br/>
-                                <div className="col-lg-3 col-md-4 mt-sm-30">
-                                    <div className="switch-wrap d-flex justify-content-between">
-                                        <div className="primary-checkox" >
-                                            <input type="checkbox" id="primary-checkbox" checked={true}/>
-                                            <label for="primary-checkbox"></label>
+                               
+                               { 
+                               type==="mcq" ?
+                               <div> 
+                                {  options.map( (option,key) => (
+                                    <div className="col-lg-3 col-md-4 mt-sm-30">
+                                        <div className="switch-wrap d-flex justify-content-between">
+                                        <p>{option}</p>
+                                            <div className="primary-checkox" >
+                                                <input type="checkbox" id="primary-checkbox"
+                                                 checked={answer===option}
+                                                 onChange={e=>{
+                                                     if(answer!=option)
+                                                     {setAnswer(option);}
+                                                     else{
+                                                         setAnswer(null);
+                                                     }
+                                                     
+                                                     }}/>
+                                                <label for="primary-checkbox"></label>
+                                            </div>
+                                           
                                         </div>
-                                        <p>02. Primary Color radio</p>
+                                    </div>
+                                )
+                                )
+                                } 
+                                </div>
+                                :
+                                <div className="col-sm-6">
+                                    <div className="form-group">
+                                        <input className="form-control valid" name="name" id="name" 
+                                        type="number"  
+                                        placeholder="Your Answer" value={answer} onChange = {e => setAnswer(e.target.value)} />
                                     </div>
                                 </div>
-                                <div className="col-lg-3 col-md-4 mt-sm-30">
-                                    <div className="switch-wrap d-flex justify-content-between">
-                                        <div className="primary-checkox" >
-                                            <input type="checkbox" id="primary-checkbox" checked={false}/>
-                                            <label for="primary-checkbox"></label>
-                                        </div>
-                                        <p>02. Primary Color radio</p>
-                                    </div>
-                                </div>
+                            }
+                                
                                 </blockquote>
                             </div>
                         </div>
                     </div>
             </div>
-        </div>}
+             <blockquote> 
+                <section className="button-area">
+                    <div>
+                        { (move===false && answer===null)?
+                        <div className="button-group-area mt-10" style={{paddingtop:"10px",paddingLeft:"50px"}}>
+                            <button href="#" onClick={(e)=>{setMove(true)}} className="genric-btn primary-border e-large">Move To Another</button>
+                        </div>:<></>
+                        }
+                                <div> 
+                                        { (move || answer!=null)
+                                            ?
+                                            <div>  
+                                                <section className="button-area">
+                                                    <div className="container box_1170 border-top-generic">
+                                                    <div class="button-group-area mt-10">
+                                                    
+                                                    {
+                                                       Object.keys(userPaperResponse).map((key)=>{
+                                                            return(
+                                                                <>
+                                                                {  userPaperResponse[key] ==="" ?
+                                                                <button onClick={e=>{
+                                                                    console.log(JSON.stringify({
+                                                                        qnID:key,
+                                                                        paperID:paperID,
+                                                                        lastQnID:question_no,
+                                                                        lastAns : answer,
+                                                        
+                                                                      }))
+                                                                    setIsLoading(true);
+                                                                    // console.log("key ",key);
+                                                                    fetch('https://www.mutualfundcalculator.in/starlord/exam/get_question/',{
+                                                                        
+                                                                        method : 'POST',
+                                                                        headers: {'Content-Type': 'application/json',
+                                                                        'Authorization' : 'Bearer ' + accessToken   },
+                                                                        body: JSON.stringify({
+                                                                            qnID:key,
+                                                                            paperID:paperID,
+                                                                            lastQnID:question_no,
+                                                                            lastAns : answer,
+                                                            
+                                                                          })
+                                                                    })
+                                                                    .then(response =>{
+                                                                        console.log(response);
+                                                                        setIsLoading(false);
+                                                                          if(response.ok)
+                                                                          return response.json();
+                                                                          else{
+                                                                            // alert(response.status)
+                                                                            throw new Error(response.status);
+                                                                          }
+                                                                        })
+                                                                        .then(data => {
+                                                                            
+                                                                          console.log(data);
+                                                                          setQuestion_no(key);
+                                                                          setQuestion(data.question.question);
+                                                                        //   setType(data.firstQuestion.qnJSON.type);
+                                                                          setPosMark(data.question.posMark);
+                                                                          setNegMark(data.question.negMark);
+                                                                          setOptions(data.question.options);
+                                                                          setStartTime(data.startTime);
+                                                                          setAnswer(null);
+                                                                          setMove(false);
+                                                                          
+
+
+                                                                          Object.keys(userPaperResponse).map((key)=>{
+                                                                            userPaperResponse[key] = "true";
+                                                                          })
+
+                                                                          Object.keys(data.userResponse).map((key)=>{
+                                                                            userPaperResponse[key] = "";
+                                                                          })
+
+                                                                          
+                                                                         
+                                                                          
+                                                                        //   Object.entries(data.userPaperResponse).map(([key, value]) => {
+                                                                        //     userResponse.push(value);
+                                                                           
+                                                                        //     // Pretty straightforward - use key for the key and value for the value.
+                                                                        //     // Just to clarify: unlike object destructuring, the parameter names don't matter here.
+                                                                        // })
+                                                                    })
+                                                                      .catch(
+                                                                        (error) => {
+                                                                          swal({
+                                                                            title: "Oops",
+                                                                            text: "Something went wrong " + error,
+                                                                            icon: "error",
+                                                                            button: "Got it",
+                                                                          });
+                                                                        //   history.push('/');  
+                                                            
+                                                                        }
+                                                                      )
+                                                                }} className="genric-btn danger-border small">{key} </button>
+                                                                :
+                                                                <button onClick={e=>{
+                                                                    console.log(JSON.stringify({
+                                                                        qnID:key,
+                                                                        paperID:paperID,
+                                                                        lastQnID:question_no,
+                                                                        lastAns : answer,
+                                                        
+                                                                      }))
+                                                                    setIsLoading(true);
+                                                                    // console.log("key ",key);
+                                                                    fetch('https://www.mutualfundcalculator.in/starlord/exam/get_question/',{
+                                                                        
+                                                                        method : 'POST',
+                                                                        headers: {'Content-Type': 'application/json',
+                                                                        'Authorization' : 'Bearer ' + accessToken   },
+                                                                        body: JSON.stringify({
+                                                                            qnID:key,
+                                                                            paperID:paperID,
+                                                                            lastQnID:question_no,
+                                                                            lastAns : answer,
+                                                            
+                                                                          })
+                                                                    })
+                                                                    .then(response =>{
+                                                                        console.log(response);
+                                                                        setIsLoading(false);
+                                                                          if(response.ok)
+                                                                          return response.json();
+                                                                          else{
+                                                                            // alert(response.status)
+                                                                            throw new Error(response.status);
+                                                                          }
+                                                                        })
+                                                                        .then(data => {
+                                                                        
+                                                                          console.log(data);
+                                                                          
+                                                                          setQuestion_no(key);
+                                                                          setQuestion(data.question.question);
+                                                                        //setType(data.firstQuestion.qnJSON.type);
+                                                                          setPosMark(data.question.posMark);
+                                                                          setNegMark(data.question.negMark);
+                                                                          setOptions(data.question.options);
+                                                                          setStartTime(data.startTime);
+                                                                          setAnswer(null);
+                                                                          setMove(false);
+                                                                          
+                                                                          Object.keys(userPaperResponse).map((key)=>{
+                                                                            userPaperResponse[key] = "true";
+                                                                          })
+
+                                                                          Object.keys(data.userResponse).map((key)=>{
+                                                                            userPaperResponse[key] = "";
+                                                                          })
+                                                                          
+                                                                         
+                                                                        //   Object.entries(data.userPaperResponse).map(([key, value]) => {
+                                                                        //     userResponse.push(value);
+                                                                           
+                                                                        //     // Pretty straightforward - use key for the key and value for the value.
+                                                                        //     // Just to clarify: unlike object destructuring, the parameter names don't matter here.
+                                                                        // })
+                                                                           
+                                                                            // Pretty straightforward - use key for the key and value for the value.
+                                                                            // Just to clarify: unlike object destructuring, the parameter names don't matter here.
+                                                                        })
+                                                                      .catch(
+                                                                        (error) => {
+                                                                          swal({
+                                                                            title: "Oops",
+                                                                            text: "Something went wrong " + error,
+                                                                            icon: "error",
+                                                                            button: "Got it",
+                                                                          });
+                                                                        //   history.push('/');  
+                                                            
+                                                                        }
+                                                                      )
+                                                                }} class="genric-btn primary small">{key} </button>
+                                                                
+                                                                 } 
+                                                                 </>
+                                                            )
+                                                        })
+                                                    }
+                                                    
+                                                    </div>
+
+                                                    
+
+                                                    </div>
+                                                </section>
+                                            </div>
+                                            :<></>
+                                        }
+                                </div>
+                      
+                    
+                    
+                
+                        
+                        
+                    </div>
+                </section>
+            </blockquote> 
+            
+        </div>
+    
+    
+    
+    
+    
+    }
     </div>}
     </div>
     );

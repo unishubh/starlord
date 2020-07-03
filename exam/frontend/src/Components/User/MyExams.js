@@ -38,7 +38,8 @@ function MyExams(){
                 })
                 .then(data => {
                   console.log(data);
-                  
+                  setExams(data.message);
+                  setTotal(data.message.length);
                 
                 setIsLoading(false);
               
