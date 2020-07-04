@@ -10,7 +10,7 @@ function AttemptPaper(){
     const {paperID,paperName} = useParams();
     const [isLoading, setIsLoading] = useState(false);
     const [exam_ended,setExam_ended] = useState(false);
-    const [isStarted,setIsStarted] = useState(false);
+    const [isStarted,setIsStarted] = useState(true);
     const accessToken = localStorage.getItem("token");
     const [startTime,setStartTime] = useState(null);
     const [totalQns,setTotalQns] = useState(0);
@@ -32,54 +32,71 @@ function AttemptPaper(){
     
     let interval = useRef();
 
+    const startTimer = () => {
+      const finish = endTime;
+
+      interval = setInterval(()=>{
+        const now = new Date().getTime();
+        const dis = finish - now;
+        const hours = Math.floor((dis)/(1000*60*60));
+        const mins  = Math.floor(((dis)%(1000*60*60))/(1000*60));
+        const secs  = Math.floor(((dis)%(1000*60)/(1000)));
+
+        if( finish!=null && dis<=0 && exam_ended==false)
+        {
+          clearInterval(interval.current);
+          setExam_ended(true);
+          EndExam();
+
+        }
+        else if (dis<0 && finish!=null){
+          clearInterval(interval.current);
+          swal({
+            title: "Already Attempted",
+            text: "You have already attempted and time is up ",
+            icon: "warning",
+            button: "Got it",
+          }); 
+          history.push('/myattemptedpaper');
+        }
+        else{
+          if(finish!=null){
+          setLeftHours(hours);
+          setLeftMins(mins);
+          setLeftSecs(secs);
+          }        
+        }
+
+      },1000);
+    };
+
     useEffect(
         () => {
-            
+         
 
-            // console.log(endTime)
-            if(isStarted){
-            interval = setInterval (()=>{
-            const finish = endTime ;
-            const now   = new Date().getTime();
-
-            if(now>finish)
-            { 
-              if(endTime!=null && now!=null)
-              {console.log("hi")
-              setExam_ended(true);
-              clearInterval(interval.current);
-              }
-           
-            } 
-            else{
-            setLeftHours(Math.floor((finish-now)/(1000*60*60)))
-            setLeftMins(Math.floor(((finish-now)%(1000*60*60))/(1000*60)))
-            setLeftSecs(Math.floor(((finish-now)%(1000*60)/(1000))))
-            }
-          
-            },1000);
-          }
-            
-            return () => {
-              clearInterval(interval.current);
-
-            };
+           startTimer();
+           return () => {
+            clearInterval(interval.current);
+           }; 
             
         },
     );
 
     useEffect(
       ()=>{
-        if(exam_ended==true)
-        { console.log("hiiiiiiiiiiiiii")
-          EndExam();
+        
+        if(isStarted==true && exam_ended==false)
+        {
+          console.log("Exam Startes")
+          setIsExamStarted(true);
+          StartExam();
         }
-      },[exam_ended])
+      },[isStarted]);
+
     const StartExam = () =>{
             // localStorage.setItem("exam",true);
             setIsExamStarted(true);
             setIsLoading(true);
-            setIsStarted(true);
             fetch('https://www.mutualfundcalculator.in/starlord/exam/attempt_paper/'+paperID,{
                 
                 method : 'POST',
@@ -172,6 +189,7 @@ function AttemptPaper(){
     const EndExam = () => {
       setIsLoading(true);
       setIsExamStarted(false);
+      clearInterval(interval.current);
       // console.log("key ",key);
       console.log(JSON.stringify({
             
@@ -229,6 +247,121 @@ function AttemptPaper(){
         },[answer]
     );
 
+    const AnotherQuestion = (event) => {
+        const key = event.target.value;
+        console.log("In Another key is ",key)
+        console.log(JSON.stringify({
+            qnID:key,
+            paperID:paperID,
+            lastQnID:question_no,
+            lastAns : answer,
+
+          }))
+        setIsLoading(true);
+        // console.log("key ",key);
+        fetch('https://www.mutualfundcalculator.in/starlord/exam/get_question/',{
+            
+            method : 'POST',
+            headers: {'Content-Type': 'application/json',
+            'Authorization' : 'Bearer ' + accessToken   },
+            body: JSON.stringify({
+                qnID:key,
+                paperID:paperID,
+                lastQnID:question_no,
+                lastAns : answer,
+
+              })
+        })
+        .then(response =>{
+            console.log(response);
+            setIsLoading(false);
+              if(response.ok)
+              return response.json();
+              else{
+                // alert(response.status)
+                throw new Error(response.status);
+              }
+            })
+            .then(data => {
+                
+              console.log(data);
+              setQuestion_no(key);
+              setQuestion(data.question.question);
+            //   setType(data.firstQuestion.qnJSON.type);
+              setPosMark(data.question.posMark);
+              setNegMark(data.question.negMark);
+              if(data.question.options)
+              {setOptions(data.question.options);
+                setType('mcq');
+            }
+              else{
+                  setType("int");
+              }
+             
+              // ALL TIMER
+                  
+                  
+                  // Duration
+                  const duration_mili = (data.duration)*3600000;
+                  setDuration(duration_mili);
+
+                  // start time
+                  const dt = new Date(data.startTime);
+                  const start_mili = dt.getTime();
+                  console.log("start time fetched ",start_mili);
+                  setStartTime(start_mili);
+                  
+                  // end time
+                  const finish_mili = start_mili+duration_mili;
+                  setEndTime(finish_mili);
+
+
+                  // Current Time
+                  const current_mili = new Date().getTime();
+                  
+                  // console.log(data.startTime);
+                  // console.log(finish_dt);
+                  
+
+                  if(current_mili > finish_mili)
+                  {
+                    
+                    swal({
+                      title: "Already Attempted",
+                      text: "You have already attempted and time is up ",
+                      icon: "warning",
+                      button: "Got it",
+                    }); 
+                    EndExam();
+                   
+                  }
+              // All Timer
+              
+              setAnswer(null);
+              setMove(false);
+              
+              Object.keys(userPaperResponse).map((key)=>{
+                userPaperResponse[key] = "true";
+              })
+
+              Object.keys(data.userResponse).map((key)=>{
+                userPaperResponse[key] = "";
+              })
+        })
+          .catch(
+            (error) => {
+              swal({
+                title: "Oops",
+                text: "Something went wrong " + error,
+                icon: "error",
+                button: "Got it",
+              });
+            //   history.push('/');  
+
+            }
+          )
+    }
+
     
 
     return(
@@ -278,6 +411,7 @@ function AttemptPaper(){
             <div class="container box_1170">
                 <div className="section-top-border">
                         <h3 className="mb-30">Question No.{question_no}</h3>
+                        <p align="right"> Pos Mark : {posMark} &nbsp;&nbsp; Neg Mark : -{negMark}</p>
                         <div className="row">
                             <div className="col-lg-12">
                                 <blockquote className="generic-blockquote">
@@ -349,199 +483,13 @@ function AttemptPaper(){
                                                             return(
                                                                 <>
                                                                 {  userPaperResponse[key] ==="" ?
-                                                                <button onClick={e=>{
-                                                                    console.log(JSON.stringify({
-                                                                        qnID:key,
-                                                                        paperID:paperID,
-                                                                        lastQnID:question_no,
-                                                                        lastAns : answer,
-                                                        
-                                                                      }))
-                                                                    setIsLoading(true);
-                                                                    // console.log("key ",key);
-                                                                    fetch('https://www.mutualfundcalculator.in/starlord/exam/get_question/',{
-                                                                        
-                                                                        method : 'POST',
-                                                                        headers: {'Content-Type': 'application/json',
-                                                                        'Authorization' : 'Bearer ' + accessToken   },
-                                                                        body: JSON.stringify({
-                                                                            qnID:key,
-                                                                            paperID:paperID,
-                                                                            lastQnID:question_no,
-                                                                            lastAns : answer,
-                                                            
-                                                                          })
-                                                                    })
-                                                                    .then(response =>{
-                                                                        console.log(response);
-                                                                        setIsLoading(false);
-                                                                          if(response.ok)
-                                                                          return response.json();
-                                                                          else{
-                                                                            // alert(response.status)
-                                                                            throw new Error(response.status);
-                                                                          }
-                                                                        })
-                                                                        .then(data => {
-                                                                            
-                                                                          console.log(data);
-                                                                          setQuestion_no(key);
-                                                                          setQuestion(data.question.question);
-                                                                        //   setType(data.firstQuestion.qnJSON.type);
-                                                                          setPosMark(data.question.posMark);
-                                                                          setNegMark(data.question.negMark);
-                                                                          if(data.question.options)
-                                                                          {setOptions(data.question.options);
-                                                                            setType('mcq');
-                                                                        }
-                                                                          else{
-                                                                              setType("int");
-                                                                          }
-                                                                         
-                                                                          setDuration(data.duration);
-                                                                          
-                                                                          setAnswer(null);
-                                                                          setMove(false);
-
-
-                                                                          
-
-                                                                          // if()
-                                                                          // {
-                                                                            
-                                                                          //   swal({
-                                                                          //     title: "Already Attempted",
-                                                                          //     text: "You have already attempted and time is up red wala ",
-                                                                          //     icon: "warning",
-                                                                          //     button: "Got it",
-                                                                          //   }); 
-                                                                          // }
-
-
-                                                                          Object.keys(userPaperResponse).map((key)=>{
-                                                                            userPaperResponse[key] = "true";
-                                                                          })
-
-                                                                          Object.keys(data.userResponse).map((key)=>{
-                                                                            userPaperResponse[key] = "";
-                                                                          })
-
-                                                                          
-                                                                         
-                                                                          
-                                                                        //   Object.entries(data.userPaperResponse).map(([key, value]) => {
-                                                                        //     userResponse.push(value);
-                                                                           
-                                                                        //     // Pretty straightforward - use key for the key and value for the value.
-                                                                        //     // Just to clarify: unlike object destructuring, the parameter names don't matter here.
-                                                                        // })
-                                                                    })
-                                                                      .catch(
-                                                                        (error) => {
-                                                                          swal({
-                                                                            title: "Oops",
-                                                                            text: "Something went wrong " + error,
-                                                                            icon: "error",
-                                                                            button: "Got it",
-                                                                          });
-                                                                        //   history.push('/');  
-                                                            
-                                                                        }
-                                                                      )
-                                                                }} className="genric-btn danger-border small">{key} </button>
+                                                                <button  value={key} 
+                                                                onClick={AnotherQuestion}
+                                                                className="genric-btn danger-border small">{key} </button>
                                                                 :
-                                                                <button onClick={e=>{
-                                                                    console.log(JSON.stringify({
-                                                                        qnID:key,
-                                                                        paperID:paperID,
-                                                                        lastQnID:question_no,
-                                                                        lastAns : answer,
-                                                        
-                                                                      }))
-                                                                    setIsLoading(true);
-                                                                    // console.log("key ",key);
-                                                                    fetch('https://www.mutualfundcalculator.in/starlord/exam/get_question/',{
-                                                                        
-                                                                        method : 'POST',
-                                                                        headers: {'Content-Type': 'application/json',
-                                                                        'Authorization' : 'Bearer ' + accessToken   },
-                                                                        body: JSON.stringify({
-                                                                            qnID:key,
-                                                                            paperID:paperID,
-                                                                            lastQnID:question_no,
-                                                                            lastAns : answer,
-                                                            
-                                                                          })
-                                                                    })
-                                                                    .then(response =>{
-                                                                        console.log(response);
-                                                                        setIsLoading(false);
-                                                                          if(response.ok)
-                                                                          return response.json();
-                                                                          else{
-                                                                            // alert(response.status)
-                                                                            throw new Error(response.status);
-                                                                          }
-                                                                        })
-                                                                        .then(data => {
-                                                                        
-                                                                          console.log(data);
-                                                                          
-                                                                          setQuestion_no(key);
-                                                                          setQuestion(data.question.question);
-                                                                        //setType(data.firstQuestion.qnJSON.type);
-                                                                          setPosMark(data.question.posMark);
-                                                                          setNegMark(data.question.negMark);
-
-                                                                          if(data.question.options)
-                                                                         { setOptions(data.question.options);
-                                                                            setType('mcq');
-                                                                        }
-                                                                          else{
-                                                                              setType("int");
-                                                                          }
-                                                                          
-                                                                          setDuration(data.duration);
-                                                                          setAnswer(null);
-                                                                          setMove(false);
-
-                                                                          
-                                                                          
-                                                                          
-
-                                                                          
-                                                                          Object.keys(userPaperResponse).map((key)=>{
-                                                                            userPaperResponse[key] = "true";
-                                                                          })
-
-                                                                          Object.keys(data.userResponse).map((key)=>{
-                                                                            userPaperResponse[key] = "";
-                                                                          })
-                                                                          
-                                                                         
-                                                                        //   Object.entries(data.userPaperResponse).map(([key, value]) => {
-                                                                        //     userResponse.push(value);
-                                                                           
-                                                                        //     // Pretty straightforward - use key for the key and value for the value.
-                                                                        //     // Just to clarify: unlike object destructuring, the parameter names don't matter here.
-                                                                        // })
-                                                                           
-                                                                            // Pretty straightforward - use key for the key and value for the value.
-                                                                            // Just to clarify: unlike object destructuring, the parameter names don't matter here.
-                                                                        })
-                                                                      .catch(
-                                                                        (error) => {
-                                                                          swal({
-                                                                            title: "Oops",
-                                                                            text: "Something went wrong " + error,
-                                                                            icon: "error",
-                                                                            button: "Got it",
-                                                                          });
-                                                                        //   history.push('/');  
-                                                            
-                                                                        }
-                                                                      )
-                                                                }} class="genric-btn primary small">{key} </button>
+                                                                <button value={key}
+                                                                 onClick={AnotherQuestion}
+                                                                  class="genric-btn primary small">{key} </button>
                                                                 
                                                                  } 
                                                                  </>
