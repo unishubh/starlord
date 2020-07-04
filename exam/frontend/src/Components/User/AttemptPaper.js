@@ -29,6 +29,7 @@ function AttemptPaper(){
     const [duration,setDuration] = useState(null);
     const [endTime,setEndTime] = useState(null);
     const [answer,setAnswer] = useState(null);
+    const [onEndExam,setOnEndExam] = useState(false);
     
     let interval = useRef();
 
@@ -42,22 +43,27 @@ function AttemptPaper(){
         const mins  = Math.floor(((dis)%(1000*60*60))/(1000*60));
         const secs  = Math.floor(((dis)%(1000*60)/(1000)));
 
-        if( finish!=null && dis<=0 && exam_ended==false)
+        if( finish!=null && dis==0 && exam_ended==false)
         {
-          clearInterval(interval.current);
+          clearInterval(interval);
           setExam_ended(true);
-          EndExam();
+          console.log("this is happening");
+          setExam_ended(true);
 
         }
         else if (dis<0 && finish!=null){
-          clearInterval(interval.current);
+          clearInterval(interval);
+          setLeftHours(0);
+          setLeftMins(0);
+          setLeftSecs(0);
           swal({
             title: "Already Attempted",
             text: "You have already attempted and time is up ",
             icon: "warning",
             button: "Got it",
           }); 
-          history.push('/myattemptedpaper');
+          history.push('/myattemptedpapers');
+          
         }
         else{
           if(finish!=null){
@@ -73,10 +79,10 @@ function AttemptPaper(){
     useEffect(
         () => {
          
-
-           startTimer();
+          if(exam_ended==false)
+           {startTimer();}
            return () => {
-            clearInterval(interval.current);
+            clearInterval(interval);
            }; 
             
         },
@@ -92,6 +98,15 @@ function AttemptPaper(){
           StartExam();
         }
       },[isStarted]);
+
+    useEffect(
+      ()=>{
+        if(onEndExam==false && exam_ended==true)
+        {
+          EndExam();
+        }
+      },[exam_ended]
+    )
 
     const StartExam = () =>{
             // localStorage.setItem("exam",true);
@@ -158,14 +173,15 @@ function AttemptPaper(){
 
                   if(current_mili > finish_mili)
                   {
+                    setExam_ended(true);
                     
                     swal({
                       title: "Already Attempted",
-                      text: "You have already attempted and time is up ",
+                      text: "You have already attempted and time is up inside",
                       icon: "warning",
                       button: "Got it",
                     }); 
-                    history.push('/myattemptedpaper');
+                    history.push('/myattemptedpapers');
                   }
 
                  
@@ -187,9 +203,10 @@ function AttemptPaper(){
               )
     };
     const EndExam = () => {
+      setOnEndExam(true);
       setIsLoading(true);
       setIsExamStarted(false);
-      clearInterval(interval.current);
+      clearInterval(interval);
       // console.log("key ",key);
       console.log(JSON.stringify({
             
@@ -325,14 +342,15 @@ function AttemptPaper(){
 
                   if(current_mili > finish_mili)
                   {
-                    
+                    setExam_ended(true);
                     swal({
                       title: "Already Attempted",
                       text: "You have already attempted and time is up ",
                       icon: "warning",
                       button: "Got it",
                     }); 
-                    EndExam();
+                  
+                    history.push('/myattemptedpapers');
                    
                   }
               // All Timer
