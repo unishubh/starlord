@@ -27,40 +27,53 @@ import MyExams from './Components/User/MyExams'
 import MyAttemptedPapers from './Components/User/MyAttemptedPapers';
 import UserPapers from './Components/User/UserPapers';
 import AttemptPaper from './Components/User/AttemptPaper';
+import PapersOfExam from './Components/Admin/PapersOfExam';
 function App() {
   
     // localStorage.setItem("token",null) 
     const [token,setToken] = useState(null);
     const [isExamStarted,setIsExamStarted] = useState(null);
-    if(localStorage.getItem("exam"))
-    {
-      setIsExamStarted(true);
-    }
-    const history = useHistory();
-    useEffect ( async () => {
-      const istoken = await localStorage.getItem("token");
-    if(istoken ){
-      var jwtDecode = require('jwt-decode');
-      var decoded = await jwtDecode(istoken);
     
-      setToken(decoded);
+    const history = useHistory();
+    // useEffect ( async () => {
+    //   const istoken = await localStorage.getItem("token");
+    // if(istoken ){
+    //   var jwtDecode = require('jwt-decode');
+    //   var decoded = await jwtDecode(istoken);
+    
+    //   setToken(decoded);
       
      
+    // }
+    // else{
+    // console.log("token is yhhh  ",token);
+    // }
+  // }
+    // ,[]);
+    useEffect (()=>{
+      if(localStorage.getItem("token"))
+    {
+      console.log(" ha ye toh h ");
+      const istoken = localStorage.getItem("token");
+      var jwtDecode = require('jwt-decode');
+      var decoded =  jwtDecode(istoken);
+      setToken(decoded);
+      console.log(decoded);
+      
     }
-    else{
-    console.log("token is yhhh  ",token);
-    }}
-    ,[]);
-    useEffect (
-      () => {
-        console.log("token is " ,token);
-        if(token)
-        console.log("jab ", token.userId);
-      },[token]
-    );
+    },[]);
+    
+    // useEffect (
+    //   () => {
+    //     console.log("token is " ,token);
+    //     if(token)
+    //     console.log("token role ", token.role);
+    //   },[token]
+    // );
    return (
-    <div>
+    <div> 
       <UserContext.Provider value={{token,setToken,isExamStarted,setIsExamStarted}}>
+        {/* value of token role  : {token.role}  */}
     {isExamStarted ? <></> : <Navbar/> }
      <Main/>
      <Switch>
@@ -76,8 +89,9 @@ function App() {
        {!token ?  <Route exact path='/createagency' component={CreateAgency} /> :  <Route exact path='/createagency' component={NotValid} />}
       { (token && token.role===1)  ? <Route exact path='/createexam' component={CreateExam} /> : <Route exact path='/createexam' component={NotValid} /> }
       { (token && token.role===1) ? <Route exact path='/createpaper' component={CreatePaper} /> : <Route exact path='/createpaper' component={NotValid} /> }
-      { (token ) ? <Route exact path='/exams' component={Exams} /> : <Route exact path='/exams' component={NotValid} /> }
-      { (token ) ? <Route exact path='/papers' component={Papers} /> : <Route exact path='/papers' component={NotValid} /> }
+      { (token && token.role===1) ? <Route exact path='/exams' component={Exams} /> : <Route exact path='/exams' component={NotValid} /> }
+      { (token && token.role===1) ? <Route exact path='/papers' component={Papers} /> : <Route exact path='/papers' component={NotValid} /> }
+      { (token && token.role===1) ? <Route exact path='/exam-papers/:examID' component={PapersOfExam} /> : <Route exact path='/exam-papers/:examID' component={NotValid} /> }
       { (token && token.role===1)? <Route exact path='/preview/:paperID' component={PreviewPapers} /> : <Route exact path='/preview/:paperID' component={NotValid} /> }
       { (token && token.role===1) ? <Route exact path='/addquestion/:paperID' component={AddQuestion} /> : <Route exact path='/addquestion/:paperID' component={NotValid} /> }
       { (token && token.role===2) ? <Route exact path='/myexams' component={MyExams} /> : <Route exact path='/myexams' component={NotValid} /> }

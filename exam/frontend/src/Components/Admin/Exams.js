@@ -1,5 +1,5 @@
 import React,{useEffect,useContext, useState} from 'react';
-import {useHistory} from 'react-router-dom';
+import {useHistory,Link} from 'react-router-dom';
 import { UserContext } from '../UserContext';
 import swal from 'sweetalert';
 import { TableSortLabel } from '@material-ui/core';
@@ -101,7 +101,10 @@ function Exams(){
                                     <div className="serial">#</div>
                                     <div className="country">Exam</div>
                                     <div className="visit">Max Marks</div>
+                                    <div className="visit">Time Duration</div>
                                     <div className="percentage">Description</div>
+                                    <div className="visit">See Papers</div>
+                                    
                                     
                                 </div>
                                { exams.map((exam,key)=>(
@@ -109,7 +112,13 @@ function Exams(){
                                     <div className="serial">{key+1}</div>
                                     <div className="country"> {exam.name}</div>
                                     <div className="visit">{exam.max_marks}</div>
-                                    <div className="visit">{exam.details}</div>
+                                    <div className="visit">{exam.time} &nbsp; {exam.time!=1 ? <>Hours</>:<>Hour</>}</div>
+                                    <div className="percentage">{exam.details}</div>
+                                    <div className="visit">
+                                        <div className="button-group-area mt-10">
+                                            <Link to={"/exam-papers/"+exam.id} className="genric-btn primary-border small" >Papers</Link>
+                                         </div>
+                                    </div>
                                     
                                     {/* <div className="percentage">
                                         <div className="progress">

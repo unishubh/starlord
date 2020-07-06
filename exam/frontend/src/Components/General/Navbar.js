@@ -6,13 +6,14 @@ function Navbar()
 {
     const history = useHistory();
     const {token,setToken} = useContext(UserContext);
-    // let token = localStorage.getItem("token");
+   
+    // console.log("role ",token.role);
     const handleLogout = () =>{
         localStorage.removeItem("token");
         setToken(null);
         console.log("hi");
         console.log(token);
-        history.replace('/about');
+        history.push('/');
 
     };
     
@@ -103,8 +104,8 @@ function Navbar()
                                 <li><Link to="/">Home</Link></li>
                                 <li><Link to="/about">About</Link></li>
                                 <li><Link to="/allexams">All Exams</Link></li>
-                                {/* <li><Link to="instructor.html">Instructors</Link></li> */} 
-                                {token && token.role===1? 
+                              {token && token.role===1? 
+                                <>
                                 <li><Link to="/admin">Admin</Link>
                                     <ul className="submenu">
                                         <li><Link to="/createexam">Create Exam</Link></li>
@@ -113,7 +114,10 @@ function Navbar()
                                         <li><Link to="/papers">See Papers</Link></li>
                                     </ul>
                                 </li>
+                                </>
                                 :
+                                <>
+                                {/* {token} */}
                                 <li><Link to="#">Options</Link>
                                     <ul className="submenu">
                                         <li><Link to="/myexams">My Exams</Link></li>
@@ -121,8 +125,9 @@ function Navbar()
                                       
                                     </ul>
                                 </li>
+                                </>
                                 }
-                                {/* <li><Link to="/createexam">Create New Exam</Link></li> */}
+                              
                                 <li><Link to="/contact">Contact</Link></li>
                                 
                             </ul>

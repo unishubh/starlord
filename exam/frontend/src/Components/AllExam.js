@@ -93,6 +93,7 @@ function AllExams(){
                                     <div className="serial">#</div>
                                     <div className="percentage">Exam</div>
                                     <div className="visit">Max Marks</div>
+                                    <div className="visit">Time Duration</div>
                                     <div className="percentage">Description</div>
                                      { token.role==2 ? <div className="visit">Subscribe</div> : <> </> }
                                 </div>
@@ -101,6 +102,7 @@ function AllExams(){
                                     <div className="serial">{key+1}</div>
                                     <div className="percentage"> {exam.name}</div>
                                     <div className="visit">{exam.max_marks}</div>
+                                    <div className="visit">{exam.time} &nbsp; {exam.time!=1 ? <>Hours</>:<>Hour</>}</div>
                                     <div className="percentage">{exam.details}</div>
                                     
                                     { token.role==2 ?
