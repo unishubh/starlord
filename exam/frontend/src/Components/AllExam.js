@@ -1,5 +1,5 @@
 import React,{useEffect,useContext, useState} from 'react';
-import {useHistory} from 'react-router-dom';
+import {useHistory,Link} from 'react-router-dom';
 import { UserContext } from './UserContext';
 import swal from 'sweetalert';
 import {Spinner} from 'react-bootstrap';
@@ -14,6 +14,49 @@ function AllExams(){
     const [isLoading,setIsLoading] = useState(true);
     const [exams,setExams] = useState([]);
     const [total,setTotal] = useState(0);
+
+    const Subscribe = (event)=>{
+
+                setIsLoading(true);
+                const accessToken = localStorage.getItem("token");
+                fetch('https://www.mutualfundcalculator.in/starlord/user/subscribe/'+event.target.value,{
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json',
+                        'Authorization' : 'Bearer ' + accessToken   },
+                                               
+                        })
+                        .then(response =>{
+                                        setIsLoading(false);
+                                        if(response.ok)  
+                                        return response.json();
+                                        else{
+                                            throw new Error(response.status)
+                                            }
+                                        } )
+                                        .then(data => {
+                                            console.log(data);
+                                            console.log(data.message);
+                                            swal({
+                                             title: "Hey Yaayy !!",
+                                                        text: "Exam Has Been Subscribed",
+                                                        icon: "success",
+                                                        button: "Got it",
+                                                      });
+                                                    
+                                            
+                                                }).catch(
+                                            (error)=>{
+                                            swal({
+                                            title: "Oh Ohhh",
+                                            text: "Either you have already subscribed or Something went wrong",
+                                            icon: "error",
+                                            button: "Got it",
+                                          });
+                                            }
+                                            )
+                                
+    }
+
     useEffect(
         
         ()=>{
@@ -44,7 +87,7 @@ function AllExams(){
                     icon: "error",
                     button: "Got it",
                   });
-                //   history.push('/');  
+                  history.push('/myexams');  
 
                 }
               )
@@ -68,8 +111,7 @@ function AllExams(){
 
     </div>
       :
-    <div>
-   
+      <div>
         <div className="slider-area">
             <div className="slider-height2 d-flex align-items-center">
                 <div className="container">
@@ -83,96 +125,56 @@ function AllExams(){
                 </div>
             </div>
         </div>
-        <div className="whole-wrap"> 
-            <div className="container box_1170">
-                <div className="section-top-border">
-                        <h3 className="mb-30"></h3>
-                        <div className="progress-table-wrap">
-                            <div className="progress-table">
-                                <div className="table-head">
-                                    <div className="serial">#</div>
-                                    <div className="percentage">Exam</div>
-                                    <div className="visit">Max Marks</div>
-                                    <div className="visit">Time Duration</div>
-                                    <div className="percentage">Description</div>
-                                     { token.role==2 ? <div className="visit">Subscribe</div> : <> </> }
-                                </div>
-                               { exams.map((exam,key)=>(
-                                <div className="table-row" id={key}>
-                                    <div className="serial">{key+1}</div>
-                                    <div className="percentage"> {exam.name}</div>
-                                    <div className="visit">{exam.max_marks}</div>
-                                    <div className="visit">{exam.time} &nbsp; {exam.time!=1 ? <>Hours</>:<>Hour</>}</div>
-                                    <div className="percentage">{exam.details}</div>
-                                    
-                                    { token.role==2 ?
-                                    <div className="visit">
-                                    <button onClick={()=>{
-                                        setIsLoading(true);
-                                        const accessToken = localStorage.getItem("token");
-                                        fetch('https://www.mutualfundcalculator.in/starlord/user/subscribe/'+exam.id,{
-                                          method: 'POST',
-                                          headers: {'Content-Type': 'application/json',
-                                                    'Authorization' : 'Bearer ' + accessToken   },
-                                        //   body: JSON.stringify({
-                                        //     name: name,
-                                        //     maxMarks: maxMarks,
-                                        //     details: details,
-                                        //     time: time
-                                        //   })
-                                        })
-                                          .then(response =>{
-                                            setIsLoading(false);
-                                            if(response.ok)  
-                                            return response.json();
-                                            else{
-                                                throw new Error(response.status)
-                                            }
-                                          } )
-                                          .then(data => {
-                                            console.log(data);
-                                            console.log(data.message);
-                                            swal({
-                                                title: "Hey Yaayy !!",
-                                                text: "Exam Has Been Subscribed",
-                                                icon: "success",
-                                                button: "Got it",
-                                              });
-                                            
-                                    
-                                        }).catch(
-                                            (error)=>{
-                                                swal({
-                                                    title: "Oh Ohhh",
-                                                    text: "Either you have already subscribed or Something went wrong",
-                                                    icon: "error",
-                                                    button: "Got it",
-                                                  });
-                                            }
-                                        )
-                                    }} 
-                                    className="genric-btn primary-border small" >
-                                    Subscribe
-                                    </button>
+        <div className="about-details section-padding10"></div>
+
+     <div className="row">
+
+                  
+         
+            {exams.map((exam,key)=>(
+               <div className="col-xl-4 col-lg-4 col-md-6">
+               <div style={{padding:"40px"}}>
+                   <div className="my-own-card">
+               
+                       <div className="my-own-name" >
+                       <div className="hero-cap hero-cap2 text-center">
+                       <h3 style={{color:"white"}}> {exam.name} </h3>
+                       </div>
+                       </div>
+                   <div className="my-own-container">
+                       <h5><b>Max Marks : {exam.max_marks}</b></h5> 
+                       <h5>Time Duration : {exam.time} {exam.time!==1 ? <>Hours</> : <>Hour</>}</h5>
+                       <p>{exam.details}</p> 
+                       { token.role==2 ?
+                                    <>
+                                    <div className="button-group-area mt-10">
+                                    <button value={exam.id} onClick={Subscribe} className="genric-btn primary-border small" >Subscribe</button>
                                     </div>
+                                    <div className="button-group-area mt-10">
+                                        
+                                    <Link to={"/mypapers/"+exam.id} className="genric-btn primary-border small" >Papers</Link>
+                                    </div>
+                                    
+                                    </>
                                     :<></>
-                                    }
-                                    {/* <div className="percentage">
-                                        <div className="progress">
-                                            <div className="progress-bar color-1" role="progressbar" style={{width: "80%"}}
-                                                aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div> */}
-                                </div>
-                                ))}
-                                
-                            </div>
-                        </div>
-                </div>
-            </div>
-        </div> 
-        
-    </div>
+                                            
+                                    } 
+                                    
+                   </div>
+           
+                   </div>
+               </div>
+           </div>  
+            )
+            
+            )}  
+                          
+        </div>
+
+     </div>
+     
+   
+   
      }
 </div>
     );
