@@ -28,6 +28,7 @@ import MyAttemptedPapers from './Components/User/MyAttemptedPapers';
 import UserPapers from './Components/User/UserPapers';
 import AttemptPaper from './Components/User/AttemptPaper';
 import PapersOfExam from './Components/Admin/PapersOfExam';
+import ShowPapers from './Components/User/ShowPapers';
 function App() {
   
     // localStorage.setItem("token",null) 
@@ -97,7 +98,8 @@ function App() {
       { (token && token.role===2) ? <Route exact path='/myexams' component={MyExams} /> : <Route exact path='/myexams' component={NotValid} /> }
       { (token && token.role===2) ? <Route exact path='/myattemptedpapers' component={MyAttemptedPapers} /> : <Route exact path='/myattemptedpapers' component={NotValid} /> }
       { (token && token.role===2) ? <Route exact path='/mypapers/:examID' component={UserPapers} /> : <Route exact path='/mypapers/:examID' component={NotValid} /> }
-      
+      { (token && token.role===2) ? <Route exact path='/showpapers/:examID' component={ShowPapers} /> : <Route exact path='/showpapers/:examID' component={NotValid} /> }
+
 
        <Route  component={YouLost}/>  
    

@@ -1,28 +1,37 @@
-import React,{useEffect,useContext, useState} from 'react';
-import {useHistory,Link} from 'react-router-dom';
-import { UserContext } from '../UserContext';
+import React,{useContext,useEffect,useState} from 'react';
+import {Link,useParams} from 'react-router-dom';
+import {UserContext} from '../UserContext';
 import swal from 'sweetalert';
-import { TableSortLabel } from '@material-ui/core';
-
-
-
-
-
-function Exams(){
-    const accessToken = localStorage.getItem("token");
+import Select from 'react-select';
+function ShowPapers(){
     const {token,setToken} = useContext(UserContext);
-    const history = useHistory();
-    const [isLoading,setIsLoading] = useState(true);
-    const [exams,setExams] = useState([]);
-    const [total,setTotal] = useState(0);
+    const [options,setOptions] = useState([]);
+    // const [examID,setExamID] = useState(null);
+    const [isLoading,setIsLoading] =useState(true);
+    const [examName,setExamName] = useState("");
+    const [papers,setPapers] = useState([]);
+    const [papercount,setPapercount] = useState(null);
+    const {examID} = useParams();
+    const accessToken = localStorage.getItem("token");
     useEffect(
         
         ()=>{
+          
+            setIsLoading(true);
             console.log("uius");
-            fetch('https://www.mutualfundcalculator.in/starlord/user/getallexams'
+           console.log(examID);
+            fetch('https://www.mutualfundcalculator.in/starlord/user/view_papers/'+examID,{
+                
+                method: 'GET',
+                headers: {'Content-Type': 'application/json',
+                          'Authorization' : 'Bearer ' + accessToken   }
+               }
+               
+            
                 )
                 .then(response =>{
-                // console.log(response);
+                console.log(response);
+                setIsLoading(false);
                   if(response.ok)
                   return response.json();
                   else{
@@ -32,14 +41,9 @@ function Exams(){
                 })
                 .then(data => {
                   console.log(data);
-                  data.examdata.map((exam,key) => {
-                    
-                      if(exam.agencyID === token.agencyID){
-                        exams.push(exam)
-                        setTotal(t=>t+1)
-                      }
-                      
-                    });
+                  setPapers(data.message)
+                  setPapercount(data.message.length)
+                  
                 
                 setIsLoading(false);
               
@@ -48,7 +52,7 @@ function Exams(){
                 (error) => {
                   swal({
                     title: "Oops",
-                    text: "Something went wrong " + error,
+                    text: "This exam have no papers yet ",
                     icon: "error",
                     button: "Got it",
                   });
@@ -56,10 +60,12 @@ function Exams(){
 
                 }
               )
+
+            
         },[]
     );
-
     return( 
+
         <div>
         { isLoading ?  
         <div>
@@ -82,7 +88,7 @@ function Exams(){
                        <div className="row">
                            <div className="col-xl-12">
                                <div className="hero-cap hero-cap2 text-center">
-                                   <h2>Your Exams {isLoading ? <>IS LOADING..</> : <> : {total}</>}</h2>
+                                   <h2>Your Papers{isLoading ? <>IS LOADING..</> : <> : {papercount}</>}</h2>
                                </div>
                            </div>
                        </div>
@@ -95,41 +101,25 @@ function Exams(){
    
                      
             
-               {exams.map((exam,key)=>(
+               {papers.map((paper,key)=>(
                   <div className="col-xl-4 col-lg-4 col-md-6">
                   <div style={{padding:"40px"}}>
                       <div className="my-own-card">
                   
                           <div className="my-own-name" >
                           <div className="hero-cap hero-cap2 text-center">
-                          <h3 style={{color:"white"}}> {exam.name} </h3>
+                          <h3 style={{color:"white"}}> {paper.name} </h3>
                           </div>
                           </div>
                       <div className="my-own-container">
-                          <h5><b>Max Marks : {exam.max_marks}</b></h5> 
-                          <h5>Time Duration : {exam.time} {exam.time!==1 ? <>Hours</> : <>Hour</>}</h5>
-                          <p>{exam.details}</p> 
-                          { token.role==2 ?
-                                       <>
-                                       {/* <div className="button-group-area mt-10">
-                                       <button value={exam.id} onClick={} className="genric-btn primary-border small" >Edit</button>
-                                       </div> */}
-                                      
+                          <h5><b>Total Qns : {paper.totalQns}</b></h5> 
+                       
                                        
-                                       </>
-                                       :<></>
-                                               
-                                       } 
-                            <div className="button-group-area mt-10">
-                                           
-                           <Link to={"/exam-papers/"+exam.id} className="genric-btn primary-border small" >Papers</Link>
-                           </div>
-                       </div>       
                       </div>
               
                       </div>
                   </div>
-          
+              </div>  
                )
                
                )}  
@@ -142,10 +132,7 @@ function Exams(){
       
         }
    </div>
-
-
-
     );
 }
 
-export default Exams;
+export default ShowPapers;

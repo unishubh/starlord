@@ -60,78 +60,85 @@ function MyExams(){
     );
 
     return( 
-<div>
-{ 
-    isLoading ?  
-     <div>
-         
-        <div className="preloader d-flex align-items-center justify-content-center">
-            <div className="preloader-inner position-relative">
-                <div className="preloader-circle"></div>
-                <div className="preloader-img pere-text">
-                    <img src="assets/img/logo/loder.png" alt=""/>
-                </div>
-            </div>
-        </div>
 
-    </div>
-      :
-
-    <div>
-        <div className="slider-area">
-            <div className="slider-height2 d-flex align-items-center">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-xl-12">
-                            <div className="hero-cap hero-cap2 text-center">
-                                    <h2>Your Subscibed Exams {isLoading ? <>IS LOADING..</> : <>: {total}</>}</h2>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div>
+        { isLoading ?  
+        <div>
+            
+           <div className="preloader d-flex align-items-center justify-content-center">
+               <div className="preloader-inner position-relative">
+                   <div className="preloader-circle"></div>
+                   <div className="preloader-img pere-text">
+                       <img src="assets/img/logo/loder.png" alt=""/>
+                   </div>
+               </div>
+           </div>
+   
+       </div>
+         :
+         <div>
+           <div className="slider-area">
+               <div className="slider-height2 d-flex align-items-center">
+                   <div className="container">
+                       <div className="row">
+                           <div className="col-xl-12">
+                               <div className="hero-cap hero-cap2 text-center">
+                                   <h2>Your Suscried Exams{isLoading ? <>IS LOADING..</> : <> : {total}</>}</h2>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+               </div>
+           </div>
+           <div className="about-details section-padding10"></div>
+   
+        <div className="row">
+   
+                     
+            
+               {exams.map((exam,key)=>(
+                  <div className="col-xl-4 col-lg-4 col-md-6">
+                  <div style={{padding:"40px"}}>
+                      <div className="my-own-card">
+                  
+                          <div className="my-own-name" >
+                          <div className="hero-cap hero-cap2 text-center">
+                          <h3 style={{color:"white"}}> {exam.name} </h3>
+                          </div>
+                          </div>
+                      <div className="my-own-container">
+                          <h5><b></b></h5> 
+                       
+                          { token.role==2 ?
+                                       <>
+                                       <div className="button-group-area mt-10">
+                                       <Link to={"/mypapers/"+exam.examID} className="genric-btn primary-border small" >Papers</Link>
+                                       </div>
+                                      
+                                       </>
+                                       :<></>
+                                               
+                                       } 
+                                       
+                      </div>
+              
+                      </div>
+                  </div>
+              </div>  
+               )
+               
+               )}  
+                             
+           </div>
+   
         </div>
-        <div className="whole-wrap"> 
-            <div className="container box_1170">
-                <div className="section-top-border">
-                        <h3 className="mb-30"></h3>
-                        <div className="progress-table-wrap">
-                            <div className="progress-table">
-                                <div className="table-head">
-                                    <div className="serial">#</div>
-                                    <div className="country">Exam</div>
-                                    <div className="visit">Max Marks</div>
-                                    <div className="percentage">See Papers</div>
-                                    
-                                </div>
-                               { exams.map((exam,key)=>(
-                                <div className="table-row" id={key}>
-                                    <div className="serial">{key+1}</div>
-                                    <div className="country"> {exam.examID}</div>
-                                    <div className="visit">{}</div>
-                                    <div className="visit">
-                                        <div className="button-group-area mt-10">
-                                            <Link to={"/mypapers/"+exam.examID} className="genric-btn primary-border small" >Papers</Link>
-                                         </div>
-                                    </div>
-                                    
-                                    {/* <div className="percentage">
-                                        <div className="progress">
-                                            <div className="progress-bar color-1" role="progressbar" style={{width: "80%"}}
-                                                aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div> */}
-                                </div>
-                                ))}
-                                
-                            </div>
-                        </div>
-                </div>
-            </div>
-        </div> 
-    </div>
-}
-</div>
+        
+      
+      
+        }
+   </div>
+
+
     );
 }
 

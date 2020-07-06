@@ -150,21 +150,22 @@ function AllExams(){
                                     <div className="button-group-area mt-10">
                                     <button value={exam.id} onClick={Subscribe} className="genric-btn primary-border small" >Subscribe</button>
                                     </div>
-                                    <div className="button-group-area mt-10">
-                                        
-                                    <Link to={"/mypapers/"+exam.id} className="genric-btn primary-border small" >Papers</Link>
-                                    </div>
+                                   
                                     
                                     </>
                                     :<></>
                                             
                                     } 
-                                    
+                         <div className="button-group-area mt-10">
+                                        
+                        <Link to={"/showpapers/"+exam.id} className="genric-btn primary-border small" >Papers</Link>
+                        </div>
+                    </div>       
                    </div>
            
                    </div>
                </div>
-           </div>  
+       
             )
             
             )}  
