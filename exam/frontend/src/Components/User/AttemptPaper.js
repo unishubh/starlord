@@ -28,7 +28,7 @@ function AttemptPaper(){
     const [move,setMove] = useState(false);
     const [duration,setDuration] = useState(null);
     const [endTime,setEndTime] = useState(null);
-    const [answer,setAnswer] = useState(null);
+    const [answer,setAnswer] = useState("");
     const [onEndExam,setOnEndExam] = useState(false);
     
     let interval = useRef();
@@ -224,7 +224,7 @@ function AttemptPaper(){
             
               paperID:paperID,
               lastQnID:question_no,
-              lastAns : answer,
+              lastQnAns : answer,
 
             })
       })
@@ -271,7 +271,7 @@ function AttemptPaper(){
             qnID:key,
             paperID:paperID,
             lastQnID:question_no,
-            lastAns : answer,
+            lastQnAns : answer,
 
           }))
         setIsLoading(true);
@@ -285,7 +285,7 @@ function AttemptPaper(){
                 qnID:key,
                 paperID:paperID,
                 lastQnID:question_no,
-                lastAns : answer,
+                lastQnAns : answer,
 
               })
         })
@@ -355,16 +355,18 @@ function AttemptPaper(){
                   }
               // All Timer
               
-              setAnswer(null);
+             
               setMove(false);
+              setUserPaperResponse(data.userResponse);
+              setAnswer(data.userResponse[key]);
               
-              Object.keys(userPaperResponse).map((key)=>{
-                userPaperResponse[key] = "true";
-              })
+              // Object.keys(userPaperResponse).map((key)=>{
+              //   userPaperResponse[key] = "true";
+              // })
 
-              Object.keys(data.userResponse).map((key)=>{
-                userPaperResponse[key] = "";
-              })
+              // Object.keys(data.userResponse).map((key)=>{
+              //   userPaperResponse[key] = "";
+              // })
         })
           .catch(
             (error) => {
@@ -450,7 +452,7 @@ function AttemptPaper(){
                                                      if(answer!=option)
                                                      {setAnswer(option);}
                                                      else{
-                                                         setAnswer(null);
+                                                         setAnswer("");
                                                      }
                                                      
                                                      }}/>
