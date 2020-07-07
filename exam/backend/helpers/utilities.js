@@ -5,9 +5,9 @@ module.exports.sendError = (message="Some error Occurred", res) => {
     res.send({ "message": message });
 }
 
-module.exports.sendSuccess = (message, res) => {
+module.exports.sendSuccess = (message, res, data = {}) => {
     res.status(200);
-    res.send({ "message": message });
+    res.send({ "message": message, data });
 }
 
 // module.exports.send_blank_message = (data, res) => {

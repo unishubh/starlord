@@ -10,7 +10,7 @@ module.exports.basicAuth = async function (req, res, next) {
     // verify auth credentials
     const token =  req.headers.authorization.split(' ')[1];
     const credentials = Buffer.from(token, 'base64').toString('ascii');
-    console.error(credentials) ;
+    //console.error(credentials) ;
     jwt.verify(token, process.env.JWT_SECRET , (err, user) => {
         if (err) {
             return res.sendStatus(403);

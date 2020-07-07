@@ -18,7 +18,7 @@ module.exports.basicAuth = async function (req, res, next) {
             return res.sendStatus(403);
         }
         req.user = user;
-        if (req.user.role == 1 )
+        if (req.user.role === 1 )
             next();
         else
             return res.status(401).json({ message: 'Admin access denied' });     

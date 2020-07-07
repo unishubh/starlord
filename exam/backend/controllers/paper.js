@@ -1,13 +1,64 @@
-const db = require('../../models') ;
-const utilities = require('../../helpers/utilities');
-const getJwtCred = require('../../helpers/get_jwt_credentials') ;
-const createJSON = require('../../helpers/createJSONresponse') ;
+const db = require('../models') ;
 const uuid = require('uuid') ;
-const paperAttempted = require('../../helpers/isAttempted') ;
-exports.byPaperId = async ( req , res ) => {
+const utilities = require('../helpers/utilities');
+const createJSON = require('../helpers/createJSONresponse') ;
+const paperAttempted = require('../helpers/isAttempted') ;
+
+exports.createPaper = async ( req , res ) => {
+    let newExamID = req.body.examID ;
+    let newName = req.body.name ;
+    let newTotalQns = req.body.totalQns ;
+
+    try{
+        let exam = await db.exams.findOne({where: {id:newExamID}});
+        if (!exam){
+            console.log("Exam does not exist");
+            utilities.sendError("Exam does not exist", res);
+            return
+        }
+        let newPaper = db.mockpapers.build({ id: uuid.v1(), examID:newExamID , name:newName , totalQns:newTotalQns }) ;
+        await newPaper.save() ;
+        utilities.sendSuccess('success', res, newPaper);
+    }
+    catch(err){
+        console.log( '401 ' + err  ) ;
+        utilities.sendError(err, res);
+    }
+}
+
+exports.getPaperByExam = async (req , res ) =>{
+    try{
+        let newExamID = req.params.examID ;
+        let { count , rows } = await db.mockpapers.findAndCountAll({
+            where :{
+                examID : newExamID
+            },
+        });
+
+        let exams = {} ;
+        let userID = req.user.userID;
+        exams['attemptedPapers'] = await db.attemptedPapers.findAll({
+            where: {
+                userID,
+            },
+            attributes: ['paperID'],
+            raw: true,
+        }) ;
+        exams['papercount'] = count ;
+        exams['paperdata'] = rows ;
+        res.status(200) ;
+        res.send(exams) ;
+    }
+    catch(err){
+        console.log( '401 ' + err  ) ;
+        utilities.sendError(err, res);
+    }
+}
+
+exports.attemptPaperbyPaperID = async (req , res ) => {
     try{
         let startTime = new Date();
-        let newUserID = await getJwtCred.userID(req,res);
+        let newUserID = req.user.userID;
         let newPaperID = req.params.paperID ;
         let paperExist = await db.mockpapers.findOne({
             include : db.exams,
@@ -28,7 +79,7 @@ exports.byPaperId = async ( req , res ) => {
                 userID : newUserID ,
                 paperID : newPaperID ,
             },
-            raw : true , 
+            raw : true ,
         }) ;
         if (!alreadyResponse){
             let examineeResponse = await createJSON.ofQns(req,res) ;
@@ -40,7 +91,7 @@ exports.byPaperId = async ( req , res ) => {
                 userID : newUserID ,
                 paperID : newPaperID ,
             },
-            raw : true , 
+            raw : true ,
         }) ;
         let startPaperResponse = {} ;
         let firstQuestion = await db.questions.findOne({
@@ -59,31 +110,16 @@ exports.byPaperId = async ( req , res ) => {
             where :{
                 userID : newUserID ,
                 paperID : newPaperID },
-            raw:true,    
+            raw:true,
         });
 
         startPaperResponse['startTime'] = attempted.startTime ;
         startPaperResponse['duration'] = paperExist.exam.time ;
 
-        res.status(200) ;
-        res.send(startPaperResponse) ;
+        utilities.sendSuccess('success', res, startPaperResponse);
     }
     catch(err){
         console.log( '401 ' + err  ) ;
         utilities.sendError(err, res) ;
     }
 }
-
-
-
-// {
-//     "type" : "1" ,
-//       "question" : "To be or not to be" ,
-//       "correctAns" : "be" ,
-//       "posMark" : "1" ,
-//       "options" : [ "be" , "notbe" ] ,
-//       "negmark" : "0.5"
-//   }
-  
-  // 300ea560-b759-11ea-97e5-87ba4b5fa945 paperID
-  // d7ab4262-347b-424b-b375-dc7552d199b7 userID

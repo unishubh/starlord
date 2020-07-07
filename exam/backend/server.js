@@ -1,10 +1,11 @@
 const express = require('express') ;
 const cors = require('cors');
 require('dotenv').config() ;
+const apiRouter = require('./routes/api') ;
+
 
 const app = express() ;
 const port = process.env.PORT || 5001 ;
-const uuid =  require('uuid') ;
 app.use(express.json()) ;
 app.use(cors());
 
@@ -17,13 +18,8 @@ db.sequelize.sync({force:false}).then( () =>{
 }) ;
 
 
-let userRouter = require('./routes/user') ;
-let orgAdminRouter = require('./routes/org_admin') ;
-let examRouter = require('./routes/exam') ;
 //app.use('/api', api);
-app.use('/user' , userRouter ) ;
-app.use('/admin' , orgAdminRouter ) ;
-app.use('/exam' , examRouter ) ;
+app.use('/api/' , apiRouter ) ;
 app.listen(port,() =>
     {console.log(`Server is running on port : ${port}`)}) ;
 
