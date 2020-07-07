@@ -23,10 +23,25 @@ exports.byPaperId = async ( req , res ) => {
         if( attemptExpired ){
             throw "User has already finished the paper" ;
         }
-        
-        let examineeResponse = await createJSON.ofQns(req,res) ;
-        let newResponse = db.userPaperResponse.build( { id : uuid.v4() , userID:newUserID , paperID:newPaperID , response:examineeResponse} ) ;
-        await newResponse.save() ;
+        let alreadyResponse = await db.userPaperResponse.findOne({
+            where:{
+                userID : newUserID ,
+                paperID : newPaperID ,
+            },
+            raw : true , 
+        }) ;
+        if (!alreadyResponse){
+            let examineeResponse = await createJSON.ofQns(req,res) ;
+            let newResponse = db.userPaperResponse.build( { id : uuid.v4() , userID:newUserID , paperID:newPaperID , response:examineeResponse} ) ;
+            await newResponse.save() ;
+        }
+        let userResponse = await db.userPaperResponse.findOne({
+            where:{
+                userID : newUserID ,
+                paperID : newPaperID ,
+            },
+            raw : true , 
+        }) ;
         let startPaperResponse = {} ;
         let firstQuestion = await db.questions.findOne({
             where:{
@@ -38,8 +53,16 @@ exports.byPaperId = async ( req , res ) => {
         if ( !firstQuestion )
             throw "There are no questions in this paper" ;
         startPaperResponse['firstQuestion'] = firstQuestion ;
-        startPaperResponse['userPaperResponse'] = newResponse ;
-        startPaperResponse['startTime'] = startTime ;
+        startPaperResponse['userPaperResponse'] = userResponse ;
+
+        let attempted = await db.attemptedPapers.findOne({
+            where :{
+                userID : newUserID ,
+                paperID : newPaperID },
+            raw:true,    
+        });
+
+        startPaperResponse['startTime'] = attempted.startTime ;
         startPaperResponse['duration'] = paperExist.exam.time ;
 
         res.status(200) ;
@@ -62,4 +85,5 @@ exports.byPaperId = async ( req , res ) => {
 //       "negmark" : "0.5"
 //   }
   
-  
+  // 300ea560-b759-11ea-97e5-87ba4b5fa945 paperID
+  // d7ab4262-347b-424b-b375-dc7552d199b7 userID

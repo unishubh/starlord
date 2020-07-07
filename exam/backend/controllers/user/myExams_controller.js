@@ -17,7 +17,7 @@ exports.byUserID = async(req,res) =>{
         new_userID = user.userID ;
         console.log(user.userID) ;
     });
-    try{
+    try{ 
         let { count , rows } = await db.subscriptions.findAndCountAll({
             where :{
                 userID : new_userID },

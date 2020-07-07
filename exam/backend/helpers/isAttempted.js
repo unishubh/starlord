@@ -15,7 +15,10 @@ module.exports.byUser = async( req , res ) =>{
             where :{
                 userID : newUserID ,
                 paperID : newPaperID },
+            raw:true,    
         });
+        console.log('***') ;
+        console.log(attempted) ;
         if(attempted){
             if ( attempted.finished ){
                 ok = true ;
@@ -34,7 +37,7 @@ module.exports.byUser = async( req , res ) =>{
             let newStartTime = new Date() ;
             let newAttempt = db.attemptedPapers.build({ id : uuid.v4() , userID : newUserID , paperID : newPaperID , finished:false , startTime : newStartTime } ) ;
             await newAttempt.save() ;
-        }
+        } 
         return ok ;
     }catch(err){
         console.log(err);
