@@ -27,10 +27,8 @@ exports.toExam = async( req , res ) =>{
         }
         let subscribed = await db.subscriptions.findOne({where: {examID:new_examID , userID:new_userID}}) ;
         if ( subscribed ){
-            console.log('User already subscribed to this exam') ;
-            utilities.sendError("User already subscribed to this exam", res);
+            throw "User already subscribed to this exam" ;
         }
-
         let newSubscription = db.subscriptions.build({id:uuid.v1() , examID:new_examID , userID : new_userID } ) ;
         await newSubscription.save() ;
         utilities.sendSuccess(newSubscription, res);
