@@ -1,8 +1,10 @@
 import React, { useEffect, useState, useRef, useContext } from 'react';
-import {useHistory,useParams} from 'react-router-dom';
+import {useHistory,useParams,Prompt} from 'react-router-dom';
 import swal from 'sweetalert';
 import { Next } from 'react-bootstrap/PageItem';
 import { UserContext } from '../UserContext';
+import NavigationPrompt from "react-router-navigation-prompt";
+
 
 function AttemptPaper(){
     const history = useHistory();
@@ -203,6 +205,7 @@ function AttemptPaper(){
               )
     };
     const EndExam = () => {
+      console.log("end exam called");
       setOnEndExam(true);
       setIsLoading(true);
       setIsExamStarted(false);
@@ -212,7 +215,7 @@ function AttemptPaper(){
             
         paperID:paperID,
         lastQnID:question_no,
-        lastAns : answer,
+        lastQnAns : answer,
 
       }));
       fetch('https://www.mutualfundcalculator.in/starlord/exam/get_question/',{
@@ -382,10 +385,18 @@ function AttemptPaper(){
           )
     }
 
-    
+    useEffect(
+      ()=>{
+        return ()=> {alert("Working");};
+      },[]
+    )
 
     return(
     <div>
+    
+  {/* <Prompt when={isExamStarted}
+  message="Are you sure ? Your Exam will be ended" /> */}
+
     { isLoading ?
             <div>
          

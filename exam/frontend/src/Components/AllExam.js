@@ -68,7 +68,7 @@ function AllExams(){
                   if(response.ok)
                   return response.json();
                   else{
-                    alert(response.status)
+                    
                     throw new Error(response.status);
                   }
                 })
@@ -87,7 +87,7 @@ function AllExams(){
                     icon: "error",
                     button: "Got it",
                   });
-                  history.push('/myexams');  
+                  history.push('/');  
 
                 }
               )

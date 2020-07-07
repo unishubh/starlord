@@ -75,9 +75,10 @@ function App() {
     <div> 
       <UserContext.Provider value={{token,setToken,isExamStarted,setIsExamStarted}}>
         {/* value of token role  : {token.role}  */}
-    {isExamStarted ? <></> : <Navbar/> }
+        {isExamStarted ? <></> : <Navbar/> }
      <Main/>
      <Switch>
+     
        {/* <Route exact path='/' component={SignInStudent} /> */}
        { (token && token.role===2) ? <Route exact path='/attemptpaper/:paperID/:paperName' component={AttemptPaper} /> : <Route exact path='/attemptpaper/:paperID/:paperName' component={NotValid} /> }
        

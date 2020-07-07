@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import './Navbar.css';
+import './Navbar.module.css';
 import {useHistory,Link} from 'react-router-dom';
 import {UserContext} from '../UserContext';
 function Navbar()
@@ -16,86 +16,84 @@ function Navbar()
         history.push('/');
 
     };
+
+    const handleLogin = () =>{
+        history.push('/signin');
+    }
     
     return(
-    //     <div className="demo-big-content" style={{position :"fixed"}}>
-    //     <Layout>
-    //         <Header className='header-color' title="Title"  scroll>
-    //             <Navigation>
-    //                 <Link to="/">Home</Link>
-    //                 <Link to="/studentsignin">Signin</Link>
-    //                 <Link to="/register">Sign Up</Link>
-    //                 <Link to="/contact">Contact</Link>
-    //             </Navigation>
-    //         </Header>
-    //         {/* <Drawer title="Title">
-    //             <Navigation>
-    //                 <Link to="#">Link</Link>
-    //                 <Link to="#">Link</Link>
-    //                 <Link to="#">Link</Link>
-    //                 <Link to="#">Link</Link>
-    //             </Navigation>
-    //         </Drawer> */}
-    //         <Content>
-    //             <div className="page-content" />
-    //         </Content>
-    //     </Layout>
-    // </div>
+  
     <div className="header-area">
     <div className="main-header ">
+    <div class="header-top d-none d-lg-block">
+               
+                    <div class="header-left-social">
+                        <ul class="header-social">    
+                            <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                            <li><a href="https://www.facebook.com/sai4ull"><i class="fab fa-facebook-f"></i></a></li>
+                            <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                            <li> <a href="#"><i class="fab fa-google-plus-g"></i></a></li>
+                        </ul>
+                    </div>
+                    <div class="container">
+                        <div class="col-xl-12">
+                            <div class="row d-flex justify-content-between align-items-center">
+                                <div class="header-info-left">
+                                    <ul>     
+                                        <li>needhelp@gmail.com</li>
+                                        <li>666 7475 25252</li>
+                                    </ul>
+                                </div>
+                                <div class="header-info-right">
+                                    <ul>    
+                                        {!token?
+                                        <>
+                                        <li><Link to="/signin"><i class="ti-user"></i>Login</Link></li>
+                                        <li><Link to="/register"><i class="ti-lock"></i>Register</Link></li>
+                                        </>
+                                        :
+                                        <li><Link onClick={handleLogout} to="/"><i class="ti-lock"></i>Logout</Link></li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
         <div className="header-top d-none d-lg-block">
             {/* <!-- Left Social --> */}
-            <div className="header-left-social">
-                <ul className="header-social">    
-                    <li><Link to="#"><i className="fab fa-twitter"></i></Link></li>
-                    <li><Link to="#"><i className="fab fa-facebook-f"></i></Link></li>
-                    <li><Link to="#"><i className="fab fa-linkedin-in"></i></Link></li>
-                    <li> <Link to="#"><i className="fab fa-google-plus-g"></i></Link></li>
-                </ul>
-            </div>
+           
             <div className="container">
                 <div className="col-xl-12">
                     <div className="row d-flex justify-content-between align-items-center">
-                        <div className="header-info-left">
-                            <ul>     
-                                <li>onlineexam@gmail.com </li>
-                                <li>+91-XXXXXXXXXX   : </li>
-                            </ul>
-                        </div>
+                        
                         <div className="header-info-right">
-                            <ul> 
-                                { !token ?
-                                ( 
-                                    <>
-                                    <li><Link to="/signin"><i className="ti-user"></i>Login</Link></li>
-                                    <li><Link to="/register"><i className="ti-lock"></i>Register</Link></li>
-                                    <li><Link to="/createagency"><i className="ti-book"></i>Create Agency</Link></li>
-                                    </>
-                                    
-        
-                                ) : (
-                                    <>
-                                    <li><Link onClick={handleLogout} to="/"><i className="ti-user"></i>Logout </Link></li>
-                                    </>
-                                )
-
-                                }
-                            </ul>
+                           
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        
         <div className="header-bottom header-sticky">
             {/* <!-- Logo --> */}
             <div className="logo d-none d-lg-block">
                 <Link to="/"><img src="assets/img/logo/logo.png" alt="" /></Link>
             </div>
+           
+
+            
             <div className="container">
                 <div className="menu-wrapper">
                     {/* <!-- Logo --> */}
                     <div className="logo logo2 d-block d-lg-none">
-                        <Link to="index.html"><img src="assets/img/logo/logo.png" alt="" /></Link>
+                    {token?
+                        <button onClick={handleLogout} className="genric-btn primary-border">Logout</button>
+                                :
+                                <button 
+                                className="genric-btn primary-border"
+                                onClick={handleLogin}>Login/Register</button>
+                    }
                     </div>
                     {/* <!-- Main-menu --> */}
                     <div className="main-menu d-none d-lg-block">
@@ -134,14 +132,7 @@ function Navbar()
                         </nav>
                     </div>
                     {/* <!-- Header-btn --> */}
-                    <div className="header-search d-none d-lg-block">
-                        <form action="#" className="form-box f-right ">
-                            <input type="text" name="Search" placeholder="Search Exams" />
-                            <div className="search-icon">
-                                <i className="fas fa-search special-tag"></i>
-                            </div>
-                        </form>
-                    </div>
+                    
                 </div>
                 {/* <!-- Mobile Menu --> */}
                 <div className="col-12">
