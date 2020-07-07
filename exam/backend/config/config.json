@@ -1,8 +1,8 @@
 {
   "development": {
-    "username": "root",
-    "password": "ldapmysql",
-    "database": "dev_user",
+    "username": "newuser",
+    "password": "Password123*",
+    "database": "starlord",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "port": 3306 ,
