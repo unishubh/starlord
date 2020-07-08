@@ -114,7 +114,7 @@ function AttemptPaper(){
             // localStorage.setItem("exam",true);
             setIsExamStarted(true);
             setIsLoading(true);
-            fetch('https://www.mutualfundcalculator.in/starlord/exam/attempt_paper/'+paperID,{
+            fetch('https://www.mutualfundcalculator.in/starlord/api/attempt/'+paperID,{
                 
                 method : 'POST',
                 headers: {'Content-Type': 'application/json',
@@ -133,30 +133,30 @@ function AttemptPaper(){
                 .then(data => {
                 
                   console.log(data);
-                  setQuestion_no(data.firstQuestion.iid);
-                  setQuestion(data.firstQuestion.qnJSON.question);
-                  setType(data.firstQuestion.qnJSON.type);
-                  setPosMark(data.firstQuestion.qnJSON.posMark);
-                  setNegMark(data.firstQuestion.qnJSON.negMark);
-                  if(data.firstQuestion.qnJSON.options)
-                  setOptions(data.firstQuestion.qnJSON.options);
+                  setQuestion_no(data.data.firstQuestion.iid);
+                  setQuestion(data.data.firstQuestion.qnJSON.question);
+                  setType(data.data.firstQuestion.qnJSON.type);
+                  setPosMark(data.data.firstQuestion.qnJSON.posMark);
+                  setNegMark(data.data.firstQuestion.qnJSON.negMark);
+                  if(data.data.firstQuestion.qnJSON.options)
+                  setOptions(data.data.firstQuestion.qnJSON.options);
                   
                   // console.log("start ",data.startTime);
-                  var size = Object.keys(data.userPaperResponse.response).length;
+                  var size = Object.keys(data.data.userPaperResponse.response).length;
                   setTotalQns(size);
                   if(size>0)
-                  setUserPaperResponse(data.userPaperResponse.response);
+                  setUserPaperResponse(data.data.userPaperResponse.response);
                   
                   
                   // ALL TIMER
                   
                   
                   // Duration
-                  const duration_mili = (data.duration)*3600000;
+                  const duration_mili = (data.data.duration)*3600000;
                   setDuration(duration_mili);
 
                   // start time
-                  const dt = new Date(data.startTime);
+                  const dt = new Date(data.data.startTime);
                   const start_mili = dt.getTime();
                   console.log("start time fetched ",start_mili);
                   setStartTime(start_mili);
@@ -218,7 +218,7 @@ function AttemptPaper(){
         lastQnAns : answer,
 
       }));
-      fetch('https://www.mutualfundcalculator.in/starlord/exam/get_question/',{
+      fetch('https://www.mutualfundcalculator.in/starlord/api/question/',{
           
           method : 'POST',
           headers: {'Content-Type': 'application/json',
@@ -279,7 +279,7 @@ function AttemptPaper(){
           }))
         setIsLoading(true);
         // console.log("key ",key);
-        fetch('https://www.mutualfundcalculator.in/starlord/exam/get_question/',{
+        fetch('https://www.mutualfundcalculator.in/starlord/api/question/',{
             
             method : 'POST',
             headers: {'Content-Type': 'application/json',
@@ -312,10 +312,10 @@ function AttemptPaper(){
               setNegMark(data.question.negMark);
               if(data.question.options)
               {setOptions(data.question.options);
-                setType('mcq');
+                setType('MCQ');
             }
               else{
-                  setType("int");
+                  setType("INT");
               }
              
               // ALL TIMER
@@ -387,15 +387,26 @@ function AttemptPaper(){
 
     useEffect(
       ()=>{
-        return ()=> {alert("Working");};
+        console.log(isExamStarted)
+        return ()=> {
+        // window.removeEventListener('beforeunload')
+        EndExam();
+        };
       },[]
     )
+//     window.addEventListener("beforeunload", (ev) => 
+// {  if(performance.navigation.type!==performance.navigation.TYPE_RELOAD)
+//     {
+//       ev.preventDefault();
+//     return ev.returnValue = 'Are you sure you want to close?';
+//   }
+// });
 
     return(
     <div>
     
-  {/* <Prompt when={isExamStarted}
-  message="Are you sure ? Your Exam will be ended" /> */}
+  <Prompt when={isExamStarted}
+  message="Are you sure ? Your Exam will be ended" />
 
     { isLoading ?
             <div>
@@ -450,7 +461,7 @@ function AttemptPaper(){
                                 <br/><br/>
                                
                                { 
-                               type==="mcq" ?
+                               type==="MCQ" ?
                                <div> 
                                 {  options.map( (option,key) => (
                                     <div className="col-lg-3 col-md-4 mt-sm-30">

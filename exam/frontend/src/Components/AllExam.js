@@ -19,7 +19,7 @@ function AllExams(){
 
                 setIsLoading(true);
                 const accessToken = localStorage.getItem("token");
-                fetch('https://www.mutualfundcalculator.in/starlord/user/subscribe/'+event.target.value,{
+                fetch('https://www.mutualfundcalculator.in/starlord/api/subscribe/'+event.target.value,{
                         method: 'POST',
                         headers: {'Content-Type': 'application/json',
                         'Authorization' : 'Bearer ' + accessToken   },

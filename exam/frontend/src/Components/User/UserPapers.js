@@ -42,6 +42,7 @@ function UserPapers(){
                 .then(data => {
                   console.log(data);
                 //   setPapers(data.paperdata)
+                let c = 0;
                   const attempted = data.attemptedPapers;
                   const papers1 = data.paperdata;
                   papers1.map((paper,i)=>{
@@ -55,11 +56,12 @@ function UserPapers(){
                     if(f==0)
                     {
                         papers.push(paper);
+                        c = c+1;
                     }
                   })
                   
 
-                  setPapercount((data.papercount)-(data.attemptedPapers.length))
+                  setPapercount(c);
                   
                 
                 setIsLoading(false);

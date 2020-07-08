@@ -72,7 +72,7 @@ function ShowPapers(){
 
         setIsLoading(true);
         const accessToken = localStorage.getItem("token");
-        fetch('https://www.mutualfundcalculator.in/starlord/user/subscribe/'+event.target.value,{
+        fetch('https://www.mutualfundcalculator.in/starlord/api/subscribe/'+event.target.value,{
                 method: 'POST',
                 headers: {'Content-Type': 'application/json',
                 'Authorization' : 'Bearer ' + accessToken   },
@@ -135,7 +135,7 @@ function ShowPapers(){
                            <div className="col-xl-12">
                                <div className="hero-cap hero-cap2 text-center">
                                    <h2> Papers{isLoading ? <>IS LOADING..</> : <> : {papercount}</>}</h2>
-                                   <button  onClick={Subscribe}  className="btn hero-btn"  data-animation="fadeInLeft" data-delay=".8s">Subscribe</button>
+                                   <button value={examID} onClick={Subscribe}  className="btn hero-btn"  data-animation="fadeInLeft" data-delay=".8s">Subscribe</button>
                                </div>
                            </div>
                        </div>
