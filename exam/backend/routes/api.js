@@ -50,7 +50,7 @@ router.post('/agency/:name',   createAgencyController.createAgency);
 //add question to a paper
 router.post('/question/:paperID', sess_auth.basicAuth, admin_auth.basicAuth,  questionController.InsertQuestions);
 //get next question of the exam currently being attempted
-router.get('/question' , sess_auth.basicAuth , questionController.getQuestionByIntegerID) ;
+router.post('/question' , sess_auth.basicAuth , questionController.getQuestionByIntegerID) ;
 
 
 

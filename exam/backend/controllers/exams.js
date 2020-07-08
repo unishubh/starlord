@@ -107,6 +107,7 @@ exports.getAttemptedPapers = async (req , res ) =>{
     try{
         let { count , rows } = await db.attemptedPapers.findAndCountAll({
             where :{ userID  },
+            include : db.mockpapers,
         });
         let exams = {} ;
         exams['papercount'] = count ;

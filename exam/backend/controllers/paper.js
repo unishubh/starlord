@@ -38,6 +38,7 @@ exports.getPaperByExam = async (req , res ) =>{
         let exams = {} ;
         let userID = req.user.userID;
         exams['attemptedPapers'] = await db.attemptedPapers.findAll({
+            include: db.mockpapers,
             where: {
                 userID,
             },
