@@ -4,7 +4,7 @@ import swal from 'sweetalert';
 import { Next } from 'react-bootstrap/PageItem';
 import { UserContext } from '../UserContext';
 import NavigationPrompt from "react-router-navigation-prompt";
-
+import { Modal } from "react-modal";
 
 function AttemptPaper(){
     const history = useHistory();
@@ -394,17 +394,63 @@ function AttemptPaper(){
         };
       },[]
     )
-//     window.addEventListener("beforeunload", (ev) => 
-// {  if(performance.navigation.type!==performance.navigation.TYPE_RELOAD)
-//     {
-//       ev.preventDefault();
-//     return ev.returnValue = 'Are you sure you want to close?';
-//   }
-// });
+
+  //  window.addEventListener('beforeunload',(event)=>{
+  //    event.preventDefault();
+     
+  //    event.returnValue = "Your Exam will be Ended";
+  //  })
+  const Hi = ()=>{
+    let f=0;
+    console.log("hi called")
+  }
+  // window.addEventListener('beforeunload', (event) => {
+  //   // Cancel the event as stated by the standard.
+   
+  //   event.preventDefault();
+  //   event.returnValue = 'Are You sure ?';
+  //   swal({
+  //     title: "Are you sure?",
+  //     text: "If you leave, your exam will be ended",
+  //     icon: "warning",
+  //     buttons: true,
+  //     dangerMode: true,
+  //   })
+  //   .then((willDelete) => {
+  //     if (willDelete) {
+  //       EndExam();
+  //     } else {
+  //       swal("Continue with your exam!");
+  //     }
+  //   });
+
+    // Chrome requires returnValue to be set.
+    // EndExam();
+    
+   
+    
+  // });
+  const onConfirm = () =>{
+    console.log("confrim")
+    
+  }
+ 
 
     return(
     <div>
-    
+     <NavigationPrompt when={true}>
+            {({ onConfirm, onCancel }) => (
+              <React.Fragment>
+                <Modal
+                  isOpen={isExamStarted}
+                  handleClose={this.hideModal}
+                >
+                  <button onClick={onCancel}>Cancel</button>
+                  <button onClick={onConfirm}>Confirm</button>
+                </Modal>
+              </React.Fragment>
+            )}
+          </NavigationPrompt>
   <Prompt when={isExamStarted}
   message="Are you sure ? Your Exam will be ended" />
 

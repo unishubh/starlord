@@ -37,7 +37,7 @@ function MyExams(){
                   }
                 })
                 .then(data => {
-                  console.log(data);
+                  console.log(data.data);
                   setExams(data.data);
                   setTotal(data.data.length);
                 
@@ -103,7 +103,7 @@ function MyExams(){
                   
                           <div className="my-own-name" >
                           <div className="hero-cap hero-cap2 text-center">
-                          <h3 style={{color:"white"}}> {exam.name} </h3>
+                          <h3 style={{color:"white"}}> {exam.exam.name} </h3>
                           </div>
                           </div>
                       <div className="my-own-container">
