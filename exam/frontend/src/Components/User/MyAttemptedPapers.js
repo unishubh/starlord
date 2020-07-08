@@ -42,7 +42,7 @@ function MyAttemptedPapers(){
                 })
                 .then(data => {
                   console.log(data);
-                  setPapers(data.data.paperdata.mockpaper);
+                  setPapers(data.data.paperdata);
                   setTotal(data.data.papercount);
                 
                 setIsLoading(false);
@@ -108,7 +108,7 @@ function MyAttemptedPapers(){
                   
                           <div className="my-own-name" >
                           <div className="hero-cap hero-cap2 text-center">
-                          <h3 style={{color:"white"}}> {paper.name} </h3>
+                          <h3 style={{color:"white"}}> {paper.mockpaper.name} </h3>
                           </div>
                           </div>
                       <div className="my-own-container">
@@ -117,7 +117,7 @@ function MyAttemptedPapers(){
                           { token.role==2 ?
                                        <>
                                        <div className="button-group-area mt-10">
-                                       <Link to={"/attemptpaper/"+paper.id+"/"+paper.name} className="genric-btn primary-border small" >Result/Resume </Link>
+                                       <Link to={"/attemptpaper/"+paper.paperID+"/"+paper.mockpaper.name} className="genric-btn primary-border small" >Result/Resume </Link>
                                        </div>
                                       
                                        </>
