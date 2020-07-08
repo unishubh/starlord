@@ -41,7 +41,6 @@ exports.getPaperByExam = async (req , res ) =>{
             where: {
                 userID,
             },
-            attributes: ['paperID'],
             raw: true,
         }) ;
         exams['papercount'] = count ;
