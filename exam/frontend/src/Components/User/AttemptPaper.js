@@ -438,19 +438,7 @@ function AttemptPaper(){
 
     return(
     <div>
-     <NavigationPrompt when={true}>
-            {({ onConfirm, onCancel }) => (
-              <React.Fragment>
-                <Modal
-                  isOpen={isExamStarted}
-                  handleClose={this.hideModal}
-                >
-                  <button onClick={onCancel}>Cancel</button>
-                  <button onClick={onConfirm}>Confirm</button>
-                </Modal>
-              </React.Fragment>
-            )}
-          </NavigationPrompt>
+     
   <Prompt when={isExamStarted}
   message="Are you sure ? Your Exam will be ended" />
 

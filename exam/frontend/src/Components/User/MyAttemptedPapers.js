@@ -42,7 +42,7 @@ function MyAttemptedPapers(){
                 })
                 .then(data => {
                   console.log(data);
-                  setPapers(data.data.paperdata);
+                  setPapers(data.data.paperdata.mockpaper);
                   setTotal(data.data.papercount);
                 
                 setIsLoading(false);
