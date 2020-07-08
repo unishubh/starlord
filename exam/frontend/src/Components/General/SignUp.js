@@ -209,7 +209,7 @@ export default function SignUp() {
       console.log("role is ", 2);
     }
 
-    fetch('https://www.mutualfundcalculator.in/starlord/user/register',{
+    fetch('https://www.mutualfundcalculator.in/starlord/api/register',{
         method: 'POST',
         mode : 'cors',
         headers: {'Content-Type': 'application/json'},
@@ -232,10 +232,9 @@ export default function SignUp() {
          
          console.log("data is ")
           
-          console.log(data.message.accessToken)
-          console.log(data.message.data.name)
-          localStorage.setItem("token",data.message.accessToken)
-          var decoded = jwtDecode(data.message.accessToken);
+          
+          localStorage.setItem("token",data.data.accessToken)
+          var decoded = jwtDecode(data.data.accessToken);
           setToken(decoded);
           // console.log(token.role);
           history.push('/');

@@ -19,7 +19,11 @@ function Exams(){
         
         ()=>{
             console.log("uius");
-            fetch('https://www.mutualfundcalculator.in/starlord/user/getallexams'
+            fetch('https://mutualfundcalculator.in/starlord/api/exam/byAgency/',{
+                method: 'GET',
+                headers: {'Content-Type': 'application/json',
+                          'Authorization' : 'Bearer ' + accessToken   },
+        }
                 )
                 .then(response =>{
                 // console.log(response);
@@ -32,14 +36,8 @@ function Exams(){
                 })
                 .then(data => {
                   console.log(data);
-                  data.examdata.map((exam,key) => {
-                    
-                      if(exam.agencyID === token.agencyID){
-                        exams.push(exam)
-                        setTotal(t=>t+1)
-                      }
-                      
-                    });
+                  setExams(data.data.examdata)
+                  setTotal(data.data.examcount)
                 
                 setIsLoading(false);
               

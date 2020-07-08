@@ -20,7 +20,7 @@ function MyExams(){
         ()=>{
             setIsLoading(true);
             console.log("uius");
-            fetch('https://www.mutualfundcalculator.in/starlord/user/my_exams',{
+            fetch('https://www.mutualfundcalculator.in/starlord/api/exam/byUser',{
                 method: 'GET',
                 headers: {'Content-Type': 'application/json',
                           'Authorization' : 'Bearer ' + accessToken   }
@@ -38,8 +38,8 @@ function MyExams(){
                 })
                 .then(data => {
                   console.log(data);
-                  setExams(data.message);
-                  setTotal(data.message.length);
+                  setExams(data.data);
+                  setTotal(data.data.length);
                 
                 setIsLoading(false);
               
@@ -83,7 +83,7 @@ function MyExams(){
                        <div className="row">
                            <div className="col-xl-12">
                                <div className="hero-cap hero-cap2 text-center">
-                                   <h2>Your Suscried Exams{isLoading ? <>IS LOADING..</> : <> : {total}</>}</h2>
+                                   <h2>Your Subscribed Exams{isLoading ? <>IS LOADING..</> : <> : {total}</>}</h2>
                                </div>
                            </div>
                        </div>

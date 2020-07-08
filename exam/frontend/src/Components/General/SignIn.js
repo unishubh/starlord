@@ -118,7 +118,7 @@ export default function SignIn() {
     
     
   
-    fetch('https://www.mutualfundcalculator.in/starlord/user/login',{
+    fetch('https://www.mutualfundcalculator.in/starlord/api/login',{
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -128,6 +128,7 @@ export default function SignIn() {
     })
       .then(response =>{
         setIsLoading(false);
+        console.log(response)
         if(response.ok)
         return response.json();
         else{
@@ -135,10 +136,10 @@ export default function SignIn() {
         }
       })
       .then(data => {
-        console.log(data);
-        localStorage.setItem("token", data.message);
+        // console.log(data);
+        localStorage.setItem("token", data.data);
         
-        var decoded = jwtDecode(data.message)
+        var decoded = jwtDecode(data.data)
         setToken(decoded);
         history.push('/');  
       

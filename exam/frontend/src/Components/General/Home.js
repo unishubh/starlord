@@ -60,7 +60,7 @@ function Home(){
                         
                         <div class="section-tittle text-center mb-70">
                             <span>Hi Admin</span>
-                            <h2>Let's Get Started</h2>
+                            <h2>Lets Get Started</h2>
                         </div> 
                     </div>
                 </div>
@@ -85,7 +85,7 @@ function Home(){
                             <div class="cat-cap">
                                 <h5><Link  to="/createpaper">Create Paper</Link></h5>
                                 <p>Create Mock Papers.</p>
-                                <a  href="#" class="read-more1">Read More ></a>
+                               
                             </div>
                         </div>
                     </div>
@@ -95,7 +95,7 @@ function Home(){
                                 <span class="flaticon-business"></span>
                             </div>
                             <div class="cat-cap">
-                                <h5><Link  href="/exams">My Exams</Link></h5>
+                                <h5><Link  to="/exams">My Exams</Link></h5>
                                 <p>See your created exams.</p>
                              
                             </div>
@@ -107,7 +107,7 @@ function Home(){
                                 <span class="flaticon-business"></span>
                             </div>
                             <div class="cat-cap">
-                                <h5><Link  href="/papers">My Mock Paper</Link></h5>
+                                <h5><Link  to="/papers">My Mock Paper</Link></h5>
                                 <p>See your created mock papers.</p>
                              
                             </div>
@@ -122,14 +122,14 @@ function Home(){
     </>
     :
     <>
-    <div class="categories-area section-padding30">
+    <div class="categories-area section-padding10">
             <div class="container">
                 <div class="row justify-content-sm-center">
                     <div class="cl-xl-7 col-lg-8 col-md-10">
                         
                         <div class="section-tittle text-center mb-70">
-                            <span>Popular Online Courses</span>
-                            <h2>Lets Brows All Catagori</h2>
+                            <span>Hi Student</span>
+                            <h2>Lets Get Started</h2>
                         </div> 
                     </div>
                 </div>
@@ -140,9 +140,9 @@ function Home(){
                                 <span class="flaticon-web-design"></span>
                             </div>
                             <div class="cat-cap">
-                                <h5><a  href="#">Web Design</a></h5>
-                                <p>Sorem hpsum folor sixdsft amhtget, consectetur adipiscing eliht, sed do eiusmod tempor incidi.</p>
-                                <a href="#" class="read-more1">Read More ></a>
+                                <h5><Link  to="/allexams">All Exams</Link></h5>
+                                <p>Explore the exams and you can subscribe the exam of your choice.</p>
+                               
                             </div>
                         </div>
                     </div>
@@ -152,9 +152,22 @@ function Home(){
                                 <span class="flaticon-education"></span>
                             </div>
                             <div class="cat-cap">
-                                <h5><a  href="#">App Development</a></h5>
-                                <p>Sorem hpsum folor sixdsft amhtget, consectetur adipiscing eliht, sed do eiusmod tempor incidi.</p>
-                                <a  href="#" class="read-more1">Read More ></a>
+                                <h5><Link  to="/myexams">My Exams</Link></h5>
+                                <p>See the exams you have subscribed.</p>
+                              
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 col-sm-6">
+                        <div class="single-cat mb-50">
+                            <div class="cat-icon">
+                                <span class="flaticon-education"></span>
+                            </div>
+                            <div class="cat-cap">
+                                <h5><Link  to="/myattemptedpapers">My Attempted Papers</Link></h5>
+                                <p>See the papers you have Attempted.</p>
+                               
                             </div>
                         </div>
                     </div>

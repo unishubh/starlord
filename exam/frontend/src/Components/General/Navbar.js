@@ -101,8 +101,8 @@ function Navbar()
                             <ul id="navigation">                                                                                          
                                 <li><Link to="/">Home</Link></li>
                                 <li><Link to="/about">About</Link></li>
-                                <li><Link to="/allexams">All Exams</Link></li>
-                              {token && token.role===1? 
+                                {/* <li><Link to="/allexams">All Exams</Link></li> */}
+                              {/* {token && token.role===1? 
                                 <>
                                 <li><Link to="/admin">Admin</Link>
                                     <ul className="submenu">
@@ -116,15 +116,16 @@ function Navbar()
                                 :
                                 <>
                                 {/* {token} */}
-                                <li><Link to="#">Options</Link>
+                                {/* <li><Link to="#">Options</Link>
                                     <ul className="submenu">
                                         <li><Link to="/myexams">My Exams</Link></li>
                                         <li><Link to="/myattemptedpapers">Attemped Paper</Link></li>
                                       
                                     </ul>
                                 </li>
-                                </>
-                                }
+                                </> */}
+                                {/* } */} 
+                                {/* */} 
                               
                                 <li><Link to="/contact">Contact</Link></li>
                                 

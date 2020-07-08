@@ -1,5 +1,5 @@
 import React,{useContext,useEffect,useState} from 'react';
-import {Link,useParams} from 'react-router-dom';
+import {Link,useParams,useHistory} from 'react-router-dom';
 import {UserContext} from '../UserContext';
 import swal from 'sweetalert';
 import Select from 'react-select';
@@ -12,7 +12,11 @@ function ShowPapers(){
     const [papers,setPapers] = useState([]);
     const [papercount,setPapercount] = useState(null);
     const {examID} = useParams();
-    const accessToken = localStorage.getItem("token");
+    const accessToken = localStorage.getItem("token");   
+    const history = useHistory();
+
+
+
     useEffect(
         
         ()=>{
@@ -20,7 +24,7 @@ function ShowPapers(){
             setIsLoading(true);
             console.log("uius");
            console.log(examID);
-            fetch('https://www.mutualfundcalculator.in/starlord/user/view_papers/'+examID,{
+            fetch('https://www.mutualfundcalculator.in/starlord/api/paper/exam/'+examID,{
                 
                 method: 'GET',
                 headers: {'Content-Type': 'application/json',
@@ -41,8 +45,8 @@ function ShowPapers(){
                 })
                 .then(data => {
                   console.log(data);
-                  setPapers(data.message)
-                  setPapercount(data.message.length)
+                  setPapers(data.paperdata)
+                  setPapercount(data.papercount)
                   
                 
                 setIsLoading(false);
@@ -64,6 +68,48 @@ function ShowPapers(){
             
         },[]
     );
+    const Subscribe = (event)=>{
+
+        setIsLoading(true);
+        const accessToken = localStorage.getItem("token");
+        fetch('https://www.mutualfundcalculator.in/starlord/user/subscribe/'+event.target.value,{
+                method: 'POST',
+                headers: {'Content-Type': 'application/json',
+                'Authorization' : 'Bearer ' + accessToken   },
+                                       
+                })
+                .then(response =>{
+                                setIsLoading(false);
+                                if(response.ok)  
+                                return response.json();
+                                else{
+                                    throw new Error(response.status)
+                                    }
+                                } )
+                                .then(data => {
+                                    console.log(data);
+                                    console.log(data.message);
+                                    swal({
+                                     title: "Hey Yaayy !!",
+                                                text: "Exam Has Been Subscribed",
+                                                icon: "success",
+                                                button: "Got it",
+                                              });
+                                            
+                                        history.push('/myexams');
+
+                                        }).catch(
+                                    (error)=>{
+                                    swal({
+                                    title: "Oh Ohhh",
+                                    text: "Either you have already subscribed or Something went wrong",
+                                    icon: "error",
+                                    button: "Got it",
+                                  });
+                                    }
+                                    )
+                        
+}
     return( 
 
         <div>
@@ -88,7 +134,8 @@ function ShowPapers(){
                        <div className="row">
                            <div className="col-xl-12">
                                <div className="hero-cap hero-cap2 text-center">
-                                   <h2>Your Papers{isLoading ? <>IS LOADING..</> : <> : {papercount}</>}</h2>
+                                   <h2> Papers{isLoading ? <>IS LOADING..</> : <> : {papercount}</>}</h2>
+                                   <button  onClick={Subscribe}  className="btn hero-btn"  data-animation="fadeInLeft" data-delay=".8s">Subscribe</button>
                                </div>
                            </div>
                        </div>

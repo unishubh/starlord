@@ -20,7 +20,7 @@ function MyAttemptedPapers(){
         ()=>{
             setIsLoading(true);
             console.log("uius");
-            fetch('https://www.mutualfundcalculator.in/starlord/user/my_attempted_papers ',{
+            fetch('https://www.mutualfundcalculator.in/starlord/api/paper/attempted ',{
                 method: 'GET',
                 headers: {'Content-Type': 'application/json',
                           'Authorization' : 'Bearer ' + accessToken   },
@@ -42,8 +42,8 @@ function MyAttemptedPapers(){
                 })
                 .then(data => {
                   console.log(data);
-                  setPapers(data.paperdata);
-                  setTotal(data.papercount);
+                  setPapers(data.data.paperdata);
+                  setTotal(data.data.papercount);
                 
                 setIsLoading(false);
               

@@ -11,11 +11,18 @@ function Papers(){
     const [examName,setExamName] = useState("");
     const [papers,setPapers] = useState([]);
     const [papercount,setPapercount] = useState(null);
+    const accessToken = localStorage.getItem("token");
     useEffect(
         
         ()=>{
             
-            fetch('https://www.mutualfundcalculator.in/starlord/user/getallexams',
+            fetch('https://www.mutualfundcalculator.in/starlord/api/exam/byAgency/',{
+              method:'GET',
+              headers:{
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer '+accessToken
+              }
+            }
                 
                 )
                 .then(response =>{
@@ -31,9 +38,9 @@ function Papers(){
                 .then(data => {
                   // console.log(data);
                   let f = 0;
-                  data.examdata.map((exam,key) => {
+                  data.data.examdata.map((exam,key) => {
                     
-                      if(exam.agencyID === token.agencyID){
+                     
                         options.push({'value':exam.id,'label':exam.name});
                         if(f==0)
                         {
@@ -41,7 +48,7 @@ function Papers(){
                           setExamName(exam.name);
                           f=1;
                         }
-                      }
+                      
                       
                     });
                 
@@ -77,17 +84,15 @@ function Papers(){
             console.log("role is  ", token.role)
             // const accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJiYWUyZjUzNi1jMGExLTQwNmUtOTRjMy1hNmUzN2NkMmZhZWUiLCJyb2xlIjoxLCJhZ2VuY3lJRCI6IjRiM2FkMDIwLWI4YWQtMTFlYS05NWQ3LWM3MDcyNWY1YzA3NSIsImlhdCI6MTU5MzUyOTE4MywiZXhwIjoxNTkzNjE1NTgzfQ.EVS7XB_pj-o7EJ2nxW_2O5DGO19-JQL7vyGV7TwxuuM"; 
             console.log("token " , accessToken);
-            fetch('https://www.mutualfundcalculator.in/starlord/admin/get_papers/',{
+            fetch('https://www.mutualfundcalculator.in/starlord/api/paper/exam/'+examID,{
                 // mode : 'cors',
-                method : 'POST',
+                method : 'GET',
                 headers : {
                   
                   'Content-Type': 'application/json',
                   'Authorization' : 'Bearer ' + accessToken ,
                 },
-                body : JSON.stringify({
-                    examID : examID
-                })
+                
             }
                 )
                 .then(response =>{

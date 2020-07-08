@@ -20,15 +20,13 @@ function UserPapers(){
             setIsLoading(true);
             console.log("uius");
            console.log(examID);
-            fetch('https://www.mutualfundcalculator.in/starlord/admin/get_papers/',{
+            fetch('https://www.mutualfundcalculator.in/starlord/api/paper/exam/'+examID,{
                 
-                method: 'POST',
+                method: 'GET',
                 headers: {'Content-Type': 'application/json',
                           'Authorization' : 'Bearer ' + accessToken   }
                ,
-               body : JSON.stringify({
-                   examID : examID
-               })
+              
                
             }
                 )

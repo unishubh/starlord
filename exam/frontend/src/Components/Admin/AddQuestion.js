@@ -6,8 +6,8 @@ import AsyncSelect from 'react-select';
 
 function AddQestion(){
     const types = [
-        {value:'mcq',label:'MCQ'},
-        {value:'int',label:'INTEGER'}
+        {value:'MCQ',label:'MCQ'},
+        {value:'INT',label:'INTEGER'}
     ];
     const {paperID} = useParams();
     // console.log("Add Question PE aagye");
@@ -53,7 +53,7 @@ function AddQestion(){
       else{
         setQuestionError("");
       }
-      if(type=="mcq" && options.length<=1)
+      if(type=="MCQ" && options.length<=1)
       {
         setOptionsError("Please provide atleast 2 options");
         f=1;
@@ -64,8 +64,8 @@ function AddQestion(){
       if(correct=="" || correct==null)
       {
         setCorrectError("Choose a correct option");
-        if(type=='int')
-        setCorrectError("write the int value");
+        if(type=='INT')
+        setCorrectError("write the INT value");
         f=1;
       }
       else{
@@ -95,7 +95,7 @@ function AddQestion(){
       else{
         setNegMarkError("");
       }
-      if(type=="mcq")
+      if(type=="MCQ")
       { 
         let found =0;
         for (let index = 0; index < options.length; index++) {
@@ -118,7 +118,7 @@ function AddQestion(){
       else{
         if(correct==null || Number(correct)==NaN)
         {
-          setCorrectError("write the int value");
+          setCorrectError("write the INT value");
           f=1;
         }
         else{
@@ -139,7 +139,7 @@ function AddQestion(){
       else{
         setQuestionError("");
       }
-      if(type=="mcq" && options.length<=1)
+      if(type=="MCQ" && options.length<=1)
       {
         setOptionsError("Please provide atleast 2 options");
         f=1;
@@ -150,8 +150,8 @@ function AddQestion(){
       if(correct=="" || correct==null)
       {
         setCorrectError("Choose a correct option");
-        if(type=='int')
-        setCorrectError("write the int value");
+        if(type=='INT')
+        setCorrectError("write the INT value");
         f=1;
       }
       else{
@@ -181,7 +181,7 @@ function AddQestion(){
       else{
         setNegMarkError("");
       }
-      if(type=="mcq")
+      if(type=="MCQ")
       { 
         let found =0;
         for (let index = 0; index < options.length; index++) {
@@ -204,19 +204,19 @@ function AddQestion(){
       else{
         if(correct==null || Number(correct)==NaN)
         {
-          setCorrectError("write the int value");
+          setCorrectError("write the INT value");
           f=1;
         }
         else{
           setCorrectError("");
         }
       }
-      if(type=="mcq" && finishAddQuestion==false)
+      if(type=="MCQ" && finishAddQuestion==false)
       {
         setOptionsError("Please provide atleast 2 options");
         f=1;
       }
-      if(type=="mcq" && finishAddQuestion==true)
+      if(type=="MCQ" && finishAddQuestion==true)
       {
         setOptionsError("");
       }
@@ -250,7 +250,7 @@ function AddQestion(){
     console.log("/sjgjs/"+paperID);
     console.log("add question");
     let bodydata;
-    if(type=="int"){
+    if(type=="INT"){
       bodydata =  JSON.stringify({
             question: question,
             correct: correct,
@@ -279,7 +279,7 @@ function AddQestion(){
     setFinishAddQuestion(false);
     console.log(bodydata);
     const accessToken = localStorage.getItem("token");
-    fetch('https://www.mutualfundcalculator.in/starlord/admin/add_questions/'+paperID,{
+    fetch('https://www.mutualfundcalculator.in/starlord/api/question/'+paperID,{
       method: 'POST',
       headers: {'Content-Type': 'application/json',
                 'Authorization' : 'Bearer ' + accessToken,   },
@@ -381,7 +381,7 @@ function AddQestion(){
                                                 </div>}
                                     </div>
                                 </div>
-                            { type !=='int' && finishAddQuestion===false ? 
+                            { type !=='INT' && finishAddQuestion===false ? 
                                 <>
                                 <div className="col-sm-6">
                                     <div className="form-group">
@@ -422,7 +422,7 @@ function AddQestion(){
                                 </> : <></>
                             }
                                 <div className="col-sm-6">
-                                   { type==='int'? <div className="form-group">
+                                   { type==='INT'? <div className="form-group">
                                         <input className="form-control"  name="correct"
                                         type="number"
                                         placeholder="Enter Correct Answer" value={correct} onChange = {e => setCorrect(e.target.value)}/>
@@ -431,7 +431,7 @@ function AddQestion(){
                                                 </div>}
                           </div> :<></> }
                                    
-                            {type==="mcq" && finishAddQuestion ===true ?
+                            {type==="MCQ" && finishAddQuestion ===true ?
                             <>
                                 <Select
                                 onChange={e=> setCorrect(e.value)}
@@ -470,8 +470,8 @@ function AddQestion(){
                                     <div className="form-group">
                                         <select className="form-control"  name="type"
                                         placeholder="Enter Type" value={type} onChange = {e => {setType(e.target.value);console.log(e.target.value)}}>
-                                        <option value="mcq" selected>MCQ</option> 
-                                        <option value="int">INT</option>   
+                                        <option value="MCQ" selected>MCQ</option> 
+                                        <option value="INT">INT</option>   
                                         </select>
 
                                     </div>*/}

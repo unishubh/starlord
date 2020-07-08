@@ -1,8 +1,9 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect, useContext } from 'react';
 import {useHistory} from 'react-router-dom';
 import swal from 'sweetalert';
+import { UserContext } from '../UserContext';
 function CreateExam(){
-
+    const {token,setToken} = useContext(UserContext);
     const [isLoading,setIsLoading] = useState(false);
     const [name,setName] = useState("");
     const [maxMarks,setMaxMarks] = useState(null);
@@ -119,11 +120,12 @@ function CreateExam(){
    console.log(time);
     
     const accessToken = localStorage.getItem("token");
-    fetch('https://www.mutualfundcalculator.in/starlord/admin/create_exam',{
+    fetch('https://mutualfundcalculator.in/starlord/api/exams',{
       method: 'POST',
       headers: {'Content-Type': 'application/json',
                 'Authorization' : 'Bearer ' + accessToken   },
       body: JSON.stringify({
+        agencyID:token.agencyID,
         name: name,
         maxMarks: maxMarks,
         details: details,

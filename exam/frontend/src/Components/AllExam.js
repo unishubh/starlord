@@ -43,7 +43,7 @@ function AllExams(){
                                                         button: "Got it",
                                                       });
                                                     
-                                            
+                                            history.push('/myexams')
                                                 }).catch(
                                             (error)=>{
                                             swal({
@@ -61,7 +61,7 @@ function AllExams(){
         
         ()=>{
             console.log("uius");
-            fetch('https://www.mutualfundcalculator.in/starlord/user/getallexams'
+            fetch('https://www.mutualfundcalculator.in/starlord/api/exam'
                 )
                 .then(response =>{
                 console.log(response);

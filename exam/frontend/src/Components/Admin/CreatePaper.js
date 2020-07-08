@@ -10,12 +10,16 @@ import swal from 'sweetalert';
 function CreatePaper(props){
     const {token,setToken} = useContext(UserContext);
     const [options,setOptions] = useState([]);
-
+    const accessToken = localStorage.getItem("token");
     useEffect(
         
         ()=>{
             
-            fetch('https://www.mutualfundcalculator.in/starlord/user/getallexams'
+            fetch('https://mutualfundcalculator.in/starlord/api/exam/byAgency/',{
+              method: 'GET',
+              headers: {'Content-Type': 'application/json',
+                        'Authorization' : 'Bearer ' + accessToken   },
+        }
                 )
                 .then(response =>{
                 // console.log(response);
@@ -28,13 +32,13 @@ function CreatePaper(props){
                 })
                 .then(data => {
                   console.log(data);
-                  data.examdata.map((exam,key) => {
+                  data.data.examdata.map((exam,key) => {
                     
-                      if(exam.agencyID === token.agencyID){
+                    
                         options.push({'value':exam.id,'label':exam.name})
                        
                         
-                      }
+                      
                       
                     });
                 
@@ -147,7 +151,7 @@ function CreatePaper(props){
    console.log(examID);
    console.log(totalQns);
    const accessToken = localStorage.getItem("token");
-   fetch('https://www.mutualfundcalculator.in/starlord/admin/create_paper',{
+   fetch('https://www.mutualfundcalculator.in/starlord/api/paper',{
      method: 'POST',
      headers: {'Content-Type': 'application/json',
                'Authorization' : 'Bearer ' + accessToken   },
@@ -174,7 +178,7 @@ function CreatePaper(props){
            icon: "success",
            button: "Got it",
          });
-         history.push('/addquestion/' + data.message.id);
+         history.push('/addquestion/' + data.data.id);
 
    }).catch(
        (error)=>{

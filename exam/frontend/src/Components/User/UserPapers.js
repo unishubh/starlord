@@ -20,7 +20,7 @@ function UserPapers(){
             setIsLoading(true);
             console.log("uius");
            console.log(examID);
-            fetch('https://www.mutualfundcalculator.in/starlord/user/view_papers/'+examID,{
+            fetch('https://www.mutualfundcalculator.in/starlord/api/paper/exam/'+examID,{
                 
                 method: 'GET',
                 headers: {'Content-Type': 'application/json',
@@ -41,8 +41,25 @@ function UserPapers(){
                 })
                 .then(data => {
                   console.log(data);
-                  setPapers(data.message)
-                  setPapercount(data.message.length)
+                //   setPapers(data.paperdata)
+                  const attempted = data.attemptedPapers;
+                  const papers1 = data.paperdata;
+                  papers1.map((paper,i)=>{
+                    let f = 0;
+                    attempted.map((attempt,key)=>{
+                        if(attempt.paperID==paper.id)
+                        {
+                            f=1;
+                        }
+                    })
+                    if(f==0)
+                    {
+                        papers.push(paper);
+                    }
+                  })
+                  
+
+                  setPapercount((data.papercount)-(data.attemptedPapers.length))
                   
                 
                 setIsLoading(false);
