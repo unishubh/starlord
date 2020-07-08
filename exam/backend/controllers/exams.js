@@ -85,9 +85,10 @@ exports.getExamByUserID = async(req, res) =>{
     const userID = req.user.userID;
     try{
         let { count , rows } = await db.subscriptions.findAndCountAll({
+            include : db.exams,
             where :{ userID  },
         });
-        console.log(count) ;
+
         if (!count){
             console.log("No Subscribed exams exist");
             utilities.sendError("No Subscribed exams exist", res);
