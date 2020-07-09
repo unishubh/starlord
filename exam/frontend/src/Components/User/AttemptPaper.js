@@ -45,8 +45,9 @@ function AttemptPaper(){
         const mins  = Math.floor(((dis)%(1000*60*60))/(1000*60));
         const secs  = Math.floor(((dis)%(1000*60)/(1000)));
 
-        if( finish!=null && dis==0 && exam_ended==false)
+        if( finish!=null && dis<=0 && exam_ended==false)
         {
+          EndExam();
           clearInterval(interval);
           setExam_ended(true);
           console.log("this is happening");
@@ -64,7 +65,7 @@ function AttemptPaper(){
             icon: "warning",
             button: "Got it",
           }); 
-          history.push('/myattemptedpapers');
+         
           
         }
         else{
@@ -143,10 +144,7 @@ function AttemptPaper(){
                   setOptions(data.data.firstQuestion.qnJSON.options);
                   
                   // console.log("start ",data.startTime);
-                  var size = Object.keys(data.data.userPaperResponse.response).length;
-                  setTotalQns(size);
-                  if(size>0)
-                  setUserPaperResponse(data.data.userPaperResponse.response);
+                  
                   
                   
                   // ALL TIMER
@@ -186,7 +184,13 @@ function AttemptPaper(){
                     }); 
                     history.push('/myattemptedpapers');
                   }
-
+                  var size = Object.keys(data.data.userPaperResponse.response).length;
+                  setTotalQns(size);
+                  // if(size>0)
+                  setUserPaperResponse(data.data.userPaperResponse.response);
+                  const key =1;
+                  setAnswer(data.data.userPaperResponse.response[key]);
+                  
                  
                 // ALL TIME THING
                 setIsLoading(false);
@@ -252,7 +256,7 @@ function AttemptPaper(){
           (error) => {
             swal({
               title: "Oops",
-              text: "Something went wrong " + error,
+              text: "You called End Exam " + error,
               icon: "error",
               button: "Got it",
             });
