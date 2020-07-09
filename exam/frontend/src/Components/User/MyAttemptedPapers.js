@@ -89,6 +89,7 @@ function MyAttemptedPapers(){
                         <div className="col-xl-12">
                             <div className="hero-cap hero-cap2 text-center">
                                     <h2>Your Attempted Papers{isLoading ? <>IS LOADING..</> : <>: {total}</>}</h2>
+                                    <button  onClick={e=>history.push('/')}  className="btn hero-btn"  data-animation="fadeInLeft" data-delay=".8s">Home</button>
                             </div>
                         </div>
                     </div>

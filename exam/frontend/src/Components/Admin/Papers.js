@@ -1,5 +1,5 @@
 import React,{useContext,useEffect,useState} from 'react';
-import {Link} from 'react-router-dom';
+import {Link,useHistory} from 'react-router-dom';
 import {UserContext} from '../UserContext';
 import swal from 'sweetalert';
 import Select from 'react-select';
@@ -12,6 +12,7 @@ function Papers(){
     const [papers,setPapers] = useState([]);
     const [papercount,setPapercount] = useState(null);
     const accessToken = localStorage.getItem("token");
+    const history = useHistory();
     useEffect(
         
         ()=>{
@@ -151,6 +152,7 @@ function Papers(){
                         <div className="col-xl-12">
                             <div className="hero-cap hero-cap2 text-center">
                                 <h2>Your Papers : {papercount}</h2>
+                                <button  onClick={e=>history.push('/')}  className="btn hero-btn"  data-animation="fadeInLeft" data-delay=".8s">Home</button>
                             </div>
                         </div>
                     </div>

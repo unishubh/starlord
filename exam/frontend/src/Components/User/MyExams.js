@@ -84,6 +84,7 @@ function MyExams(){
                            <div className="col-xl-12">
                                <div className="hero-cap hero-cap2 text-center">
                                    <h2>Your Subscribed Exams{isLoading ? <>IS LOADING..</> : <> : {total}</>}</h2>
+                                   <button  onClick={e=>history.push('/')}  className="btn hero-btn"  data-animation="fadeInLeft" data-delay=".8s">Home</button>
                                </div>
                            </div>
                        </div>
@@ -107,7 +108,9 @@ function MyExams(){
                           </div>
                           </div>
                       <div className="my-own-container">
-                          <h5><b></b></h5> 
+                      <h5><b>Max Marks : {exam.exam.max_marks}</b></h5> 
+                       <h5>Time Duration : {exam.exam.time} {exam.time!==1 ? <>Hours</> : <>Hour</>}</h5>
+                       <p>{exam.details}</p>  
                        
                           { token.role==2 ?
                                        <>

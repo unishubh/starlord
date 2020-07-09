@@ -62,6 +62,16 @@ function UserPapers(){
                   
 
                   setPapercount(c);
+                  if(c==0)
+                  {
+                    swal({
+                        title: "Oh",
+                        text: "There is no paper left to attempt ",
+                        icon: "warning",
+                        
+                      });
+                      window.history.back();
+                  }
                   
                 
                 setIsLoading(false);
@@ -108,7 +118,8 @@ function UserPapers(){
                            <div className="col-xl-12">
                                <div className="hero-cap hero-cap2 text-center">
                                    <h2>Your Papers{isLoading ? <>IS LOADING..</> : <> : {papercount}</>}</h2>
-                               </div>
+                                    <button  onClick={e=>window.history.back()}  className="btn hero-btn"  data-animation="fadeInLeft" data-delay=".8s">Back</button>
+                                </div>
                            </div>
                        </div>
                    </div>

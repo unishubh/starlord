@@ -89,7 +89,7 @@ function CreatePaper(props){
         else{
           setNameError("");
         }
-        if(totalQns<=0)
+        if(isNaN(totalQns) || Number(totalQns)<=0)
         {
           setTotalqError("Please provide no. of questions");
           f=1;
@@ -119,7 +119,7 @@ function CreatePaper(props){
       else{
         setNameError("");
       }
-      if(totalQns<=0)
+      if(isNaN(totalQns) || Number(totalQns)<=0)
       {
         setTotalqError("Please provide no. of questions");
         f=1;
@@ -253,7 +253,7 @@ function CreatePaper(props){
                                 <div className="col-12">
                                     <div className="form-group">
                                         <input className="form-control"  name="totalQns" id="totalQns" 
-                                        type="number" 
+                                        type="text" 
                                          placeholder="Total Questions" value={totalQns} 
                                          onChange = {e => {setTotalQns(e.target.value); console.log(e.target.value)}}/>
                                     { count<=0 ? <></> : <div style={{fontSize :12,color:"red"}}>

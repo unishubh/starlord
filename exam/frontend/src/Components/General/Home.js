@@ -72,7 +72,7 @@ function Home(){
                             </div>
                             <div class="cat-cap">
                                 <h5><Link  to="/createexam">Create Exam</Link></h5>
-                                <p>Create a exam and then add mock papers.</p>
+                                <p>Create an exam.</p>
                                 
                             </div>
                         </div>
@@ -141,7 +141,7 @@ function Home(){
                             </div>
                             <div class="cat-cap">
                                 <h5><Link  to="/allexams">All Exams</Link></h5>
-                                <p>Explore the exams and you can subscribe the exam of your choice.</p>
+                                <p>Explore the exams.</p>
                                
                             </div>
                         </div>

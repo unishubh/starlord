@@ -9,11 +9,13 @@ function CreateExam(){
     const [maxMarks,setMaxMarks] = useState(null);
     const [details,setDetails] = useState("");
     const [time,setTime] = useState(null);
+    const [passMarks,setPassMarks] = useState(null);
     const history = useHistory();
     const [nameError,setNameError] = useState("");
     const [maxMarksError,setMaxMarksError] = useState("");
     const [detailsError,setDetailsError] = useState("");
     const [timeError,setTimeError] = useState("");
+    const [passMarksError,setPassMarksError] = useState("");
     const [count,setCount] = useState(-1);
   
     // useEffect(
@@ -41,13 +43,22 @@ function CreateExam(){
       else{
         setNameError("");
       }
-      if(maxMarks<1)
+      if(isNaN(maxMarks) || Number(maxMarks)<1)
       {
         setMaxMarksError("Please Provide Marks");
         f=1;
       }
       else{
         setMaxMarksError("");
+      }
+      if(isNaN(passMarks) || (!isNaN(maxMarks) && (Number(maxMarks)<Number(passMarks))))
+      { console.log(isNaN(passMarks))
+        setPassMarksError("Passing marks should not be greater than maxMarks");
+        f=1;
+      }
+      else{
+        console.log(isNaN(passMarks))
+        setPassMarksError("");
       }
       if(details=="")
       {
@@ -57,14 +68,15 @@ function CreateExam(){
       else{
         setDetailsError("");
       }
-      if(time<=0)
+      if(isNaN(time) || Number(time)<=0)
       {
           setTimeError("Enter valid time");
+          f=1;
       }
       else{
           setTimeError("");
       }
-      },[name,maxMarks,details,time]
+      },[name,maxMarks,details,time,passMarks]
     );
   
   
@@ -78,13 +90,22 @@ function CreateExam(){
       else{
         setNameError("");
       }
-      if(maxMarks<1)
+      if(isNaN(maxMarks) || Number(maxMarks)<1)
       {
         setMaxMarksError("Please Provide Marks");
         f=1;
       }
       else{
         setMaxMarksError("");
+      }
+      if(isNaN(passMarks) || (!isNaN(maxMarks) && (Number(maxMarks)<Number(passMarks))))
+      { console.log(isNaN(passMarks))
+        setPassMarksError("Passing marks should not be greater than maxMarks");
+        f=1;
+      }
+      else{
+        console.log(isNaN(passMarks))
+        setPassMarksError("");
       }
       if(details=="")
       {
@@ -94,9 +115,10 @@ function CreateExam(){
       else{
         setDetailsError("");
       }
-      if(time<=0)
+      if(isNaN(time) || Number(time)<=0)
       {
           setTimeError("Enter valid time");
+          f=1;
       }
       else{
           setTimeError("");
@@ -111,6 +133,7 @@ function CreateExam(){
     event.preventDefault();
     let  isValid = Validate();
     setCount(1);
+    console.log(isValid)
     if(isValid){ 
     console.log("create exam");
     setIsLoading(true);
@@ -129,7 +152,8 @@ function CreateExam(){
         name: name,
         maxMarks: maxMarks,
         details: details,
-        time: time
+        time: time,
+        passMarks:passMarks
       })
     })
       .then(response =>{
@@ -213,7 +237,7 @@ function CreateExam(){
                                 <div className="col-sm-6">
                                     <div className="form-group">
                                         <input className="form-control"  
-                                        type="number"
+                                        type="text"
                                         placeholder="Maximum Marks" value={maxMarks} onChange = {e => setMaxMarks(e.target.value)}
                                         />
                                         { count<=0 ? <></> : <div style={{fontSize :12,color:"red"}}>
@@ -224,7 +248,18 @@ function CreateExam(){
                                 <div className="col-sm-6">
                                     <div className="form-group">
                                         <input className="form-control"  
-                                        type="number"
+                                        type="text"
+                                        placeholder="Passing Marks" value={passMarks} onChange = {e => setPassMarks(e.target.value)}
+                                        />
+                                        { count<=0 ? <></> : <div style={{fontSize :12,color:"red"}}>
+                                                           {passMarksError}
+                                                         </div>}
+                                    </div>
+                                </div>
+                                <div className="col-sm-6">
+                                    <div className="form-group">
+                                        <input className="form-control"  
+                                        type="text"
                                         placeholder="Time Limit In Hours" value={time} onChange = {e => setTime(e.target.value)}
                                         />
                                         { count<=0 ? <></> : <div style={{fontSize :12,color:"red"}}>

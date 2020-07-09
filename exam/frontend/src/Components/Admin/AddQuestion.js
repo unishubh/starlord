@@ -79,7 +79,7 @@ function AddQestion(){
       else{
         setTypeError("");
       }
-      if(posMark<=0)
+      if(isNaN(posMark) || Number(posMark)<=0)
       {
         setPosMarkError("Provide a Pos number");
         f=1;
@@ -87,9 +87,9 @@ function AddQestion(){
       else{
         setPosMarkError("");
       }
-      if(negMark>0 || negMark==null)
+      if(isNaN(negMark) || Number(negMark)<0 )
       {
-        setNegMarkError("Provide non-pos number");
+        setNegMarkError("Provide a Pos number");
         f=1;
       }
       else{
@@ -116,12 +116,13 @@ function AddQestion(){
         }
       }
       else{
-        if(correct==null || Number(correct)==NaN)
+        if(correct==null || isNaN(correct))
         {
           setCorrectError("write the INT value");
           f=1;
         }
         else{
+          
           setCorrectError("");
         }
       } 
@@ -131,7 +132,7 @@ function AddQestion(){
   
     const Validate = ()=>{
       let f = 0;
-      if(question=="")
+      if(question=="" || question==null)
       {
         setQuestionError("Write a question");
         f=1;
@@ -165,7 +166,7 @@ function AddQestion(){
       else{
         setTypeError("");
       }
-      if(posMark<=0)
+      if(isNaN(posMark) || Number(posMark)<=0)
       {
         setPosMarkError("Provide a Pos number");
         f=1;
@@ -173,12 +174,14 @@ function AddQestion(){
       else{
         setPosMarkError("");
       }
-      if(negMark>0 || negMark==null)
+      if(isNaN(negMark) || Number(negMark)<0 )
       {
-        setNegMarkError("Provide non-pos number");
+        setNegMarkError("Provide a Pos number");
         f=1;
       }
       else{
+        console.log(isNaN(negMark))
+        console.log(Number(negMark))
         setNegMarkError("");
       }
       if(type=="MCQ")
@@ -202,23 +205,15 @@ function AddQestion(){
         }
       }
       else{
-        if(correct==null || Number(correct)==NaN)
+        if(correct==null || isNaN(correct))
         {
           setCorrectError("write the INT value");
           f=1;
         }
         else{
+          
           setCorrectError("");
         }
-      }
-      if(type=="MCQ" && finishAddQuestion==false)
-      {
-        setOptionsError("Please provide atleast 2 options");
-        f=1;
-      }
-      if(type=="MCQ" && finishAddQuestion==true)
-      {
-        setOptionsError("");
       }
      
       console.log(type)
@@ -346,7 +341,11 @@ function AddQestion(){
                     <div className=" mt-3">
                                 <button 
                                 className="button button-contactForm boxed-btn"
-                                onClick={handleSubmit}>Preview Papaer</button>
+                                onClick={handleSubmit} >Preview Papaer</button>
+                                &nbsp;&nbsp;
+                                  <button 
+                                className="button button-contactForm boxed-btn"
+                                onClick={e=>{history.push('/')}}>Finish</button>
                             </div>
                             <br/>
                         <h1 className="contact-title"> Add Question </h1>
@@ -424,7 +423,7 @@ function AddQestion(){
                                 <div className="col-sm-6">
                                    { type==='INT'? <div className="form-group">
                                         <input className="form-control"  name="correct"
-                                        type="number"
+                                        type="text"
                                         placeholder="Enter Correct Answer" value={correct} onChange = {e => setCorrect(e.target.value)}/>
                                    { count<=0 ? <></> : <div style={{fontSize :12,color:"red"}}>
                                                     {correctError}
@@ -449,8 +448,8 @@ function AddQestion(){
                                 <div className="col-sm-6">
                                     <div className="form-group">
                                         <input className="form-control"  name="posMark"
-                                        type="number"
-                                        placeholder="Postive Mark" value={posMark} onChange = {e => setPosMark(e.target.value)}/>
+                                        type="text"
+                                        placeholder="Postive Mark" value={posMark} onChange = {e => {setPosMark(e.target.value);}}/>
                                    { count<=0 ? <></> : <div style={{fontSize :12,color:"red"}}>
                                                     {posMarkError}
                                                 </div>}
@@ -459,7 +458,7 @@ function AddQestion(){
                                 <div className="col-sm-6">
                                     <div className="form-group">
                                         <input className="form-control"  name="negMark"
-                                        type="number"
+                                        type="text"
                                         placeholder="Negative Mark" value={negMark} onChange = {e => setNegMark(e.target.value)}/>
                                    { count<=0 ? <></> : <div style={{fontSize :12,color:"red"}}>
                                                     {negMarkError}

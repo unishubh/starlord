@@ -119,6 +119,7 @@ function AllExams(){
                         <div className="col-xl-12">
                             <div className="hero-cap hero-cap2 text-center">
                                 <h2>All Exams {isLoading ? <>IS LOADING..</> : <> : {total}</>}</h2>
+                                <button  onClick={e=>window.history.back()}  className="btn hero-btn"  data-animation="fadeInLeft" data-delay=".8s">Back</button>
                             </div>
                         </div>
                     </div>

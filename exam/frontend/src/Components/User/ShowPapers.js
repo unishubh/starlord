@@ -136,6 +136,7 @@ function ShowPapers(){
                                <div className="hero-cap hero-cap2 text-center">
                                    <h2> Papers{isLoading ? <>IS LOADING..</> : <> : {papercount}</>}</h2>
                                    <button value={examID} onClick={Subscribe}  className="btn hero-btn"  data-animation="fadeInLeft" data-delay=".8s">Subscribe</button>
+                                   &nbsp;&nbsp;&nbsp;&nbsp;<button  onClick={e=>window.history.back()}  className="btn hero-btn"  data-animation="fadeInLeft" data-delay=".8s">Back</button>
                                </div>
                            </div>
                        </div>
