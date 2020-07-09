@@ -127,6 +127,7 @@ function AttemptPaper(){
                   return response.json();
                   else{
                     // alert(response.status)
+                    console.log("yaha cancel hua")
                     throw new Error(response.status);
                   }
                 })
@@ -306,12 +307,12 @@ function AttemptPaper(){
                 
               console.log(data);
               setQuestion_no(key);
-              setQuestion(data.question.question);
+              setQuestion(data.data.question.question);
             //   setType(data.firstQuestion.qnJSON.type);
-              setPosMark(data.question.posMark);
-              setNegMark(data.question.negMark);
-              if(data.question.options)
-              {setOptions(data.question.options);
+              setPosMark(data.data.question.posMark);
+              setNegMark(data.data.question.negMark);
+              if(data.data.question.options)
+              {setOptions(data.data.question.options);
                 setType('MCQ');
             }
               else{
@@ -322,11 +323,11 @@ function AttemptPaper(){
                   
                   
                   // Duration
-                  const duration_mili = (data.duration)*3600000;
+                  const duration_mili = (data.data.duration)*3600000;
                   setDuration(duration_mili);
 
                   // start time
-                  const dt = new Date(data.startTime);
+                  const dt = new Date(data.data.startTime);
                   const start_mili = dt.getTime();
                   console.log("start time fetched ",start_mili);
                   setStartTime(start_mili);
@@ -360,8 +361,8 @@ function AttemptPaper(){
               
              
               setMove(false);
-              setUserPaperResponse(data.userResponse);
-              setAnswer(data.userResponse[key]);
+              setUserPaperResponse(data.data.userResponse);
+              setAnswer(data.data.userResponse[key]);
               
               // Object.keys(userPaperResponse).map((key)=>{
               //   userPaperResponse[key] = "true";
