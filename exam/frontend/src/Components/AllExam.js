@@ -14,6 +14,16 @@ function AllExams(){
     const [isLoading,setIsLoading] = useState(true);
     const [exams,setExams] = useState([]);
     const [total,setTotal] = useState(0);
+    const [search_item,setSerach_item] = useState("");
+    const [search_results,setSearch_result] = useState([]);
+    useEffect(() => {
+        { const results = exams.filter(exam =>
+            exam.name.toLowerCase().includes(search_item.toLocaleLowerCase())
+          );
+          setSearch_result(results);}
+       
+      }, [search_item,exams]);
+   
 
     const Subscribe = (event)=>{
 
@@ -115,7 +125,9 @@ function AllExams(){
         <div className="slider-area">
             <div className="slider-height2 d-flex align-items-center">
                 <div className="container">
+                
                     <div className="row">
+                    
                         <div className="col-xl-12">
                             <div className="hero-cap hero-cap2 text-center">
                                 <h2>All Exams {isLoading ? <>IS LOADING..</> : <> : {total}</>}</h2>
@@ -127,12 +139,35 @@ function AllExams(){
             </div>
         </div>
         <div className="about-details section-padding10"></div>
+        <div class="col-lg-4">
+                        <div class="blog_right_sidebar">
+                            <aside class="single_sidebar_widget search_widget">
+                                <form >
+                                    <div class="form-group">
+                                        <div class="input-group mb-3">
+                                            <input type="text" 
+                                            class="form-control" 
+                                            placeholder='Search Exam'
+                                            value = {search_item}
+                                            onChange = {e=>setSerach_item(e.target.value)}
+                                               />
+                                            <div class="input-group-append"></div>
+                                                <button class="btns" type="button"><i class="ti-search"></i></button>
+                                            </div>
+                                        </div>
+                                    {/* </div> */}
+                                    
+                                </form>
+                            </aside>
+                        </div>
+                    </div>
+    
 
      <div className="row">
 
                   
          
-            {exams.map((exam,key)=>(
+            {search_results.map((exam,key)=>(
                <div className="col-xl-4 col-lg-4 col-md-6">
                <div style={{padding:"40px"}}>
                    <div className="my-own-card">

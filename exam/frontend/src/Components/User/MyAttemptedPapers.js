@@ -15,6 +15,15 @@ function MyAttemptedPapers(){
     const [isLoading,setIsLoading] = useState(false);
     const [papers,setPapers] = useState([]);
     const [total,setTotal] = useState(0);
+    const [search_item,setSerach_item] = useState("");
+    const [search_results,setSearch_result] = useState([]);
+    useEffect(() => {
+        { const results = papers.filter(paper =>
+            paper.mockpaper.name.toLowerCase().includes(search_item.toLocaleLowerCase())
+          );
+          setSearch_result(results);}
+       
+      }, [search_item,papers]);
     useEffect(
         
         ()=>{
@@ -97,12 +106,34 @@ function MyAttemptedPapers(){
             </div>
         </div>
         <div className="about-details section-padding10"></div>
+        <div class="col-lg-4">
+                        <div class="blog_right_sidebar">
+                            <aside class="single_sidebar_widget search_widget">
+                                <form >
+                                    <div class="form-group">
+                                        <div class="input-group mb-3">
+                                            <input type="text" 
+                                            class="form-control" 
+                                            placeholder='Search Your Attempted Papers'
+                                            value = {search_item}
+                                            onChange = {e=>setSerach_item(e.target.value)}
+                                               />
+                                            <div class="input-group-append"></div>
+                                                <button class="btns" type="button"><i class="ti-search"></i></button>
+                                            </div>
+                                        </div>
+                                    {/* </div> */}
+                                    
+                                </form>
+                            </aside>
+                        </div>
+                    </div>
    
         <div className="row">
    
                      
             
-               {papers.map((paper,key)=>(
+               {search_results.map((paper,key)=>(
                   <div className="col-xl-4 col-lg-4 col-md-6">
                   <div style={{padding:"40px"}}>
                       <div className="my-own-card">

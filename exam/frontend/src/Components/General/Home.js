@@ -177,6 +177,7 @@ function Home(){
                
             </div>
         </div>
+        <br></br><br></br>
     </>
     
     }
