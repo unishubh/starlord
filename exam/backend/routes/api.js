@@ -15,6 +15,7 @@ router.post('/login/' , userController.login ) ;
 
 
 
+
 //create a new exam
 router.post('/exams/' , sess_auth.basicAuth , admin_auth.basicAuth , examController.createExam ) ;
 //subscribe to an exam
@@ -38,6 +39,10 @@ router.get('/paper/exam/:examID' , sess_auth.basicAuth , paperController.getPape
 router.post('/attempt/:paperID' , sess_auth.basicAuth , paperController.attemptPaperbyPaperID) ;
 //get Attempted paper by userID
 router.get('/paper/attempted/' , sess_auth.basicAuth , examController.getAttemptedPapers ) ;
+//end paper
+router.post('/paper/end/:paperID' , sess_auth.basicAuth , paperController.endExam ) ;
+// get user results
+router.get('/paper/results/:paperID' , sess_auth.basicAuth , paperController.showResults ) ;
 
 
 

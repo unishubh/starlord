@@ -1,7 +1,7 @@
 const db = require('../models') ;
 const utilities = require('../helpers/utilities');
 const uuid = require('uuid');
-
+const paperAttempted = require('../helpers/isAttempted') ;
 exports.getAllExams = async (req , res ) =>{
     try{
         let { count , rows } = await db.exams.findAndCountAll();
@@ -105,14 +105,38 @@ exports.getExamByUserID = async(req, res) =>{
 exports.getAttemptedPapers = async (req , res ) =>{
     const userID = req.user.userID;
     try{
-        let { count , rows } = await db.attemptedPapers.findAndCountAll({
-            where :{ userID  },
-            include : db.mockpapers,
-        });
-        let exams = {} ;
-        exams['papercount'] = count ;
-        exams['paperdata'] = rows ;
-        utilities.sendSuccess("success", res, exams);
+        let attemptedPapers = await db.attemptedPapers.findAll({
+            where: {
+                userID,
+            },
+            raw: true,
+        }) ;
+        // updating the attempted papers
+        for ( paper in attemptedPapers ){
+            let paperID = attemptedPapers[paper]['paperID'] ;
+            let ok = await paperAttempted.already(paperID,userID) ;
+            if ( ok == -1 )
+                throw "Some error occured" ;
+            if ( ok == 1 ){
+                await db.attemptedPapers.update(
+                    {finished:true} ,
+                    {where:{
+                        paperID,
+                        userID,
+                    }}
+                );
+            }
+        }
+        let data = new Object() ;
+        data['attemptedPapers'] = await db.attemptedPapers.findAll({
+            include: db.mockpapers,
+            where:{
+                userID,
+                finished:true,
+            },
+            raw:true,
+        }) ;
+        utilities.sendSuccess("Got attempted papers", res , data) ;
     }
     catch(err){
         console.log( '401 ' + err  ) ;

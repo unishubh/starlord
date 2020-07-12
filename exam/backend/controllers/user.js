@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const uuid = require('uuid');
 const passwordHelper = require('../helpers/password');
 const utilities = require('../helpers/utilities');
-
+const getJwtCred = require('../helpers/get_jwt_credentials') ;
 
 module.exports.addUser = async(req , res , next ) => {
     try{
@@ -17,7 +17,7 @@ module.exports.addUser = async(req , res , next ) => {
         await passwordHelper.validate_fields( req ) ;
         let newUser = db.user.build({name , email , password:hashed_password , role, id:userID , agencyID}) ;
         await newUser.save() ;
-        let accessToken = jwt.sign({userID:newUser.id, role: newUser.role , agencyID: newUser.agencyID} , process.env.JWT_SECRET , {
+        let accessToken = jwt.sign({userID:newUser.id, role: newUser.role , agencyID: newUser.agencyID , userName : newUser.name} , process.env.JWT_SECRET , {
             expiresIn : "1d"
         }) ;
         let data = {
@@ -38,6 +38,7 @@ exports.login = async ( req , res, next  ) => {
     try {
         let email = req.body.email;
         let password = req.body.password;
+        
         let user = await db.user.findOne({where: {email}});
         if (!user) {
             console.log("User does not exist");
@@ -50,8 +51,8 @@ exports.login = async ( req , res, next  ) => {
             utilities.sendNotAllowed("invalid password", res);
             return
         }
-        let accessToken = jwt.sign({userID:user.id, role: user.role , agencyID: user.agencyID}, process.env.JWT_SECRET, {
-            expiresIn: "1d"
+        let accessToken = jwt.sign({userID:user.id, role: user.role , agencyID: user.agencyID , userName : user.name}, process.env.JWT_SECRET, {
+            expiresIn: "2d"
         });
         utilities.sendSuccess( "success", res, accessToken);
     }
@@ -62,3 +63,4 @@ exports.login = async ( req , res, next  ) => {
 
     }
 }
+
