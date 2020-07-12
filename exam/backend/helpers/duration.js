@@ -21,11 +21,12 @@ module.exports.ofExam = async( req , res ) => {
         let exam = await db.exams.findOne({
             where:{
                 id:examID
-            }
+            },
+            raw:true,
         }) ;
         if(!exam)
             throw "This exam does not exist" ;
-        return exam.duration ;    
+        return exam.time ;    
     }
     catch(err){
         console.log(err) ;

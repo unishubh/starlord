@@ -3,6 +3,7 @@ const uuid = require('uuid') ;
 const utilities = require('../helpers/utilities');
 const createJSON = require('../helpers/createJSONresponse') ;
 const paperAttempted = require('../helpers/isAttempted') ;
+const getJwtCred = require('../helpers/get_jwt_credentials') ;
 
 exports.createPaper = async ( req , res ) => {
     let newExamID = req.body.examID ;
@@ -121,5 +122,52 @@ exports.attemptPaperbyPaperID = async (req , res ) => {
     catch(err){
         console.log( '401 ' + err  ) ;
         utilities.sendError(err, res) ;
+    }
+}
+
+exports.endExam = async(req,res) =>{
+    try{
+        let paperID = req.params.paperID ;
+        let userID = await getJwtCred.userID(req,res) ;
+        await db.attemptedPapers.update(
+            {finished:true},
+            {where:{
+                paperID,
+                userID
+            }}) ;
+        utilities.sendSuccess("Exam Ended" , res , paperID) ;
+    }catch(err){
+        utilities.sendError("Error :" + err , res ) ;
+    }
+}
+
+exports.showResults = async( req , res ) =>{
+    try{
+        let paperID = req.params.paperID ;
+        let userID = await getJwtCred.userID(req,res) ;
+        let compare = new Object() ;
+        compare['userRespnse'] = await db.userPaperResponse.findOne({
+            where:{
+                paperID,
+                userID ,
+            },
+            attributes : ['response'] ,
+            raw:true,    
+        });
+        let qnData = await db.questions.findAll({
+             where : {paperID} ,
+            attributes : ['iid' , 'qnJSON'] ,
+            raw : true ,
+        }) ;
+        let correctResponse = new Object() ;
+        for ( qn in qnData ){
+            correctResponse[qnData[qn]['iid']] = qnData[qn]['qnJSON'] ;
+        } 
+        compare['correctResponse'] = correctResponse ;
+        utilities.sendSuccess("Got responses to compare " , res , compare ) ;
+
+    }catch(err){
+        console.log(err);
+        utilities.sendError(err,res);
     }
 }
