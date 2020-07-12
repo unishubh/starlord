@@ -3,7 +3,6 @@ const uuid = require('uuid') ;
 const utilities = require('../helpers/utilities');
 const createJSON = require('../helpers/createJSONresponse') ;
 const paperAttempted = require('../helpers/isAttempted') ;
-const getJwtCred = require('../helpers/get_jwt_credentials') ;
 
 exports.createPaper = async ( req , res ) => {
     let newExamID = req.body.examID ;
@@ -128,7 +127,7 @@ exports.attemptPaperbyPaperID = async (req , res ) => {
 exports.endExam = async(req,res) =>{
     try{
         let paperID = req.params.paperID ;
-        let userID = await getJwtCred.userID(req,res) ;
+        let userID = req.user.userID;
         await db.attemptedPapers.update(
             {finished:true},
             {where:{
@@ -144,8 +143,8 @@ exports.endExam = async(req,res) =>{
 exports.showResults = async( req , res ) =>{
     try{
         let paperID = req.params.paperID ;
-        let userID = await getJwtCred.userID(req,res) ;
-        let compare = new Object() ;
+        let userID = req.user.userID; ;
+        let compare = {} ;
         compare['userRespnse'] = await db.userPaperResponse.findOne({
             where:{
                 paperID,
@@ -159,7 +158,7 @@ exports.showResults = async( req , res ) =>{
             attributes : ['iid' , 'qnJSON'] ,
             raw : true ,
         }) ;
-        let correctResponse = new Object() ;
+        let correctResponse = {} ;
         for ( qn in qnData ){
             correctResponse[qnData[qn]['iid']] = qnData[qn]['qnJSON'] ;
         } 
