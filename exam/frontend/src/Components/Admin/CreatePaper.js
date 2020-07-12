@@ -3,7 +3,7 @@ import {useHistory} from 'react-router-dom';
 import Select from 'react-select';
 import { UserContext } from '../UserContext';
 import swal from 'sweetalert';
-
+import config from '../config';
 
 
 
@@ -15,7 +15,7 @@ function CreatePaper(props){
         
         ()=>{
             
-            fetch('https://mutualfundcalculator.in/starlord/api/exam/byAgency/',{
+            fetch(config.apiUrl+'api/exam/byAgency/',{
               method: 'GET',
               headers: {'Content-Type': 'application/json',
                         'Authorization' : 'Bearer ' + accessToken   },
@@ -151,7 +151,7 @@ function CreatePaper(props){
    console.log(examID);
    console.log(totalQns);
    const accessToken = localStorage.getItem("token");
-   fetch('https://www.mutualfundcalculator.in/starlord/api/paper',{
+   fetch(config.apiUrl+'api/paper',{
      method: 'POST',
      headers: {'Content-Type': 'application/json',
                'Authorization' : 'Bearer ' + accessToken   },
@@ -182,12 +182,24 @@ function CreatePaper(props){
 
    }).catch(
        (error)=>{
+        if(error==403)
+        {
+            swal({
+                title: "Oh Ohhh",
+                text: "Please Login Again",
+                icon: "warn",
+                button: "Got it",
+              });
+              history.push('/signin')
+        }
+        else{
            swal({
                title: "Oh Ohhh",
                text: "Check your details",
                icon: "error",
                button: "Got it",
              });
+            }
        }
    )
   

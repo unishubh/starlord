@@ -3,6 +3,7 @@ import {useHistory,useParams} from 'react-router-dom';
 import swal from 'sweetalert';
 import Select from 'react-select';
 import AsyncSelect from 'react-select';
+import config from '../config';
 
 function AddQestion(){
     const types = [
@@ -274,7 +275,7 @@ function AddQestion(){
     setFinishAddQuestion(false);
     console.log(bodydata);
     const accessToken = localStorage.getItem("token");
-    fetch('https://www.mutualfundcalculator.in/starlord/api/question/'+paperID,{
+    fetch(config.apiUrl+'api/question/'+paperID,{
       method: 'POST',
       headers: {'Content-Type': 'application/json',
                 'Authorization' : 'Bearer ' + accessToken,   },
@@ -302,12 +303,25 @@ function AddQestion(){
       
     }).catch(
         error => {
+          if(error==403)
+          {
+              swal({
+                  title: "Oh Ohhh",
+                  text: "Please Login Again",
+                  icon: "warn",
+                  button: "Got it",
+                });
+                history.push('/signin')
+          }
+          else{
             swal({
-                title: "Oops",
-                text: "Something went wrong " + error,
-                icon: "error",
-                button: "Got it",
-              });
+              title: "Oops",
+              text: "Something went wrong " + error,
+              icon: "error",
+              button: "Got it",
+            });
+          }
+           
         }
     );    
     

@@ -16,7 +16,7 @@ import { UserContext } from '../UserContext';
 import Select from 'react-select';
 import {useHistory} from 'react-router-dom';
 import swal from 'sweetalert';
-
+import config from '../config';
 // function Copyright() {
 //   return (
 //     <Typography variant="body2" color="textSecondary" align="center">
@@ -209,7 +209,7 @@ export default function SignUp() {
       console.log("role is ", 2);
     }
 
-    fetch('https://www.mutualfundcalculator.in/starlord/api/register',{
+    fetch(config.apiUrl+'api/register',{
         method: 'POST',
         mode : 'cors',
         headers: {'Content-Type': 'application/json'},
@@ -219,7 +219,8 @@ export default function SignUp() {
      
       })
         .then(response => 
-          { console.log(response);
+          { 
+            console.log(response);
             setIsLoading(false);
             if(response.ok)
             return response.json();

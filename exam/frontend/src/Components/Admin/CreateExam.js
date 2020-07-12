@@ -2,6 +2,8 @@ import React, { useState,useEffect, useContext } from 'react';
 import {useHistory} from 'react-router-dom';
 import swal from 'sweetalert';
 import { UserContext } from '../UserContext';
+import config from '../config';
+
 function CreateExam(){
     const {token,setToken} = useContext(UserContext);
     const [isLoading,setIsLoading] = useState(false);
@@ -51,7 +53,7 @@ function CreateExam(){
       else{
         setMaxMarksError("");
       }
-      if(isNaN(passMarks) || (!isNaN(maxMarks) && (Number(maxMarks)<Number(passMarks))))
+      if(isNaN(passMarks) || Number(passMarks)==0 || ( (Number(maxMarks)<Number(passMarks))))
       { console.log(isNaN(passMarks))
         setPassMarksError("Passing marks should not be greater than maxMarks");
         f=1;
@@ -98,7 +100,7 @@ function CreateExam(){
       else{
         setMaxMarksError("");
       }
-      if(isNaN(passMarks) || (!isNaN(maxMarks) && (Number(maxMarks)<Number(passMarks))))
+      if(isNaN(passMarks) || ( (Number(maxMarks)<Number(passMarks))))
       { console.log(isNaN(passMarks))
         setPassMarksError("Passing marks should not be greater than maxMarks");
         f=1;
@@ -143,7 +145,7 @@ function CreateExam(){
    console.log(time);
     
     const accessToken = localStorage.getItem("token");
-    fetch('https://mutualfundcalculator.in/starlord/api/exams',{
+    fetch(config.apiUrl+'api/exams',{
       method: 'POST',
       headers: {'Content-Type': 'application/json',
                 'Authorization' : 'Bearer ' + accessToken   },
@@ -177,12 +179,25 @@ function CreateExam(){
 
     }).catch(
         (error)=>{
+          if(error==403)
+          {
+              swal({
+                  title: "Oh Ohhh",
+                  text: "Please Login Again",
+                  icon: "warn",
+                  button: "Got it",
+                });
+                history.push('/signin')
+          }
+          else{
             swal({
-                title: "Oh Ohhh",
-                text: "Check your details",
-                icon: "error",
-                button: "Got it",
-              });
+              title: "Oh Ohhh",
+              text: "Check your details",
+              icon: "error",
+              button: "Got it",
+            });
+          }
+            
         }
     )  
     console.log("Exam Done");

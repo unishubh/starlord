@@ -5,6 +5,7 @@ import { Next } from 'react-bootstrap/PageItem';
 import { UserContext } from '../UserContext';
 import NavigationPrompt from "react-router-navigation-prompt";
 import { Modal } from "react-modal";
+import config from '../config';
 
 function AttemptPaper(){
     const history = useHistory();
@@ -115,7 +116,7 @@ function AttemptPaper(){
             // localStorage.setItem("exam",true);
             setIsExamStarted(true);
             setIsLoading(true);
-            fetch('https://www.mutualfundcalculator.in/starlord/api/attempt/'+paperID,{
+            fetch(config.apiUrl+'api/attempt/'+paperID,{
                 
                 method : 'POST',
                 headers: {'Content-Type': 'application/json',
@@ -223,7 +224,7 @@ function AttemptPaper(){
         lastQnAns : answer,
 
       }));
-      fetch('https://www.mutualfundcalculator.in/starlord/api/question/',{
+      fetch(config.apiUrl+'api/question/',{
           
           method : 'POST',
           headers: {'Content-Type': 'application/json',
@@ -284,7 +285,7 @@ function AttemptPaper(){
           }))
         setIsLoading(true);
         // console.log("key ",key);
-        fetch('https://www.mutualfundcalculator.in/starlord/api/question/',{
+        fetch(config.apiUrl+'api/question/',{
             
             method : 'POST',
             headers: {'Content-Type': 'application/json',

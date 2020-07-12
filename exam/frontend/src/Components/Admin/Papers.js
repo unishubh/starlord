@@ -3,6 +3,7 @@ import {Link,useHistory} from 'react-router-dom';
 import {UserContext} from '../UserContext';
 import swal from 'sweetalert';
 import Select from 'react-select';
+import config from '../config';
 function Papers(){
     const {token,setToken} = useContext(UserContext);
     const [options,setOptions] = useState([]);
@@ -17,7 +18,7 @@ function Papers(){
         
         ()=>{
             
-            fetch('https://www.mutualfundcalculator.in/starlord/api/exam/byAgency/',{
+            fetch(config.apiUrl+'api/exam/byAgency/',{
               method:'GET',
               headers:{
                 'Content-Type': 'application/json',
@@ -58,12 +59,24 @@ function Papers(){
                 }
               ).catch(
                 (error) => {
+                  if(error==403)
+                  {
+                swal({
+                    title: "Oh Ohhh",
+                    text: "Please Login Again",
+                    icon: "warn",
+                    button: "Got it",
+                  });
+                  history.push('/signin')
+                  }
+                  else{
                   swal({
                     title: "Oops",
                     text: "Something went wrong " + error,
                     icon: "error",
                     button: "Got it",
                   });
+                }
                 //   history.push('/');  
 
                 }
@@ -85,7 +98,7 @@ function Papers(){
             console.log("role is  ", token.role)
             // const accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJiYWUyZjUzNi1jMGExLTQwNmUtOTRjMy1hNmUzN2NkMmZhZWUiLCJyb2xlIjoxLCJhZ2VuY3lJRCI6IjRiM2FkMDIwLWI4YWQtMTFlYS05NWQ3LWM3MDcyNWY1YzA3NSIsImlhdCI6MTU5MzUyOTE4MywiZXhwIjoxNTkzNjE1NTgzfQ.EVS7XB_pj-o7EJ2nxW_2O5DGO19-JQL7vyGV7TwxuuM"; 
             console.log("token " , accessToken);
-            fetch('https://www.mutualfundcalculator.in/starlord/api/paper/exam/'+examID,{
+            fetch(config.apiUrl+'api/paper/exam/'+examID,{
                 // mode : 'cors',
                 method : 'GET',
                 headers : {
@@ -116,12 +129,24 @@ function Papers(){
                 }
               ).catch(
                 (error) => {
+                  if(error==403)
+                {
+              swal({
+                  title: "Oh Ohhh",
+                  text: "Please Login Again",
+                  icon: "warn",
+                  button: "Got it",
+                });
+                history.push('/signin')
+                }
+                else{
                   swal({
                     title: "Oops",
                     text: "Something went wrong " ,
                     icon: "error",
                     button: "Got it",
                   });
+                }
                 //   history.push('/');  
 
                 }

@@ -1,8 +1,10 @@
 import React,{useContext,useEffect,useState} from 'react';
-import {Link,useParams} from 'react-router-dom';
+import {Link,useParams,useHistory} from 'react-router-dom';
 import {UserContext} from '../UserContext';
 import swal from 'sweetalert';
 import Select from 'react-select';
+import config from '../config';
+
 function UserPapers(){
     const {token,setToken} = useContext(UserContext);
     const [options,setOptions] = useState([]);
@@ -13,6 +15,7 @@ function UserPapers(){
     const [papercount,setPapercount] = useState(null);
     const {examID} = useParams();
     const accessToken = localStorage.getItem("token");
+    const history = useHistory();
     useEffect(
         
         ()=>{
@@ -20,7 +23,7 @@ function UserPapers(){
             setIsLoading(true);
             console.log("uius");
            console.log(examID);
-            fetch('https://www.mutualfundcalculator.in/starlord/api/paper/exam/'+examID,{
+            fetch(config.apiUrl+'api/paper/exam/'+examID,{
                 
                 method: 'GET',
                 headers: {'Content-Type': 'application/json',
@@ -79,12 +82,24 @@ function UserPapers(){
                 }
               ).catch(
                 (error) => {
+                  if(error==403)
+                  {
+                swal({
+                    title: "Oh Ohhh",
+                    text: "Please Login Again",
+                    icon: "warn",
+                    button: "Got it",
+                  });
+                  history.push('/signin')
+                  }
+                  else{
                   swal({
                     title: "Oops",
                     text: "This exam have no papers yet ",
                     icon: "error",
                     button: "Got it",
                   });
+                }
                 //   history.push('/');  
 
                 }
@@ -171,6 +186,7 @@ function UserPapers(){
       
       
         }
+        <br></br><br></br>
    </div>
 
 

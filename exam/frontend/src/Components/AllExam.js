@@ -3,9 +3,7 @@ import {useHistory,Link} from 'react-router-dom';
 import { UserContext } from './UserContext';
 import swal from 'sweetalert';
 import {Spinner} from 'react-bootstrap';
-
-
-
+import config from './config';
 
 function AllExams(){
     const accessToken = localStorage.getItem("token");
@@ -29,7 +27,7 @@ function AllExams(){
 
                 setIsLoading(true);
                 const accessToken = localStorage.getItem("token");
-                fetch('https://www.mutualfundcalculator.in/starlord/api/subscribe/'+event.target.value,{
+                fetch(config.apiUrl+'api/subscribe/'+event.target.value,{
                         method: 'POST',
                         headers: {'Content-Type': 'application/json',
                         'Authorization' : 'Bearer ' + accessToken   },
@@ -56,12 +54,25 @@ function AllExams(){
                                             history.push('/myexams')
                                                 }).catch(
                                             (error)=>{
-                                            swal({
-                                            title: "Oh Ohhh",
-                                            text: "Either you have already subscribed or Something went wrong",
-                                            icon: "error",
-                                            button: "Got it",
-                                          });
+                                                if(error==403)
+                                                {
+                                                    swal({
+                                                        title: "Oh Ohhh",
+                                                        text: "Please Login Again",
+                                                        icon: "warn",
+                                                        button: "Got it",
+                                                      });
+                                                      history.push('/signin')
+                                                }
+                                                else{
+                                                    swal({
+                                                        title: "Oh Ohhh",
+                                                        text: "Either you have already subscribed or Something went wrong",
+                                                        icon: "error",
+                                                        button: "Got it",
+                                                      });
+                                                }
+                                           
                                             }
                                             )
                                 
@@ -71,7 +82,7 @@ function AllExams(){
         
         ()=>{
             console.log("uius");
-            fetch('https://www.mutualfundcalculator.in/starlord/api/exam'
+            fetch(config.apiUrl+'api/exam'
                 )
                 .then(response =>{
                 console.log(response);
@@ -91,6 +102,17 @@ function AllExams(){
                 }
               ).catch(
                 (error) => {
+                    if(error==403)
+                    {
+                  swal({
+                      title: "Oh Ohhh",
+                      text: "Please Login Again",
+                      icon: "warn",
+                      button: "Got it",
+                    });
+                    history.push('/signin')
+                    }
+                    else{
                   swal({
                     title: "Oops",
                     text: "Something went wrong " + error,
@@ -98,6 +120,7 @@ function AllExams(){
                     button: "Got it",
                   });
                   history.push('/');  
+                }
 
                 }
               )

@@ -15,7 +15,7 @@ import Container from '@material-ui/core/Container';
 import {useHistory} from 'react-router-dom';
 import {UserContext} from '../UserContext';
 import swal from 'sweetalert';
-
+import config from '../config';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -52,7 +52,7 @@ export default function SignIn() {
     event.preventDefault();
     console.log("create agency");
     setIsLoading(true);
-    fetch('https://www.mutualfundcalculator.in/starlord/user/create_agency/'+agency,{
+    fetch(config.apiUrl+'user/create_agency/'+agency,{
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -77,12 +77,24 @@ export default function SignIn() {
         });
         }).catch(
           error => {
+            if(error==403)
+            {
+          swal({
+              title: "Oh Ohhh",
+              text: "Please Login Again",
+              icon: "warn",
+              button: "Got it",
+            });
+            history.push('/signin')
+            }
+            else{
             swal({
               title: "Oops",
               text: "Something went wrong " + error,
               icon: "error",
               button: "Got it",
             });
+          }
           }
         )    
     console.log("agency created");

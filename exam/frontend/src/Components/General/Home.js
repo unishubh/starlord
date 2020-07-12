@@ -59,7 +59,7 @@ function Home(){
                     <div class="cl-xl-7 col-lg-8 col-md-10">
                         
                         <div class="section-tittle text-center mb-70">
-                            <span>Hi Admin</span>
+                            <span>Hi {token.userName.toUpperCase()}</span>
                             <h2>Lets Get Started</h2>
                         </div> 
                     </div>
@@ -128,7 +128,7 @@ function Home(){
                     <div class="cl-xl-7 col-lg-8 col-md-10">
                         
                         <div class="section-tittle text-center mb-70">
-                            <span>Hi Student</span>
+                            <span>Hi {token.userName.toUpperCase()}</span>
                             <h2>Lets Get Started</h2>
                         </div> 
                     </div>

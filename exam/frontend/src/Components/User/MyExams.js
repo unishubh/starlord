@@ -3,7 +3,7 @@ import {useHistory,Link,useParams} from 'react-router-dom';
 import { UserContext } from '../UserContext';
 import swal from 'sweetalert';
 import { TableSortLabel } from '@material-ui/core';
-
+import config from '../config';
 
 
 
@@ -29,7 +29,7 @@ function MyExams(){
         ()=>{
             setIsLoading(true);
             console.log("uius");
-            fetch('https://www.mutualfundcalculator.in/starlord/api/exam/byUser',{
+            fetch(config.apiUrl+'api/exam/byUser',{
                 method: 'GET',
                 headers: {'Content-Type': 'application/json',
                           'Authorization' : 'Bearer ' + accessToken   }
@@ -55,12 +55,24 @@ function MyExams(){
                 }
               ).catch(
                 (error) => {
+                    if(error==403)
+                    {
+                  swal({
+                      title: "Oh Ohhh",
+                      text: "Please Login Again",
+                      icon: "warn",
+                      button: "Got it",
+                    });
+                    history.push('/signin')
+                    }
+                    else{
                   swal({
                     title: "Oops",
                     text: "Something went wrong ",
                     icon: "error",
                     button: "Got it",
                   });
+                }
                 //   history.push('/');  
 
                 }

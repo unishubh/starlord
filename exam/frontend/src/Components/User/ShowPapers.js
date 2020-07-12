@@ -3,6 +3,8 @@ import {Link,useParams,useHistory} from 'react-router-dom';
 import {UserContext} from '../UserContext';
 import swal from 'sweetalert';
 import Select from 'react-select';
+import config from '../config';
+
 function ShowPapers(){
     const {token,setToken} = useContext(UserContext);
     const [options,setOptions] = useState([]);
@@ -24,7 +26,7 @@ function ShowPapers(){
             setIsLoading(true);
             console.log("uius");
            console.log(examID);
-            fetch('https://www.mutualfundcalculator.in/starlord/api/paper/exam/'+examID,{
+            fetch(config.apiUrl+'api/paper/exam/'+examID,{
                 
                 method: 'GET',
                 headers: {'Content-Type': 'application/json',
@@ -54,12 +56,24 @@ function ShowPapers(){
                 }
               ).catch(
                 (error) => {
+                    if(error==403)
+                    {
+                  swal({
+                      title: "Oh Ohhh",
+                      text: "Please Login Again",
+                      icon: "warn",
+                      button: "Got it",
+                    });
+                    history.push('/signin')
+                    }
+                    else{
                   swal({
                     title: "Oops",
                     text: "This exam have no papers yet ",
                     icon: "error",
                     button: "Got it",
                   });
+                }
                 //   history.push('/');  
 
                 }
@@ -72,7 +86,7 @@ function ShowPapers(){
 
         setIsLoading(true);
         const accessToken = localStorage.getItem("token");
-        fetch('https://www.mutualfundcalculator.in/starlord/api/subscribe/'+event.target.value,{
+        fetch(config.apiUrl+'api/subscribe/'+event.target.value,{
                 method: 'POST',
                 headers: {'Content-Type': 'application/json',
                 'Authorization' : 'Bearer ' + accessToken   },
@@ -100,12 +114,24 @@ function ShowPapers(){
 
                                         }).catch(
                                     (error)=>{
+                                        if(error==403)
+                                        {
+                                      swal({
+                                          title: "Oh Ohhh",
+                                          text: "Please Login Again",
+                                          icon: "warn",
+                                          button: "Got it",
+                                        });
+                                        history.push('/signin')
+                                        }
+                                        else{
                                     swal({
                                     title: "Oh Ohhh",
                                     text: "Either you have already subscribed or Something went wrong",
                                     icon: "error",
                                     button: "Got it",
                                   });
+                                }
                                     }
                                     )
                         

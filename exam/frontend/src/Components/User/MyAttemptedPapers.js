@@ -3,7 +3,7 @@ import {useHistory,Link} from 'react-router-dom';
 import { UserContext } from '../UserContext';
 import swal from 'sweetalert';
 import { TableSortLabel } from '@material-ui/core';
-
+import config from '../config';
 
 
 
@@ -19,7 +19,7 @@ function MyAttemptedPapers(){
     const [search_results,setSearch_result] = useState([]);
     useEffect(() => {
         { const results = papers.filter(paper =>
-            paper.mockpaper.name.toLowerCase().includes(search_item.toLocaleLowerCase())
+            paper['mockpaper.name'].toLowerCase().includes(search_item.toLocaleLowerCase())
           );
           setSearch_result(results);}
        
@@ -29,7 +29,7 @@ function MyAttemptedPapers(){
         ()=>{
             setIsLoading(true);
             console.log("uius");
-            fetch('https://www.mutualfundcalculator.in/starlord/api/paper/attempted ',{
+            fetch(config.apiUrl+'api/paper/attempted ',{
                 method: 'GET',
                 headers: {'Content-Type': 'application/json',
                           'Authorization' : 'Bearer ' + accessToken   },
@@ -50,21 +50,33 @@ function MyAttemptedPapers(){
                   }
                 })
                 .then(data => {
-                  console.log(data);
-                  setPapers(data.data.paperdata);
-                  setTotal(data.data.papercount);
+                  console.log(data.data.attemptedPapers);
+                  setPapers(data.data.attemptedPapers);
+                  setTotal(data.data.attemptedPapers.length);
                 
                 setIsLoading(false);
               
                 }
               ).catch(
                 (error) => {
+                    if(error==403)
+                    {
+                  swal({
+                      title: "Oh Ohhh",
+                      text: "Please Login Again",
+                      icon: "warn",
+                      button: "Got it",
+                    });
+                    history.push('/signin')
+                    }
+                    else{
                   swal({
                     title: "Oops",
                     text: "Something went wrong " + error,
                     icon: "error",
                     button: "Got it",
                   });
+                }
                 //   history.push('/');  
 
                 }
@@ -140,7 +152,7 @@ function MyAttemptedPapers(){
                   
                           <div className="my-own-name" >
                           <div className="hero-cap hero-cap2 text-center">
-                          <h3 style={{color:"white"}}> {paper.mockpaper.name} </h3>
+                          <h3 style={{color:"white"}}> {paper['mockpaper.name']} </h3>
                           </div>
                           </div>
                       <div className="my-own-container">
@@ -149,7 +161,7 @@ function MyAttemptedPapers(){
                           { token.role==2 ?
                                        <>
                                        <div className="button-group-area mt-10">
-                                       <Link to={"/attemptpaper/"+paper.paperID+"/"+paper.mockpaper.name} className="genric-btn primary-border small" >Result/Resume </Link>
+                                       <Link to={"/attemptpaper/"+paper['paperID']+"/"+paper['mockpaper.name']} className="genric-btn primary-border small" >Result/Resume </Link>
                                        </div>
                                       
                                        </>

@@ -15,6 +15,7 @@ import Container from '@material-ui/core/Container';
 import {useHistory} from 'react-router-dom';
 import {UserContext} from '../UserContext';
 import swal from 'sweetalert';
+import config from '../config';
 
 var jwtDecode = require('jwt-decode');
 
@@ -108,7 +109,7 @@ export default function SignIn() {
     const isValid = Validate();
     if(isValid){
     setIsLoading(true);
-    console.log("loginstarted");
+    // console.log("loginstarted");
     // history.push('/');
     
    
@@ -118,7 +119,7 @@ export default function SignIn() {
     
     
   
-    fetch('https://www.mutualfundcalculator.in/starlord/api/login',{
+    fetch(config.apiUrl+'api/login',{
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -128,7 +129,7 @@ export default function SignIn() {
     })
       .then(response =>{
         setIsLoading(false);
-        console.log(response)
+        // console.log(response)
         if(response.ok)
         return response.json();
         else{
@@ -136,7 +137,7 @@ export default function SignIn() {
         }
       })
       .then(data => {
-        // console.log(data);
+        console.log("data is  ",data);
         localStorage.setItem("token", data.data);
         
         var decoded = jwtDecode(data.data)
@@ -151,13 +152,13 @@ export default function SignIn() {
         setPassword("");
         swal({
           title: "Oops",
-          text: "Invalid Username or Password",
+          text: "Invalid Username or Password" + error,
           icon: "error",
           button: "Got it",
         });
       }
     )    
-    console.log("Login Done");
+    // console.log("Login Done");
     }
 
   };
