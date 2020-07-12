@@ -161,8 +161,14 @@ function MyAttemptedPapers(){
                           { token.role==2 ?
                                        <>
                                        <div className="button-group-area mt-10">
-                                       <Link to={"/attemptpaper/"+paper['paperID']+"/"+paper['mockpaper.name']} className="genric-btn primary-border small" >Result/Resume </Link>
-                                       </div>
+                                    { paper.finished ===1 
+                                        ? 
+                                        <Link to={"/result/"+paper['paperID']+"/"+paper['mockpaper.name']} className="genric-btn primary-border small" >Result </Link>
+                                        :
+                                        <Link to={"/attemptpaper/"+paper['paperID']+"/"+paper['mockpaper.name']} className="genric-btn primary-border small" >Resume </Link>
+
+                                    }                                      
+ </div>
                                       
                                        </>
                                        :<></>

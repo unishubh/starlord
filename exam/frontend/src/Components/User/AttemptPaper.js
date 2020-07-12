@@ -114,7 +114,7 @@ function AttemptPaper(){
 
     const StartExam = () =>{
             // localStorage.setItem("exam",true);
-            setIsExamStarted(true);
+            
             setIsLoading(true);
             fetch(config.apiUrl+'api/attempt/'+paperID,{
                 
@@ -134,7 +134,7 @@ function AttemptPaper(){
                   }
                 })
                 .then(data => {
-                
+                  setIsExamStarted(true);
                   console.log(data);
                   setQuestion_no(data.data.firstQuestion.iid);
                   setQuestion(data.data.firstQuestion.qnJSON.question);
@@ -199,13 +199,28 @@ function AttemptPaper(){
                 }
               ).catch(
                 (error) => {
+                  // swal({
+                  //   title: "Oops",
+                  //   text: "You have already attempted paper " ,
+                  //   icon: "warning",
+                  //   button: "Got it",
+                  // });
+                  // setIsExamStarted(false);
+                  // history.push('/myexams');  
                   swal({
-                    title: "Oops",
-                    text: "Something went wrong " + error,
-                    icon: "error",
-                    button: "Got it",
+                    title: "Umm",
+                    text: "Either you have already attempted or this paper have no question",
+                    icon: "warning",
+                    button: true,
+                    dangerMode: true,
+                  })
+                  .then((willDelete) => {
+                    if (willDelete) {
+                      setIsExamStarted(false);
+                  history.push('/myexams'); 
+                    } 
                   });
-                //   history.push('/');  
+                  
 
                 }
               )
@@ -224,57 +239,9 @@ function AttemptPaper(){
         lastQnAns : answer,
 
       }));
-      fetch(config.apiUrl+'api/question/',{
-          
-          method : 'POST',
-          headers: {'Content-Type': 'application/json',
-          'Authorization' : 'Bearer ' + accessToken   },
-          body: JSON.stringify({
-            
-              paperID:paperID,
-              lastQnID:question_no,
-              lastQnAns : answer,
-
-            })
-      })
-      .then(response =>{
-          console.log(response);
-          setIsLoading(false);
-            if(response.ok)
-            return response.json();
-            else{
-              // alert(response.status)
-              throw new Error(response.status);
-            }
-          })
-          .then(data => {
-              
-            console.log(data);
-          
-           
-      })
-        .catch(
-          (error) => {
-            swal({
-              title: "Oops",
-              text: "You called End Exam " + error,
-              icon: "error",
-              button: "Got it",
-            });
-          //   history.push('/');  
-
-          }
-        )
-    };
-
-    useEffect(
-        ()=>{
-            console.log(answer);
-        },[answer]
-    );
-
-    const AnotherQuestion = (event) => {
-        const key = event.target.value;
+      if(answer!="")
+      {
+        const key = question_no;
         console.log("In Another key is ",key)
         console.log(JSON.stringify({
             qnID:key,
@@ -389,6 +356,179 @@ function AttemptPaper(){
 
             }
           )
+      }
+      fetch(config.apiUrl+'api/paper/end/'+paperID,{
+          
+          method : 'POST',
+          headers: {'Content-Type': 'application/json',
+          'Authorization' : 'Bearer ' + accessToken   },
+          body: JSON.stringify({
+            
+              paperID:paperID,
+              
+
+            })
+      })
+      .then(response =>{
+          console.log(response);
+          setIsLoading(false);
+            if(response.ok)
+            return response.json();
+            else{
+              // alert(response.status)
+              throw new Error(response.status);
+            }
+          })
+          .then(data => {
+              
+            console.log(data);
+            swal({
+              title: "Well !",
+              text: "Exam is ended",
+              icon: "success",
+              button: "Got it",
+            });
+            history.push('/');
+
+          
+           
+      })
+        .catch(
+          (error) => {
+            swal({
+              title: "Oops",
+              text: "You called End Exam " + error,
+              icon: "error",
+              button: "Got it",
+            });
+          //   history.push('/');  
+
+          }
+        )
+    };
+
+    useEffect(
+        ()=>{
+            console.log(answer);
+        },[answer]
+    );
+
+    const AnotherQuestion = (event) => {
+        const key = event.target.value;
+        console.log("In Another key is ",key)
+        console.log(JSON.stringify({
+            qnID:key,
+            paperID:paperID,
+            lastQnID:question_no,
+            lastQnAns : answer,
+
+          }))
+        setIsLoading(true);
+        // console.log("key ",key);
+        fetch(config.apiUrl+'api/question/',{
+            
+            method : 'POST',
+            headers: {'Content-Type': 'application/json',
+            'Authorization' : 'Bearer ' + accessToken   },
+            body: JSON.stringify({
+                qnID:key,
+                paperID:paperID,
+                lastQnID:question_no,
+                lastQnAns : answer,
+
+              })
+        })
+        .then(response =>{
+            console.log(response);
+            setIsLoading(false);
+              if(response.ok)
+              return response.json();
+              else{
+                // alert(response.status)
+                throw new Error(response.status);
+              }
+            })
+            .then(data => {
+                
+              console.log(data);
+              setQuestion_no(key);
+              setQuestion(data.data.question.question);
+            //   setType(data.firstQuestion.qnJSON.type);
+              setPosMark(data.data.question.posMark);
+              setNegMark(data.data.question.negMark);
+              if(data.data.question.options)
+              {setOptions(data.data.question.options);
+                setType('MCQ');
+            }
+              else{
+                  setType("INT");
+              }
+             
+              // ALL TIMER
+                  
+                  
+                  // Duration
+                  const duration_mili = (data.data.duration)*3600000;
+                  setDuration(duration_mili);
+
+                  // start time
+                  const dt = new Date(data.data.startTime);
+                  const start_mili = dt.getTime();
+                  console.log("start time fetched ",start_mili);
+                  setStartTime(start_mili);
+                  
+                  // end time
+                  const finish_mili = start_mili+duration_mili;
+                  setEndTime(finish_mili);
+
+
+                  // Current Time
+                  const current_mili = new Date().getTime();
+                  
+                  // console.log(data.startTime);
+                  // console.log(finish_dt);
+                  
+
+                  if(current_mili > finish_mili)
+                  {
+                    setExam_ended(true);
+                    swal({
+                      title: "Already Attempted",
+                      text: "You have already attempted and time is up ",
+                      icon: "warning",
+                      button: "Got it",
+                    }); 
+                  
+                   
+                   
+                  }
+              // All Timer
+              
+             
+              setMove(false);
+              setUserPaperResponse(data.data.userResponse);
+              setAnswer(data.data.userResponse[key]);
+              
+              // Object.keys(userPaperResponse).map((key)=>{
+              //   userPaperResponse[key] = "true";
+              // })
+
+              // Object.keys(data.userResponse).map((key)=>{
+              //   userPaperResponse[key] = "";
+              // })
+        })
+          .catch(
+            (error) => {
+              swal({
+                title: "Oops",
+                text: "Something went wrong " + error,
+                icon: "error",
+                button: "Got it",
+              });
+            //   history.push('/');  
+
+            }
+          )
     }
 
     useEffect(
@@ -396,6 +536,7 @@ function AttemptPaper(){
         console.log(isExamStarted)
         return ()=> {
         // window.removeEventListener('beforeunload')
+        clearInterval(interval);
         EndExam();
         };
       },[]
@@ -544,6 +685,8 @@ function AttemptPaper(){
                     </div>
             </div>
              <blockquote> 
+             
+
                 <section className="button-area">
                     <div>
                         {/* { (move===false && answer===null)?
@@ -558,8 +701,18 @@ function AttemptPaper(){
                                             <div>  
                                                 <section className="button-area">
                                                     <div className="container box_1170 border-top-generic">
+                                                    {
+                                                      Number(question_no)!==1 ?                                       
+                                                    <button onClick={AnotherQuestion} value={Number(question_no)-1} class="genric-btn primary-border">Prev</button> 
+                                                    :<></>
+                                                    } 
+                                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                                    {Number(question_no)!==totalQns ?
+                                                    <button onClick={AnotherQuestion} value={Number(question_no)+1} class="genric-btn primary-border">Next</button> 
+                                                      :<></>
+                                                  }
                                                     <div class="button-group-area mt-10">
-                                                    
+
                                                     {
                                                        Object.keys(userPaperResponse).map((key)=>{
                                                             return(
