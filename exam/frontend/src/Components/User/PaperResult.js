@@ -63,6 +63,7 @@ function PaperResult(){
                     //  console.log(user.response[i]);
                      t=t+Number(correct[i].posMark);
                     //  console.log(t);
+                    if(user.response[i]!=""){
                      if(correct[i].correctAns==user.response[i])
                      {
                          g=g+Number(correct[i].posMark);
@@ -70,6 +71,7 @@ function PaperResult(){
                      else{
                          g=g-Number(correct[i].negMark);
                      }
+                    }
                  }
                  setTotalMarks(t);
                  setMarksObtained(g);
@@ -142,7 +144,7 @@ function PaperResult(){
                 <div className="section-top-border">
                 
                     
-                    {  Object.keys(correctResponse).map((key)=>{
+                    {  Object.keys(userResponse).map((key)=>{
                         return(
                         <>
                         <h5>Question No.{key}</h5>
@@ -150,7 +152,7 @@ function PaperResult(){
                         <div className="row">
                             <div className="col-lg-12">
                                 {
-                                    correctResponse[key].correctAns !== userResponse[key]?
+                                  userResponse[key]!=="" &&  correctResponse[key].correctAns !== userResponse[key]?
                                 <blockquote className="generic-blockquote" style={{background:"#ffded8"}}>
                                     {correctResponse[key].question}
                                     <br></br>
@@ -160,10 +162,18 @@ function PaperResult(){
                                    
                                 </blockquote>
                                 :
+                                userResponse[key]!=""?
                                <blockquote className="generic-blockquote" style={{background:"#90ee90"}}>
                                     {correctResponse[key].question}
                                     <br></br>
                                     <p>Your Answer : {userResponse[key]}<br></br>
+                                    Correct Answer : {correctResponse[key].correctAns}</p>
+                               </blockquote>
+                               :
+                               <blockquote className="generic-blockquote">
+                                    {correctResponse[key].question}
+                                    <br></br>
+                                    <p>Your Didn't Attempt<br></br>
                                     Correct Answer : {correctResponse[key].correctAns}</p>
                                </blockquote>
                                 }
@@ -178,7 +188,7 @@ function PaperResult(){
                                 </>
                         )
                     })}
-                    
+                    <br></br><br></br>
                     </div>
             </div>
              
