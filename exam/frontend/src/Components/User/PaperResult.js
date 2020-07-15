@@ -11,9 +11,12 @@ function PaperResult(){
     // const [examID,setExamID] = useState(null);
     const [isLoading,setIsLoading] =useState(true);
     const [examName,setExamName] = useState("");
-    const [papers,setPapers] = useState([]);
-    const [papercount,setPapercount] = useState(null);
+    const [correctResponse,setCorrectResponse] = useState({});
+    const [userResponse,setUserResponse] = useState({});
     const {paperID,paperName} = useParams();
+    const [totalMarks,setTotalMarks] = useState(0);
+    const [marksObtained,setMarksObtained] = useState(0);
+    const [compare,setCompare] = useState([]);
     const accessToken = localStorage.getItem("token");   
     const history = useHistory();
 
@@ -24,7 +27,7 @@ function PaperResult(){
         ()=>{
           
             setIsLoading(true);
-            console.log("uius");
+            // console.log("uius");
            console.log(paperID);
             fetch(config.apiUrl+'api/paper/results/'+paperID,{
                 
@@ -36,7 +39,7 @@ function PaperResult(){
             
                 )
                 .then(response =>{
-                console.log(response);
+                // console.log(response);
                 setIsLoading(false);
                   if(response.ok)
                   return response.json();
@@ -46,9 +49,30 @@ function PaperResult(){
                   }
                 })
                 .then(data => {
-                  console.log(data);
-                  setPapers(data.paperdata)
-                  setPapercount(data.papercount)
+                //   console.log(data);
+                  setCorrectResponse(data.data.correctResponse);
+                  setUserResponse(data.data.userRespnse.response);
+                  const correct = data.data.correctResponse;
+                  const user = data.data.userRespnse;
+                //   console.log(correct);
+                //   console.log(user);
+                  let t = 0;
+                  let g = 0;
+                  for(var i=1;i<=Object.keys(user.response).length;i++)
+                 {
+                    //  console.log(user.response[i]);
+                     t=t+Number(correct[i].posMark);
+                    //  console.log(t);
+                     if(correct[i].correctAns==user.response[i])
+                     {
+                         g=g+Number(correct[i].posMark);
+                     }
+                     else{
+                         g=g-Number(correct[i].negMark);
+                     }
+                 }
+                 setTotalMarks(t);
+                 setMarksObtained(g);
                   
                 
                 setIsLoading(false);
@@ -69,7 +93,7 @@ function PaperResult(){
                     else{
                   swal({
                     title: "Oops",
-                    text: "This exam have no papers yet ",
+                    text: "Something went wrong ",
                     icon: "error",
                     button: "Got it",
                   });
@@ -85,75 +109,91 @@ function PaperResult(){
    
     return( 
 
-        <div>
-        { isLoading ?  
-        <div>
-            
-           <div className="preloader d-flex align-items-center justify-content-center">
-               <div className="preloader-inner position-relative">
-                   <div className="preloader-circle"></div>
-                   <div className="preloader-img pere-text">
-                       <img src="assets/img/logo/loder.png" alt=""/>
-                   </div>
-               </div>
-           </div>
-   
-       </div>
-         :
-         <div>
-           <div className="slider-area">
-               <div className="slider-height2 d-flex align-items-center">
-                   <div className="container">
-                       <div className="row">
-                           <div className="col-xl-12">
-                               <div className="hero-cap hero-cap2 text-center">
-                                   <h2> {isLoading ? <>IS LOADING..</> : <>  {paperName}</>}</h2>
-                                   {/* <button value={5}  className="btn hero-btn"  data-animation="fadeInLeft" data-delay=".8s">Subscribe</button>
-                                   &nbsp;&nbsp;&nbsp;&nbsp; */}
-                                   <button  onClick={e=>window.history.back()}  className="btn hero-btn"  data-animation="fadeInLeft" data-delay=".8s">Back</button>
-                               </div>
-                           </div>
-                       </div>
-                   </div>
-               </div>
-           </div>
-           <div className="about-details section-padding10"></div>
-   
-        <div className="row">
-   
-                     
-{/*             
-               {papers.map((paper,key)=>(
-                  <div className="col-xl-4 col-lg-4 col-md-6">
-                  <div style={{padding:"40px"}}>
-                      <div className="my-own-card">
-                  
-                          <div className="my-own-name" >
-                          <div className="hero-cap hero-cap2 text-center">
-                          <h3 style={{color:"white"}}> {paper.name} </h3>
-                          </div>
-                          </div>
-                      <div className="my-own-container">
-                          <h5><b>Total Qns : {paper.totalQns}</b></h5> 
-                       
-                                       
-                      </div>
-              
-                      </div>
-                  </div>
-              </div>  
-               )
-               
-               )}   */}
-                             
-           </div>
-   
+<div>
+     
+  
+
+    { isLoading ?
+            <div>
+         
+            <div className="preloader d-flex align-items-center justify-content-center">
+                <div className="preloader-inner position-relative">
+                    <div className="preloader-circle"></div>
+                    <div className="preloader-img pere-text">
+                        <img src="assets/img/logo/loder.png" alt=""/>
+                    </div>
+                </div>
+            </div>
+    
         </div>
-        
-      
-      
-        }
-   </div>
+    :
+    <div>
+        <div className="button-group-area mt-10" style={{paddingtop:"10px",paddingLeft:"50px"}}>
+           
+            
+            <button onClick={e=>window.history.back()} class="genric-btn danger-border circle">Back</button>
+            
+        </div>
+            <h1 align="center">Result - {paperName}</h1>
+            <h2 align="center">Marks : {marksObtained}/{totalMarks}</h2>
+             
+        <div class="whole-wrap">
+            <div class="container box_1170">
+                <div className="section-top-border">
+                
+                    
+                    {  Object.keys(correctResponse).map((key)=>{
+                        return(
+                        <>
+                        <h5>Question No.{key}</h5>
+                         <p align="right"> Pos Mark : {correctResponse[key].posMark}  &nbsp;&nbsp; Neg Mark : -{correctResponse[key].negMark} </p>
+                        <div className="row">
+                            <div className="col-lg-12">
+                                {
+                                    correctResponse[key].correctAns !== userResponse[key]?
+                                <blockquote className="generic-blockquote" style={{background:"#ffded8"}}>
+                                    {correctResponse[key].question}
+                                    <br></br>
+                                    <p>Your Answer : {userResponse[key]}<br>
+                                    </br>
+                                    Correct Answer : {correctResponse[key].correctAns}</p>
+                                   
+                                </blockquote>
+                                :
+                               <blockquote className="generic-blockquote" style={{background:"#90ee90"}}>
+                                    {correctResponse[key].question}
+                                    <br></br>
+                                    <p>Your Answer : {userResponse[key]}<br></br>
+                                    Correct Answer : {correctResponse[key].correctAns}</p>
+                               </blockquote>
+                                }
+                              
+                               
+                               
+                                
+                                <br></br>
+                            </div>
+                        </div> 
+
+                                </>
+                        )
+                    })}
+                    
+                    </div>
+            </div>
+             
+            
+        </div>
+    
+    
+    
+    
+    
+    
+    </div>
+}
+<br></br>  <br></br>  <br></br>
+    </div>
     );
 }
 

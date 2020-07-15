@@ -27,7 +27,7 @@ function Exams(){
     useEffect(
         
         ()=>{
-            console.log("uius");
+            // console.log("uius");
             fetch(config.apiUrl+'api/exam/byAgency/',{
                 method: 'GET',
                 headers: {'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ function Exams(){
                   }
                 })
                 .then(data => {
-                  console.log(data);
+                //   console.log(data);
                   setExams(data.data.examdata)
                   setTotal(data.data.examcount)
                 
@@ -183,6 +183,7 @@ function Exams(){
       
       
         }
+        <br></br>  <br></br>  <br></br>
    </div>
 
 

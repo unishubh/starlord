@@ -51,7 +51,7 @@ function AttemptPaper(){
           EndExam();
           clearInterval(interval);
           setExam_ended(true);
-          console.log("this is happening");
+          // console.log("this is happening");
           setExam_ended(true);
 
         }
@@ -97,7 +97,7 @@ function AttemptPaper(){
         
         if(isStarted==true && exam_ended==false)
         {
-          console.log("Exam Startes")
+          // console.log("Exam Startes")
           setIsExamStarted(true);
           StartExam();
         }
@@ -123,19 +123,19 @@ function AttemptPaper(){
                 'Authorization' : 'Bearer ' + accessToken   },
             })
             .then(response =>{
-                console.log(response);
+                // console.log(response);
                 setIsLoading(false);
                   if(response.ok)
                   return response.json();
                   else{
                     // alert(response.status)
-                    console.log("yaha cancel hua")
+                    // console.log("yaha cancel hua")
                     throw new Error(response.status);
                   }
                 })
                 .then(data => {
                   setIsExamStarted(true);
-                  console.log(data);
+                  // console.log(data);
                   setQuestion_no(data.data.firstQuestion.iid);
                   setQuestion(data.data.firstQuestion.qnJSON.question);
                   setType(data.data.firstQuestion.qnJSON.type);
@@ -158,7 +158,7 @@ function AttemptPaper(){
                   // start time
                   const dt = new Date(data.data.startTime);
                   const start_mili = dt.getTime();
-                  console.log("start time fetched ",start_mili);
+                  // console.log("start time fetched ",start_mili);
                   setStartTime(start_mili);
                   
                   // end time
@@ -226,30 +226,30 @@ function AttemptPaper(){
               )
     };
     const EndExam = () => {
-      console.log("end exam called");
+      // console.log("end exam called");
       setOnEndExam(true);
       setIsLoading(true);
       setIsExamStarted(false);
       clearInterval(interval);
       // console.log("key ",key);
-      console.log(JSON.stringify({
+      // console.log(JSON.stringify({
             
-        paperID:paperID,
-        lastQnID:question_no,
-        lastQnAns : answer,
+      //   paperID:paperID,
+      //   lastQnID:question_no,
+      //   lastQnAns : answer,
 
-      }));
+      // }));
       if(answer!="")
       {
         const key = question_no;
-        console.log("In Another key is ",key)
-        console.log(JSON.stringify({
-            qnID:key,
-            paperID:paperID,
-            lastQnID:question_no,
-            lastQnAns : answer,
+        // console.log("In Another key is ",key)
+        // console.log(JSON.stringify({
+        //     qnID:key,
+        //     paperID:paperID,
+        //     lastQnID:question_no,
+        //     lastQnAns : answer,
 
-          }))
+        //   }))
         setIsLoading(true);
         // console.log("key ",key);
         fetch(config.apiUrl+'api/question/',{
@@ -266,7 +266,7 @@ function AttemptPaper(){
               })
         })
         .then(response =>{
-            console.log(response);
+            // console.log(response);
             setIsLoading(false);
               if(response.ok)
               return response.json();
@@ -277,7 +277,7 @@ function AttemptPaper(){
             })
             .then(data => {
                 
-              console.log(data);
+              // console.log(data);
               setQuestion_no(key);
               setQuestion(data.data.question.question);
             //   setType(data.firstQuestion.qnJSON.type);
@@ -301,7 +301,7 @@ function AttemptPaper(){
                   // start time
                   const dt = new Date(data.data.startTime);
                   const start_mili = dt.getTime();
-                  console.log("start time fetched ",start_mili);
+                  // console.log("start time fetched ",start_mili);
                   setStartTime(start_mili);
                   
                   // end time
@@ -370,7 +370,7 @@ function AttemptPaper(){
             })
       })
       .then(response =>{
-          console.log(response);
+          // console.log(response);
           setIsLoading(false);
             if(response.ok)
             return response.json();
@@ -381,7 +381,7 @@ function AttemptPaper(){
           })
           .then(data => {
               
-            console.log(data);
+            // console.log(data);
             swal({
               title: "Well !",
               text: "Exam is ended",
@@ -409,20 +409,20 @@ function AttemptPaper(){
 
     useEffect(
         ()=>{
-            console.log(answer);
+            // console.log(answer);
         },[answer]
     );
 
     const AnotherQuestion = (event) => {
         const key = event.target.value;
-        console.log("In Another key is ",key)
-        console.log(JSON.stringify({
-            qnID:key,
-            paperID:paperID,
-            lastQnID:question_no,
-            lastQnAns : answer,
+        // console.log("In Another key is ",key)
+        // console.log(JSON.stringify({
+        //     qnID:key,
+        //     paperID:paperID,
+        //     lastQnID:question_no,
+        //     lastQnAns : answer,
 
-          }))
+        //   }))
         setIsLoading(true);
         // console.log("key ",key);
         fetch(config.apiUrl+'api/question/',{
@@ -439,7 +439,7 @@ function AttemptPaper(){
               })
         })
         .then(response =>{
-            console.log(response);
+            // console.log(response);
             setIsLoading(false);
               if(response.ok)
               return response.json();
@@ -450,7 +450,7 @@ function AttemptPaper(){
             })
             .then(data => {
                 
-              console.log(data);
+              // console.log(data);
               setQuestion_no(key);
               setQuestion(data.data.question.question);
             //   setType(data.firstQuestion.qnJSON.type);
@@ -474,7 +474,7 @@ function AttemptPaper(){
                   // start time
                   const dt = new Date(data.data.startTime);
                   const start_mili = dt.getTime();
-                  console.log("start time fetched ",start_mili);
+                  // console.log("start time fetched ",start_mili);
                   setStartTime(start_mili);
                   
                   // end time
@@ -533,7 +533,7 @@ function AttemptPaper(){
 
     useEffect(
       ()=>{
-        console.log(isExamStarted)
+        // console.log(isExamStarted)
         return ()=> {
         // window.removeEventListener('beforeunload')
         clearInterval(interval);
@@ -549,7 +549,7 @@ function AttemptPaper(){
   //  })
   const Hi = ()=>{
     let f=0;
-    console.log("hi called")
+    // console.log("hi called")
   }
   // window.addEventListener('beforeunload', (event) => {
   //   // Cancel the event as stated by the standard.
@@ -578,7 +578,7 @@ function AttemptPaper(){
     
   // });
   const onConfirm = () =>{
-    console.log("confrim")
+    // console.log("confrim")
     
   }
  

@@ -28,7 +28,7 @@ function MyExams(){
         
         ()=>{
             setIsLoading(true);
-            console.log("uius");
+            // console.log("uius");
             fetch(config.apiUrl+'api/exam/byUser',{
                 method: 'GET',
                 headers: {'Content-Type': 'application/json',
@@ -46,7 +46,7 @@ function MyExams(){
                   }
                 })
                 .then(data => {
-                  console.log(data.data);
+                //   console.log(data.data);
                   setExams(data.data);
                   setTotal(data.data.length);
                 
@@ -182,6 +182,7 @@ function MyExams(){
       
       
         }
+        <br></br>  <br></br>  <br></br>
    </div>
 
 

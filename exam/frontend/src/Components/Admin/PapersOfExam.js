@@ -21,8 +21,8 @@ function UserPapers(){
         ()=>{
           
             setIsLoading(true);
-            console.log("uius");
-           console.log(examID);
+            // console.log("uius");
+        //    console.log(examID);
             fetch(config.apiUrl+'api/paper/exam/'+examID,{
                 
                 method: 'GET',
@@ -34,7 +34,7 @@ function UserPapers(){
             }
                 )
                 .then(response =>{
-                console.log(response);
+                // console.log(response);
                 setIsLoading(false);
                   if(response.ok)
                   return response.json();
@@ -44,7 +44,7 @@ function UserPapers(){
                   }
                 })
                 .then(data => {
-                  console.log(data);
+                //   console.log(data);
                   setPapers(data.paperdata)
                   setPapercount(data.papercount)
                   
@@ -157,6 +157,7 @@ function UserPapers(){
         
     </div>
      }
+     <br></br>  <br></br>  <br></br>
     </div>
     );
 }

@@ -41,8 +41,8 @@ function AddQestion(){
     
     useEffect(
       ()=>{
-        console.log(options);
-        console.log(optionsfake);
+        // console.log(options);
+        // console.log(optionsfake);
         setCount(c=>c+1);
         
         let f = 0;
@@ -181,8 +181,8 @@ function AddQestion(){
         f=1;
       }
       else{
-        console.log(isNaN(negMark))
-        console.log(Number(negMark))
+        // console.log(isNaN(negMark))
+        // console.log(Number(negMark))
         setNegMarkError("");
       }
       if(type=="MCQ")
@@ -217,13 +217,13 @@ function AddQestion(){
         }
       }
      
-      console.log(type)
+      // console.log(type)
       if(f==1)
         return false;
       return true;
     }
     const handleSubmit = (event) => {
-        console.log(question);
+        // console.log(question);
         event.preventDefault();
         setIsLoading(true);
     
@@ -243,13 +243,13 @@ function AddQestion(){
     let isValid = Validate();
     if(isValid){
     setIsLoading(true);
-    console.log("/sjgjs/"+paperID);
-    console.log("add question");
+    // console.log("/sjgjs/"+paperID);
+    // console.log("add question");
     let bodydata;
     if(type=="INT"){
       bodydata =  JSON.stringify({
             question: question,
-            correct: correct,
+            correctAns: correct,
             type:type,
             posMark:posMark,
             negMark:negMark
@@ -259,7 +259,7 @@ function AddQestion(){
         bodydata = JSON.stringify({
             question: question,
             options: options,
-            correct: correct,
+            correctAns: correct,
             type:type,
             posMark:posMark,
             negMark:negMark
@@ -273,7 +273,7 @@ function AddQestion(){
     setNegMark(null);
     setCount(-1);
     setFinishAddQuestion(false);
-    console.log(bodydata);
+    // console.log(bodydata);
     const accessToken = localStorage.getItem("token");
     fetch(config.apiUrl+'api/question/'+paperID,{
       method: 'POST',
@@ -289,7 +289,7 @@ function AddQestion(){
             }
         })
       .then(data => {
-        console.log("reply",data);
+        // console.log("reply",data);
          
         swal({
             title: "Hayy",
@@ -416,7 +416,7 @@ function AddQestion(){
                                             setCount(1);
                                             setOptionsError("Option Can't be null");
                                         }
-                                        console.log(optionsfake);
+                                        // console.log(optionsfake);
                                         setOption("");
                                     }} >Add Option</button>
                                     <button  className="genric-btn primary-border small" onClick ={(e)=>{

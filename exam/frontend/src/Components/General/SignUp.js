@@ -175,14 +175,8 @@ export default function SignUp() {
     if(isValid){
  
     setIsLoading(true);
-    console.log("Register Started");
-    console.log(JSON.stringify({
-      name : name,
-      email: email,
-      role: role,
-      password: password,
-      confirmpassword:confirmpassword
-    }));
+    // console.log("Register Started");
+   
 
     let bodydata;
     if(role==1)
@@ -195,7 +189,7 @@ export default function SignUp() {
         confirmpassword:confirmpassword,
         agencyID:agencyID
       })
-      console.log("role is ", 1);
+      // console.log("role is ", 1);
     }
     else{
       bodydata = JSON.stringify({
@@ -206,7 +200,7 @@ export default function SignUp() {
         confirmpassword:confirmpassword,
         
       })
-      console.log("role is ", 2);
+      // console.log("role is ", 2);
     }
 
     fetch(config.apiUrl+'api/register',{
@@ -220,7 +214,7 @@ export default function SignUp() {
       })
         .then(response => 
           { 
-            console.log(response);
+            // console.log(response);
             setIsLoading(false);
             if(response.ok)
             return response.json();
@@ -229,9 +223,9 @@ export default function SignUp() {
             }
           })
         .then(data => {
-          console.log(data)
+          // console.log(data)
          
-         console.log("data is ")
+        //  console.log("data is ")
           
           
           localStorage.setItem("token",data.data.accessToken)
@@ -252,7 +246,7 @@ export default function SignUp() {
           });
         }
       );
-      console.log("Registration ",token)
+      // console.log("Registration ",token)
       }
     };
 

@@ -28,7 +28,7 @@ function MyAttemptedPapers(){
         
         ()=>{
             setIsLoading(true);
-            console.log("uius");
+            // console.log("uius");
             fetch(config.apiUrl+'api/paper/attempted ',{
                 method: 'GET',
                 headers: {'Content-Type': 'application/json',
@@ -50,7 +50,7 @@ function MyAttemptedPapers(){
                   }
                 })
                 .then(data => {
-                  console.log(data.data.attemptedPapers);
+                //   console.log(data.data.attemptedPapers);
                   setPapers(data.data.attemptedPapers);
                   setTotal(data.data.attemptedPapers.length);
                 

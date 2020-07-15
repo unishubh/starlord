@@ -31,7 +31,7 @@ function CreatePaper(props){
                   }
                 })
                 .then(data => {
-                  console.log(data);
+                  // console.log(data);
                   data.data.examdata.map((exam,key) => {
                     
                     
@@ -58,7 +58,7 @@ function CreatePaper(props){
                 }
               )
 
-              console.log(options);
+              // console.log(options);
         },[]
     );
 
@@ -145,11 +145,11 @@ function CreatePaper(props){
     let isValid = Validate();
     if(isValid){
     setIsLoading(true);
-    console.log("create paper");
+    // console.log("create paper");
     // history.push('/');
-   console.log(name);
-   console.log(examID);
-   console.log(totalQns);
+  //  console.log(name);
+  //  console.log(examID);
+  //  console.log(totalQns);
    const accessToken = localStorage.getItem("token");
    fetch(config.apiUrl+'api/paper',{
      method: 'POST',
@@ -170,8 +170,8 @@ function CreatePaper(props){
        }
      } )
      .then(data => {
-       console.log(data);
-       console.log(data.message);
+      //  console.log(data);
+      //  console.log(data.message);
        swal({
            title: "Hey Yaayy !!",
            text: "Paper Has Been Created",
@@ -267,7 +267,7 @@ function CreatePaper(props){
                                         <input className="form-control"  name="totalQns" id="totalQns" 
                                         type="text" 
                                          placeholder="Total Questions" value={totalQns} 
-                                         onChange = {e => {setTotalQns(e.target.value); console.log(e.target.value)}}/>
+                                         onChange = {e => {setTotalQns(e.target.value); }}/>
                                     { count<=0 ? <></> : <div style={{fontSize :12,color:"red"}}>
                                                     {totalqError}
                                                 </div>}

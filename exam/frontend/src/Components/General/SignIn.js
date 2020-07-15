@@ -137,7 +137,7 @@ export default function SignIn() {
         }
       })
       .then(data => {
-        console.log("data is  ",data);
+        // console.log("data is  ",data);
         localStorage.setItem("token", data.data);
         
         var decoded = jwtDecode(data.data)

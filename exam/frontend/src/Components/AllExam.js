@@ -42,8 +42,8 @@ function AllExams(){
                                             }
                                         } )
                                         .then(data => {
-                                            console.log(data);
-                                            console.log(data.message);
+                                            // console.log(data);
+                                            // console.log(data.message);
                                             swal({
                                              title: "Hey Yaayy !!",
                                                         text: "Exam Has Been Subscribed",
@@ -81,11 +81,11 @@ function AllExams(){
     useEffect(
         
         ()=>{
-            console.log("uius");
+            // console.log("uius");
             fetch(config.apiUrl+'api/exam'
                 )
                 .then(response =>{
-                console.log(response);
+                // console.log(response);
                   if(response.ok)
                   return response.json();
                   else{
@@ -94,7 +94,7 @@ function AllExams(){
                   }
                 })
                 .then(data => {
-                  console.log(data);
+                //   console.log(data);
                   setTotal(data.examcount);
                   setExams(data.examdata);
                 setIsLoading(false);
@@ -236,6 +236,7 @@ function AllExams(){
    
    
      }
+     <br></br>  <br></br>  <br></br>
 </div>
     );
 }

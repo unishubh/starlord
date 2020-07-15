@@ -28,7 +28,7 @@ function Papers(){
                 
                 )
                 .then(response =>{
-                console.log(response);
+                // console.log(response);
                   setIsLoading(false);
                   if(response.ok)
                   return response.json();
@@ -88,16 +88,13 @@ function Papers(){
     useEffect(
         
         ()=>{
-            console.log("it started fetching  ",examID);
+            // console.log("it started fetching  ",examID);
             setIsLoading(true);
-            console.log(JSON.stringify({
-              examID : examID
-          }));
+            
           // console.log("token.role",token.role);
             const accessToken = localStorage.getItem("token");
-            console.log("role is  ", token.role)
-            // const accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJiYWUyZjUzNi1jMGExLTQwNmUtOTRjMy1hNmUzN2NkMmZhZWUiLCJyb2xlIjoxLCJhZ2VuY3lJRCI6IjRiM2FkMDIwLWI4YWQtMTFlYS05NWQ3LWM3MDcyNWY1YzA3NSIsImlhdCI6MTU5MzUyOTE4MywiZXhwIjoxNTkzNjE1NTgzfQ.EVS7XB_pj-o7EJ2nxW_2O5DGO19-JQL7vyGV7TwxuuM"; 
-            console.log("token " , accessToken);
+            // console.log("role is  ", token.role)
+            // console.log("token " , accessToken);
             fetch(config.apiUrl+'api/paper/exam/'+examID,{
                 // mode : 'cors',
                 method : 'GET',
@@ -111,7 +108,7 @@ function Papers(){
                 )
                 .then(response =>{
                   setIsLoading(false);
-                console.log(response);
+                // console.log(response);
                   if(response.status == 200)
                   return response.json();
                   else{
@@ -120,7 +117,7 @@ function Papers(){
                   }
                 })
                 .then(data => {
-                  console.log(data);
+                  // console.log(data);
                   
                 setPapers(data.paperdata);
                 setPapercount(data.papercount);
@@ -241,6 +238,7 @@ function Papers(){
         
   
      }
+     <br></br>  <br></br>  <br></br>
     </div>
     );
 }

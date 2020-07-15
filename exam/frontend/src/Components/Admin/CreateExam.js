@@ -54,12 +54,13 @@ function CreateExam(){
         setMaxMarksError("");
       }
       if(isNaN(passMarks) || Number(passMarks)==0 || ( (Number(maxMarks)<Number(passMarks))))
-      { console.log(isNaN(passMarks))
+      {
+        //  console.log(isNaN(passMarks))
         setPassMarksError("Passing marks should not be greater than maxMarks");
         f=1;
       }
       else{
-        console.log(isNaN(passMarks))
+        // console.log(isNaN(passMarks))
         setPassMarksError("");
       }
       if(details=="")
@@ -101,12 +102,13 @@ function CreateExam(){
         setMaxMarksError("");
       }
       if(isNaN(passMarks) || ( (Number(maxMarks)<Number(passMarks))))
-      { console.log(isNaN(passMarks))
+      {
+        //  console.log(isNaN(passMarks))
         setPassMarksError("Passing marks should not be greater than maxMarks");
         f=1;
       }
       else{
-        console.log(isNaN(passMarks))
+        // console.log(isNaN(passMarks))
         setPassMarksError("");
       }
       if(details=="")
@@ -135,14 +137,14 @@ function CreateExam(){
     event.preventDefault();
     let  isValid = Validate();
     setCount(1);
-    console.log(isValid)
+    // console.log(isValid)
     if(isValid){ 
-    console.log("create exam");
+    // console.log("create exam");
     setIsLoading(true);
     
-   console.log(name);
-   console.log(maxMarks);
-   console.log(time);
+  //  console.log(name);
+  //  console.log(maxMarks);
+  //  console.log(time);
     
     const accessToken = localStorage.getItem("token");
     fetch(config.apiUrl+'api/exams',{
@@ -167,8 +169,8 @@ function CreateExam(){
         }
       } )
       .then(data => {
-        console.log(data);
-        console.log(data.message);
+        // console.log(data);
+        // console.log(data.message);
         swal({
             title: "Hey Yaayy !!",
             text: "Exam Has Been Created",
@@ -200,7 +202,7 @@ function CreateExam(){
             
         }
     )  
-    console.log("Exam Done");
+    // console.log("Exam Done");
     }
 
   };
