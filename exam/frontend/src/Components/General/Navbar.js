@@ -11,8 +11,8 @@ function Navbar()
     const handleLogout = () =>{
         localStorage.removeItem("token");
         setToken(null);
-        console.log("hi");
-        console.log(token);
+        // console.log("hi");
+        // console.log(token);
         history.push('/');
 
     };
