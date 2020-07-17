@@ -53,60 +53,60 @@ function Home(){
     <>
     { token && token.role==1 ?
     <>
-    <div class="categories-area section-padding10">
-            <div class="container">
-                <div class="row justify-content-sm-center">
-                    <div class="cl-xl-7 col-lg-8 col-md-10">
+    <div className="categories-area section-padding10">
+            <div className="container">
+                <div className="row justify-content-sm-center">
+                    <div className="cl-xl-7 col-lg-8 col-md-10">
                         
-                        <div class="section-tittle text-center mb-70">
+                        <div className="section-tittle text-center mb-70">
                             <span>Hi {token.userName}</span>
                             <h2>Lets Get Started</h2>
                         </div> 
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-lg-4 col-md-6 col-sm-6">
-                        <div class="single-cat mb-50">
-                            <div class="cat-icon">
-                                <span class="flaticon-web-design"></span>
+                <div className="row">
+                    <div className="col-lg-4 col-md-6 col-sm-6">
+                        <div className="single-cat mb-50">
+                            <div className="cat-icon">
+                                <span className="flaticon-web-design"></span>
                             </div>
-                            <div class="cat-cap">
+                            <div className="cat-cap">
                                 <h5><Link  to="/createexam">Create Exam</Link></h5>
                                 <p>Create an exam.</p>
                                 
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-sm-6">
-                        <div class="single-cat mb-50">
-                            <div class="cat-icon">
-                                <span class="flaticon-education"></span>
+                    <div className="col-lg-4 col-md-6 col-sm-6">
+                        <div className="single-cat mb-50">
+                            <div className="cat-icon">
+                                <span className="flaticon-education"></span>
                             </div>
-                            <div class="cat-cap">
+                            <div className="cat-cap">
                                 <h5><Link  to="/createpaper">Create Paper</Link></h5>
                                 <p>Create Mock Papers.</p>
                                
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-sm-6">
-                        <div class="single-cat mb-50">
-                            <div class="cat-icon">
-                                <span class="flaticon-business"></span>
+                    <div className="col-lg-4 col-md-6 col-sm-6">
+                        <div className="single-cat mb-50">
+                            <div className="cat-icon">
+                                <span className="flaticon-business"></span>
                             </div>
-                            <div class="cat-cap">
+                            <div className="cat-cap">
                                 <h5><Link  to="/exams">My Exams</Link></h5>
                                 <p>See your created exams.</p>
                              
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-sm-6">
-                        <div class="single-cat mb-50">
-                            <div class="cat-icon">
-                                <span class="flaticon-business"></span>
+                    <div className="col-lg-4 col-md-6 col-sm-6">
+                        <div className="single-cat mb-50">
+                            <div className="cat-icon">
+                                <span className="flaticon-business"></span>
                             </div>
-                            <div class="cat-cap">
+                            <div className="cat-cap">
                                 <h5><Link  to="/papers">My Mock Paper</Link></h5>
                                 <p>See your created mock papers.</p>
                              
@@ -122,36 +122,36 @@ function Home(){
     </>
     :
     <>
-    <div class="categories-area section-padding10">
-            <div class="container">
-                <div class="row justify-content-sm-center">
-                    <div class="cl-xl-7 col-lg-8 col-md-10">
+    <div className="categories-area section-padding10">
+            <div className="container">
+                <div className="row justify-content-sm-center">
+                    <div className="cl-xl-7 col-lg-8 col-md-10">
                         
-                        <div class="section-tittle text-center mb-70">
+                        <div className="section-tittle text-center mb-70">
                             <span>Hi {token.userName}</span>
                             <h2>Lets Get Started</h2>
                         </div> 
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-lg-4 col-md-6 col-sm-6">
-                        <div class="single-cat mb-50">
-                            <div class="cat-icon">
-                                <span class="flaticon-web-design"></span>
+                <div className="row">
+                    <div className="col-lg-4 col-md-6 col-sm-6">
+                        <div className="single-cat mb-50">
+                            <div className="cat-icon">
+                                <span className="flaticon-web-design"></span>
                             </div>
-                            <div class="cat-cap">
+                            <div className="cat-cap">
                                 <h5><Link  to="/allexams">All Exams</Link></h5>
                                 <p>Explore the exams.</p>
                                
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-4 col-md-6 col-sm-6">
-                        <div class="single-cat mb-50">
-                            <div class="cat-icon">
-                                <span class="flaticon-education"></span>
+                    <div className="col-lg-4 col-md-6 col-sm-6">
+                        <div className="single-cat mb-50">
+                            <div className="cat-icon">
+                                <span className="flaticon-education"></span>
                             </div>
-                            <div class="cat-cap">
+                            <div className="cat-cap">
                                 <h5><Link  to="/myexams">My Exams</Link></h5>
                                 <p>See the exams you have subscribed.</p>
                               
@@ -159,12 +159,12 @@ function Home(){
                         </div>
                     </div>
 
-                    <div class="col-lg-4 col-md-6 col-sm-6">
-                        <div class="single-cat mb-50">
-                            <div class="cat-icon">
-                                <span class="flaticon-education"></span>
+                    <div className="col-lg-4 col-md-6 col-sm-6">
+                        <div className="single-cat mb-50">
+                            <div className="cat-icon">
+                                <span className="flaticon-education"></span>
                             </div>
-                            <div class="cat-cap">
+                            <div className="cat-cap">
                                 <h5><Link  to="/myattemptedpapers">My Attempted Papers</Link></h5>
                                 <p>See the papers you have Attempted.</p>
                                
