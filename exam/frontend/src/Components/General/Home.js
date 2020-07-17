@@ -55,12 +55,12 @@ function Home(){
     <>
     <div className="categories-area section-padding10">
             <div className="container">
-                <div className="row justify-content-sm-center">
+                <div className="row">
                     <div className="cl-xl-7 col-lg-8 col-md-10">
                         
                         <div className="section-tittle text-center mb-70">
-                            <span>Hi {token.userName}</span>
-                            <h2>Lets Get Started</h2>
+                            {/* <span>Hi {token.userName}</span>
+                            <h2>Lets Get Started</h2> */}
                         </div> 
                     </div>
                 </div>
@@ -128,8 +128,8 @@ function Home(){
                     <div className="cl-xl-7 col-lg-8 col-md-10">
                         
                         <div className="section-tittle text-center mb-70">
-                            <span>Hi {token.userName}</span>
-                            <h2>Lets Get Started</h2>
+                            {/* <span>Hi {token.userName}</span>
+                            <h2>Lets Get Started</h2> */}
                         </div> 
                     </div>
                 </div>
