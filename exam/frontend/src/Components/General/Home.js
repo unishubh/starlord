@@ -184,6 +184,7 @@ function Home() {
                   </div>
                 </div>
                 <div className="row">
+<<<<<<< HEAD
                   {search_results.map((exam, key) => (
                     <div className="col-xl-4 col-lg-4 col-md-6">
                       <div style={{ padding: "40px" }}>
@@ -191,6 +192,18 @@ function Home() {
                           <div className="my-own-name">
                             <div className="hero-cap hero-cap2 text-center">
                               <h3 style={{ color: "white" }}> {exam.name} </h3>
+=======
+                    <div className="col-lg-4 col-md-6 col-sm-6">
+                        <Link  to="/createexam">
+                        <div className="single-cat mb-50">
+                            <div className="cat-icon">
+                                <span className="flaticon-web-design"></span>
+                            </div>
+                            <div className="cat-cap">
+                                <h5>Create Exam</h5>
+                                <p>Create an exam.</p>
+                                
+>>>>>>> upstream/master
                             </div>
                           </div>
                           <div className="my-own-container">
@@ -210,6 +223,7 @@ function Home() {
                           */}
                           </div>
                         </div>
+<<<<<<< HEAD
                       </div>
                     </div>
                   ))}
@@ -277,8 +291,28 @@ function Home() {
                           <p>Create an exam.</p>
                         </div>
                       </div>
+=======
+                        </Link>
                     </div>
+
                     <div className="col-lg-4 col-md-6 col-sm-6">
+                        <Link  to="/createpaper">
+                        <div className="single-cat mb-50">
+                            <div className="cat-icon">
+                                <span className="flaticon-education"></span>
+                            </div>
+                            <div className="cat-cap">
+                                <h5>Create Paper</h5>
+                                <p>Create Mock Papers.</p>
+                               
+                            </div>
+                        </div>
+                        </Link>
+>>>>>>> upstream/master
+                    </div>
+
+                    <div className="col-lg-4 col-md-6 col-sm-6">
+<<<<<<< HEAD
                       <div className="single-cat mb-50">
                         <div className="cat-icon">
                           <span className="flaticon-education"></span>
@@ -303,6 +337,34 @@ function Home() {
                           <p>See your created exams.</p>
                         </div>
                       </div>
+=======
+                        <Link  to="/exams">
+                        <div className="single-cat mb-50">
+                            <div className="cat-icon">
+                                <span className="flaticon-business"></span>
+                            </div>
+                            <div className="cat-cap">
+                                <h5>My Exams</h5>
+                                <p>See your created exams.</p>
+                             
+                            </div>
+                        </div>
+                        </Link>
+                    </div>
+                    <div className="col-lg-4 col-md-6 col-sm-6">
+                        <Link  to="/papers">
+                        <div className="single-cat mb-50">
+                            <div className="cat-icon">
+                                <span className="flaticon-business"></span>
+                            </div>
+                            <div className="cat-cap">
+                                <h5>My Mock Paper</h5>
+                                <p>See your created mock papers.</p>
+                             
+                            </div>
+                        </div>
+                        </Link>
+>>>>>>> upstream/master
                     </div>
                     <div className="col-lg-4 col-md-6 col-sm-6">
                       <div className="single-cat mb-50">
@@ -336,6 +398,7 @@ function Home() {
                   </div>
                   <div className="row">
                     <div className="col-lg-4 col-md-6 col-sm-6">
+<<<<<<< HEAD
                       <div className="single-cat mb-50">
                         <div className="cat-icon">
                           <span className="flaticon-web-design"></span>
@@ -360,8 +423,37 @@ function Home() {
                           <p>See the exams you have subscribed.</p>
                         </div>
                       </div>
+=======
+                        <Link  to="/allexams">
+                        <div className="single-cat mb-50">
+                            <div className="cat-icon">
+                                <span className="flaticon-web-design"></span>
+                            </div>
+                            <div className="cat-cap">
+                                <h5>All Exams</h5>
+                                <p>Explore the exams.</p>
+                               
+                            </div>
+                        </div>
+                        </Link>
                     </div>
                     <div className="col-lg-4 col-md-6 col-sm-6">
+                        <Link  to="/myexams">
+                            <div className="single-cat mb-50">
+                                <div className="cat-icon">
+                                    <span className="flaticon-education"></span>
+                                </div>
+                                <div className="cat-cap">
+                                    <h5>My Exams</h5>
+                                    <p>See the exams you have subscribed.</p>
+
+                                </div>
+                            </div>
+                        </Link>
+>>>>>>> upstream/master
+                    </div>
+                    <div className="col-lg-4 col-md-6 col-sm-6">
+<<<<<<< HEAD
                       <div className="single-cat mb-50">
                         <div className="cat-icon">
                           <span className="flaticon-education"></span>
@@ -375,6 +467,20 @@ function Home() {
                           <p>See the papers you have Attempted.</p>
                         </div>
                       </div>
+=======
+                        <Link  to="/myattemptedpapers">
+                            <div className="single-cat mb-50">
+                                <div className="cat-icon">
+                                    <span className="flaticon-education"></span>
+                                </div>
+                                <div className="cat-cap">
+                                    <h5>My Attempted Papers</h5>
+                                    <p>See the papers you have Attempted.</p>
+
+                                </div>
+                        </div>
+                        </Link>
+>>>>>>> upstream/master
                     </div>
                   </div>
                 </div>
