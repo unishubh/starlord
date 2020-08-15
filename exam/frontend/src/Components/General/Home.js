@@ -66,52 +66,62 @@ function Home(){
                 </div>
                 <div className="row">
                     <div className="col-lg-4 col-md-6 col-sm-6">
+                        <Link  to="/createexam">
                         <div className="single-cat mb-50">
                             <div className="cat-icon">
                                 <span className="flaticon-web-design"></span>
                             </div>
                             <div className="cat-cap">
-                                <h5><Link  to="/createexam">Create Exam</Link></h5>
+                                <h5>Create Exam</h5>
                                 <p>Create an exam.</p>
                                 
                             </div>
                         </div>
+                        </Link>
                     </div>
+
                     <div className="col-lg-4 col-md-6 col-sm-6">
+                        <Link  to="/createpaper">
                         <div className="single-cat mb-50">
                             <div className="cat-icon">
                                 <span className="flaticon-education"></span>
                             </div>
                             <div className="cat-cap">
-                                <h5><Link  to="/createpaper">Create Paper</Link></h5>
+                                <h5>Create Paper</h5>
                                 <p>Create Mock Papers.</p>
                                
                             </div>
                         </div>
+                        </Link>
                     </div>
+
                     <div className="col-lg-4 col-md-6 col-sm-6">
+                        <Link  to="/exams">
                         <div className="single-cat mb-50">
                             <div className="cat-icon">
                                 <span className="flaticon-business"></span>
                             </div>
                             <div className="cat-cap">
-                                <h5><Link  to="/exams">My Exams</Link></h5>
+                                <h5>My Exams</h5>
                                 <p>See your created exams.</p>
                              
                             </div>
                         </div>
+                        </Link>
                     </div>
                     <div className="col-lg-4 col-md-6 col-sm-6">
+                        <Link  to="/papers">
                         <div className="single-cat mb-50">
                             <div className="cat-icon">
                                 <span className="flaticon-business"></span>
                             </div>
                             <div className="cat-cap">
-                                <h5><Link  to="/papers">My Mock Paper</Link></h5>
+                                <h5>My Mock Paper</h5>
                                 <p>See your created mock papers.</p>
                              
                             </div>
                         </div>
+                        </Link>
                     </div>
                    
                 </div>
@@ -135,41 +145,47 @@ function Home(){
                 </div>
                 <div className="row">
                     <div className="col-lg-4 col-md-6 col-sm-6">
+                        <Link  to="/allexams">
                         <div className="single-cat mb-50">
                             <div className="cat-icon">
                                 <span className="flaticon-web-design"></span>
                             </div>
                             <div className="cat-cap">
-                                <h5><Link  to="/allexams">All Exams</Link></h5>
+                                <h5>All Exams</h5>
                                 <p>Explore the exams.</p>
                                
                             </div>
                         </div>
+                        </Link>
                     </div>
                     <div className="col-lg-4 col-md-6 col-sm-6">
-                        <div className="single-cat mb-50">
-                            <div className="cat-icon">
-                                <span className="flaticon-education"></span>
+                        <Link  to="/myexams">
+                            <div className="single-cat mb-50">
+                                <div className="cat-icon">
+                                    <span className="flaticon-education"></span>
+                                </div>
+                                <div className="cat-cap">
+                                    <h5>My Exams</h5>
+                                    <p>See the exams you have subscribed.</p>
+
+                                </div>
                             </div>
-                            <div className="cat-cap">
-                                <h5><Link  to="/myexams">My Exams</Link></h5>
-                                <p>See the exams you have subscribed.</p>
-                              
-                            </div>
-                        </div>
+                        </Link>
                     </div>
 
                     <div className="col-lg-4 col-md-6 col-sm-6">
-                        <div className="single-cat mb-50">
-                            <div className="cat-icon">
-                                <span className="flaticon-education"></span>
-                            </div>
-                            <div className="cat-cap">
-                                <h5><Link  to="/myattemptedpapers">My Attempted Papers</Link></h5>
-                                <p>See the papers you have Attempted.</p>
-                               
-                            </div>
+                        <Link  to="/myattemptedpapers">
+                            <div className="single-cat mb-50">
+                                <div className="cat-icon">
+                                    <span className="flaticon-education"></span>
+                                </div>
+                                <div className="cat-cap">
+                                    <h5>My Attempted Papers</h5>
+                                    <p>See the papers you have Attempted.</p>
+
+                                </div>
                         </div>
+                        </Link>
                     </div>
                    
                 </div>

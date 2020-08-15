@@ -1,7 +1,7 @@
 const express = require('express') ;
+const Umzug = require('./helpers/uzmug');
 const cors = require('cors');
 require('dotenv').config() ;
-
 const app = express() ;
 const port = process.env.PORT || 5001 ;
 const uuid =  require('uuid') ;
@@ -20,11 +20,23 @@ db.sequelize.sync({force:false}).then( () =>{
 let apiRouter = require('./routes/api') ;
 
 app.use('/api', apiRouter);
-// app.use('/user' , userRouter ) ;
-// app.use('/admin' , orgAdminRouter ) ;
-// app.use('/exam' , examRouter ) ;
-app.listen(port,() =>
-    {console.log(`Server is running on port : ${port}`)}) ;
+
+
+Umzug.UzmugClient.pending().then(function(migrations) {
+    // "migrations" will be an Array with the names of
+    // pending migrations.
+    Umzug.UzmugClient.execute({
+        migrations: migrations,
+        method: 'up'
+    }).then(function(migrations) {
+        // "migrations" will be an Array of all executed/reverted migrations.
+        // start the server
+        app.listen(port,() =>
+        {console.log(`Server is running on port : ${port}`)}) ;
+        // do your stuff
+    });
+});
+
 
 //358ab7f0-b758-11ea-97e5-87ba4b5fa945
 

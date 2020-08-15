@@ -33,7 +33,6 @@ module.exports.InsertQuestions = async (req, res) => {
             order:[['createdAt' , 'DESC']],
             raw:true
         }) ;
-        console.log(lasQuestion) ;
         let newIID ;
         if (!(lasQuestion).length){
             newIID = 1 ;
@@ -41,7 +40,6 @@ module.exports.InsertQuestions = async (req, res) => {
         else{
             newIID = lasQuestion[0].iid + 1 ;
         }
-        console.log(newIID) ;
         let newData =  db.questions.build({ id:uuid.v4(), iid : newIID , paperID, qnJSON:questionData}) ;
         await newData.save();
         utilities.sendSuccess('success', res, newData);
