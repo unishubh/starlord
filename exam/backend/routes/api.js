@@ -56,6 +56,7 @@ router.post('/agency/:name',   createAgencyController.createAgency);
 router.post('/question/:paperID', sess_auth.basicAuth, admin_auth.basicAuth,  questionController.InsertQuestions);
 //get next question of the exam currently being attempted
 router.post('/question' , sess_auth.basicAuth , questionController.getQuestionByIntegerID) ;
+router.get('/getQuestionNumbers/:paperID',questionController.getNumberOfQuestions);
 
 
 

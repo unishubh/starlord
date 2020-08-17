@@ -7,7 +7,8 @@ module.exports = (sequelize, DataTypes) => {
     paperID: {type : DataTypes.UUID ,  allowNull : false }
   }, {});
   questions.associate = function(models) {
-    // associations can be defined here
+    // associations can be defined heree
+    questions.belongsTo(models.mockpapers , {foreignKey:'paperID'})
   };
   return questions;
 };

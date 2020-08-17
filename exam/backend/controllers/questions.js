@@ -11,7 +11,7 @@ module.exports.InsertQuestions = async (req, res) => {
     let type = req.body.type; //This will be always finite
     let question = req.body.question; // The question text
     let posMark = req.body.posMark; //int
-    let negMark = req.body.posMark; //neg
+    let negMark = req.body.negMark; //neg
     //check if the user has authority over the paper he is trying to insert into
     try {
         if(!validators.isAccessible('paperID',paperID,"")) { //todo:send agency id after taking it from jwt
@@ -96,5 +96,27 @@ module.exports.getQuestionByIntegerID = async (req, res)=>{
     }catch(err){
         console.log(err);
         utilities.sendError(err,res) ;
+    }
+}
+
+module.exports.getNumberOfQuestions = async (req, res) => {
+    let { paperID } = req.params
+    try {
+        let exam = await db.questions.findOne( {
+            where: {paperID},
+            include : db.mockpapers,
+            order:  [
+                ['iid', 'DESC']
+            ],
+            limit: 1,
+        });
+        let data = {};
+        data['maxQuestions'] = exam.mockpaper.totalQns;
+        data['currentQuestions'] = exam.iid;
+        utilities.sendSuccess("success",res,data);
+
+    } catch (e) {
+        console.log(e);
+        utilities.sendError(e,res);
     }
 }

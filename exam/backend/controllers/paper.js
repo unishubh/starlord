@@ -151,7 +151,7 @@ exports.showResults = async( req , res ) =>{
                 userID ,
             },
             attributes : ['response'] ,
-            raw:true,    
+            raw:true,
         });
         let qnData = await db.questions.findAll({
              where : {paperID} ,
@@ -161,7 +161,7 @@ exports.showResults = async( req , res ) =>{
         let correctResponse = {} ;
         for ( qn in qnData ){
             correctResponse[qnData[qn]['iid']] = qnData[qn]['qnJSON'] ;
-        } 
+        }
         compare['correctResponse'] = correctResponse ;
         utilities.sendSuccess("Got responses to compare " , res , compare ) ;
 

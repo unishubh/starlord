@@ -69,7 +69,6 @@ exports.getExamByID = async(req, res) =>{
         let examID = req.params.examID ;
         let exam = await db.exams.findOne({where: {id:examID}}) ;
         if (!exam){
-            console.log("Exam does not exist");
             utilities.sendError("Exam does not exist", res);
             return
         }
