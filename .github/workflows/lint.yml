@@ -20,6 +20,9 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
 
+      - name: Move to frontend directory
+        run: cd exam/frontend
+
       - name: Cache Node.js modules
         uses: actions/cache@v2
         with:
