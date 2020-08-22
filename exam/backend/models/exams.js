@@ -6,11 +6,15 @@ module.exports = (sequelize, DataTypes) => {
     agencyID: DataTypes.UUID,
     details: DataTypes.STRING,
     max_marks: DataTypes.INTEGER,
-    time: DataTypes.INTEGER
+    time: DataTypes.INTEGER,
+    subjectID: DataTypes.UUID,
+    categoryID: DataTypes.UUID,
   }, {});
   exams.associate = function(models) {
     // associations can be defined here
     exams.belongsTo(models.agency , {foreignKey:'agencyID'});
+    exams.belongsTo(models.subjects,{foreignKey:'subjectID'});
+    exams.belongsTo(models.categories, {foreignKey:'categoryID'});
   };
   return exams;
 };

@@ -6,6 +6,8 @@ const questionController = require('../controllers/questions')
 const createAgencyController = require('../controllers/create_agency') ;
 const examController = require('../controllers/exams');
 const paperController = require('../controllers/paper');
+const subjectController = require('../controllers/subjects');
+const cateoryController = require('../controllers/categories');
 const router = express.Router() ;
 
 //register
@@ -58,6 +60,18 @@ router.post('/question/:paperID', sess_auth.basicAuth, admin_auth.basicAuth,  qu
 router.post('/question' , sess_auth.basicAuth , questionController.getQuestionByIntegerID) ;
 router.get('/getQuestionNumbers/:paperID',questionController.getNumberOfQuestions);
 
+//subjects
+router.post('/subject', subjectController.addSubject);
+//get subjects
+router.get('/subject/:query',subjectController.getSubjects);
+//verifysubject
+router.post('/subject/verify/:subjectID',subjectController.verifySubject);
 
+//categories
+router.post('/category', cateoryController.addCategory);
+//get categories
+router.get('/category/:query',cateoryController.getCategories);
+//verify categories
+router.post('/category/verify/:categoryID',cateoryController.verifyCategory);
 
 module.exports = router ;

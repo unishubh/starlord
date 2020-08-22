@@ -25,6 +25,8 @@ exports.createExam = async ( req , res  ) =>{
     let new_details = req.body.details ;
     let new_max_marks = req.body.maxMarks ;
     let new_time = req.body.time ;
+    let subjectID = req.body.subjectID;
+    let categoryID = req.body.categoryID;
     console.log(newAgencyID) ;
     try{
         let agency = await db.agency.findOne({where: {id:newAgencyID}});
@@ -33,7 +35,7 @@ exports.createExam = async ( req , res  ) =>{
             utilities.sendError("Agency does not exist", res);
             return
         }
-        let newExam = db.exams.build({id: uuid.v1(), agencyID:newAgencyID , name:new_name , details:new_details , max_marks:new_max_marks , time:new_time }) ;
+        let newExam = db.exams.build({id: uuid.v1(), agencyID:newAgencyID , name:new_name , details:new_details , max_marks:new_max_marks , time:new_time , subjectID, categoryID}) ;
         await newExam.save() ;
         utilities.sendSuccess('success', res, newExam);
     }
