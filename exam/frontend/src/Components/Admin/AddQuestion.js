@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import swal from 'sweetalert';
 import Select from 'react-select';
-import AsyncSelect from 'react-select';
 import config from '../config';
 
 function AddQestion() {
@@ -34,7 +33,7 @@ function AddQestion() {
   const [correctError, setCorrectError] = useState('');
   const [posMarkError, setPosMarkError] = useState('');
   const [negMarkError, setNegMarkError] = useState('');
-  const [isAllowed, setAllowance] = useState(true);
+  const [isAllowed] = useState(true);
   const [typeError, setTypeError] = useState('');
   const [count, setCount] = useState(-1);
   const [finishAddQuestion, setFinishAddQuestion] = useState(false);
@@ -44,61 +43,61 @@ function AddQestion() {
     // console.log(optionsfake);
     setCount((c) => c + 1);
 
-    let f = 0;
-    if (question === '' || question == null) {
+    // let f = 0;
+    if (question === '' || question === null) {
       setQuestionError('Write a question');
-      f = 1;
+      // f = 1;
     } else {
       setQuestionError('');
     }
     if (type === 'MCQ' && options.length <= 1) {
       setOptionsError('Please provide atleast 2 options');
-      f = 1;
+      // f = 1;
     } else {
       setOptionsError('');
     }
-    if (correct === '' || correct == null) {
+    if (correct === '' || correct === null) {
       setCorrectError('Choose a correct option');
       if (type === 'INT') setCorrectError('write the INT value');
-      f = 1;
+      // f = 1;
     } else {
       setCorrectError('');
     }
     if (type === '') {
       setTypeError('Choose a correct option');
-      f = 1;
+      // f = 1;
     } else {
       setTypeError('');
     }
-    if (isNaN(posMark) || Number(posMark) <= 0) {
+    if (Number.isNaN(posMark) || Number(posMark) <= 0) {
       setPosMarkError('Provide a Pos number');
-      f = 1;
+      // f = 1;
     } else {
       setPosMarkError('');
     }
-    if (isNaN(negMark) || Number(negMark) < 0) {
+    if (Number.isNaN(negMark) || Number(negMark) < 0) {
       setNegMarkError('Provide a Pos number');
-      f = 1;
+      // f = 1;
     } else {
       setNegMarkError('');
     }
-    if (type == 'MCQ') {
+    if (type === 'MCQ') {
       let found = 0;
       for (let index = 0; index < options.length; index++) {
-        if (options[index] == correct) {
+        if (options[index] === correct) {
           found = 1;
           break;
         }
       }
-      if (found == 0) {
+      if (found === 0) {
         setCorrectError('Select Correct Answer from options');
-        f = 1;
+        // f = 1;
       } else {
         setCorrectError('');
       }
-    } else if (correct == null || isNaN(correct)) {
+    } else if (correct === null || Number.isNaN(correct)) {
       setCorrectError('write the INT value');
-      f = 1;
+      // f = 1;
     } else {
       setCorrectError('');
     }
@@ -136,60 +135,60 @@ function AddQestion() {
   }, []);
   const Validate = () => {
     let f = 0;
-    if (question == '' || question == null) {
+    if (question === '' || question === null) {
       setQuestionError('Write a question');
       f = 1;
     } else {
       setQuestionError('');
     }
-    if (type == 'MCQ' && options.length <= 1) {
+    if (type === 'MCQ' && options.length <= 1) {
       setOptionsError('Please provide atleast 2 options');
       f = 1;
     } else {
       setOptionsError('');
     }
-    if (correct == '' || correct == null) {
+    if (correct === '' || correct === null) {
       setCorrectError('Choose a correct option');
-      if (type == 'INT') setCorrectError('write the INT value');
+      if (type === 'INT') setCorrectError('write the INT value');
       f = 1;
     } else {
       setCorrectError('');
     }
-    if (type == '') {
+    if (type === '') {
       setTypeError('Choose a correct option');
       f = 1;
     } else {
       setTypeError('');
     }
-    if (isNaN(posMark) || Number(posMark) <= 0) {
+    if (Number.isNaN(posMark) || Number(posMark) <= 0) {
       setPosMarkError('Provide a Pos number');
       f = 1;
     } else {
       setPosMarkError('');
     }
-    if (isNaN(negMark) || Number(negMark) < 0) {
+    if (Number.isNaN(negMark) || Number(negMark) < 0) {
       setNegMarkError('Provide a Pos number');
       f = 1;
     } else {
-      // console.log(isNaN(negMark))
+      // console.log(Number.isNaN(negMark))
       // console.log(Number(negMark))
       setNegMarkError('');
     }
-    if (type == 'MCQ') {
+    if (type === 'MCQ') {
       let found = 0;
       for (let index = 0; index < options.length; index++) {
-        if (options[index] == correct) {
+        if (options[index] === correct) {
           found = 1;
           break;
         }
       }
-      if (found == 0) {
+      if (found === 0) {
         setCorrectError('Select Correct Answer from options');
         f = 1;
       } else {
         setCorrectError('');
       }
-    } else if (correct == null || isNaN(correct)) {
+    } else if (correct === null || Number.isNaN(correct)) {
       setCorrectError('write the INT value');
       f = 1;
     } else {
@@ -197,7 +196,7 @@ function AddQestion() {
     }
 
     // console.log(type)
-    if (f == 1) return false;
+    if (f === 1) return false;
     return true;
   };
   const handleSubmit = (event) => {
@@ -266,7 +265,7 @@ function AddQestion() {
 
           throw new Error(response.status);
         })
-        .then((data) => {
+        .then(() => {
           // console.log("reply",data);
 
           swal({
@@ -277,7 +276,7 @@ function AddQestion() {
           }).then(history.go(0));
         })
         .catch((error) => {
-          if (error == 403) {
+          if (error === 403) {
             swal({
               title: 'Oh Ohhh',
               text: 'Please Login Again',
@@ -325,13 +324,14 @@ function AddQestion() {
               <div className="row">
                 <div className="col-12">
                   <div className=" mt-3">
-                    <button className="button button-contactForm boxed-btn" onClick={handleSubmit}>
+                    <button type="button" className="button button-contactForm boxed-btn" onClick={handleSubmit}>
                       Preview Papaer
                     </button>
                     &nbsp;&nbsp;
                     <button
+                      type="button"
                       className="button button-contactForm boxed-btn"
-                      onClick={(e) => {
+                      onClick={() => {
                         history.push('/');
                       }}
                     >
@@ -389,10 +389,11 @@ function AddQestion() {
                               <div className="button-group-area mt-10">
                                 {count <= 0 ? <></> : <div style={{ fontSize: 12, color: 'red' }}>{optionsError}</div>}
                                 <button
+                                  type="button"
                                   className="genric-btn primary-border small"
                                   onClick={(e) => {
                                     e.preventDefault();
-                                    if (option != '') {
+                                    if (option !== '') {
                                       options.push(option);
                                       optionsfake.push({ value: option, label: option });
                                     } else {
@@ -406,6 +407,7 @@ function AddQestion() {
                                   Add Option
                                 </button>
                                 <button
+                                  type="button"
                                   className="genric-btn primary-border small"
                                   onClick={(e) => {
                                     e.preventDefault();
@@ -494,7 +496,7 @@ function AddQestion() {
                       {/* </div>  */}
                     </div>
                     <div className=" mt-3">
-                      <button className="button button-contactForm boxed-btn" onClick={handleAdd}>
+                      <button type="button" className="button button-contactForm boxed-btn" onClick={handleAdd}>
                         Add
                       </button>
                     </div>

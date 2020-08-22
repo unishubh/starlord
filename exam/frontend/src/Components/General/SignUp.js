@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useContext, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import jwtDecode from 'jwt-decode';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -12,7 +11,6 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Select from 'react-select';
 import { useHistory } from 'react-router-dom';
 import swal from 'sweetalert';
 import { UserContext } from '../UserContext';
@@ -51,17 +49,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignUp() {
-  const jwtDecode = require('jwt-decode');
-  const options = [
-    { value: '1', label: 'ADMIN' },
-    { value: '2', label: 'STUDENT' },
-  ];
-  const [agencies, setAgencies] = useState([]);
   const history = useHistory();
-  const { token, setToken } = useContext(UserContext);
+  const { setToken } = useContext(UserContext);
   const classes = useStyles();
   const [name, setName] = useState('');
-  const [role, setRole] = useState(2);
+  const [role] = useState(2);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [agencyID, setAgencyID] = useState('');
@@ -86,30 +78,30 @@ export default function SignUp() {
   // useEffect(()=>{console.log(agencies)},[agencies]);
 
   useEffect(() => {
-    let f = 0;
+    // let f = 0;
     setCount((c) => c + 1);
 
-    if (name == '') {
+    if (name === '') {
       setNameError('Please write your name');
-      f = 1;
+      // f = 1;
     } else {
       setNameError('');
     }
     if (!email.includes('@') || !email.includes('.')) {
       setEmailError('Please provide valid email');
-      f = 1;
+      // f = 1;
     } else {
       setEmailError('');
     }
-    if (password == '') {
+    if (password === '') {
       setPasswordError('Please provide a password');
-      f = 1;
+      // f = 1;
     } else {
       setPasswordError('');
     }
-    if (password != confirmpassword) {
+    if (password !== confirmpassword) {
       setPasswordMatchError('Password did not match');
-      f = 1;
+      // f = 1;
     } else {
       setPasswordMatchError('');
     }
@@ -117,7 +109,7 @@ export default function SignUp() {
 
   const Validate = () => {
     let f = 0;
-    if (name == '') {
+    if (name === '') {
       setNameError('Please write your name');
       f = 1;
     } else {
@@ -129,19 +121,19 @@ export default function SignUp() {
     } else {
       setEmailError('');
     }
-    if (password == '') {
+    if (password === '') {
       setPasswordError('Please provide a password');
       f = 1;
     } else {
       setPasswordError('');
     }
-    if (password != confirmpassword) {
+    if (password !== confirmpassword) {
       setPasswordMatchError('Password did not match');
       f = 1;
     } else {
       setPasswordMatchError('');
     }
-    if (f == 1) return false;
+    if (f === 1) return false;
     return true;
   };
 
@@ -154,7 +146,7 @@ export default function SignUp() {
       // console.log("Register Started");
 
       let bodydata;
-      if (role == 1) {
+      if (role === 1) {
         bodydata = JSON.stringify({
           name,
           email,
@@ -200,7 +192,7 @@ export default function SignUp() {
           // console.log(token.role);
           history.push('/');
         })
-        .catch((error) => {
+        .catch(() => {
           swal({
             title: 'Oops',
             text: 'Incorrect Details or You are already registered',
@@ -313,7 +305,7 @@ export default function SignUp() {
                   />
                   {count <= 0 ? <></> : <div style={{ fontSize: 12, color: 'red' }}>{passwordMatchError}</div>}
                 </Grid>
-                {role == 1 ? (
+                {role === 1 ? (
                   <Grid item xs={12}>
                     <TextField
                       variant="outlined"

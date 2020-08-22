@@ -10,14 +10,12 @@ function AllExams() {
   const [isLoading, setIsLoading] = useState(true);
   const [exams, setExams] = useState([]);
   const [total, setTotal] = useState(0);
-  const [search_item, setSerach_item] = useState('');
-  const [search_results, setSearch_result] = useState([]);
+  const [searchItem, setSerachItem] = useState('');
+  const [searchResults, setSearchResult] = useState([]);
   useEffect(() => {
-    {
-      const results = exams.filter((exam) => exam.name.toLowerCase().includes(search_item.toLocaleLowerCase()));
-      setSearch_result(results);
-    }
-  }, [search_item, exams]);
+    const results = exams.filter((exam) => exam.name.toLowerCase().includes(searchItem.toLocaleLowerCase()));
+    setSearchResult(results);
+  }, [searchItem, exams]);
 
   const Subscribe = (event) => {
     setIsLoading(true);
@@ -35,7 +33,7 @@ function AllExams() {
 
         throw new Error(response.status);
       })
-      .then((data) => {
+      .then(() => {
         // console.log(data);
         // console.log(data.message);
         swal({
@@ -126,12 +124,11 @@ function AllExams() {
                     <div className="hero-cap hero-cap2 text-center">
                       <h2>
                         All Exams
-                        {isLoading ? <>IS LOADING..</> : <>
-{' '}
-:{total}</>}
+                        {isLoading ? <>IS LOADING..</> : <> :{total}</>}
                       </h2>
                       <button
-                        onClick={(e) => window.history.back()}
+                        type="button"
+                        onClick={() => window.history.back()}
                         className="btn hero-btn"
                         data-animation="fadeInLeft"
                         data-delay=".8s"
@@ -155,8 +152,8 @@ function AllExams() {
                         type="text"
                         className="form-control"
                         placeholder="Search Exam"
-                        value={search_item}
-                        onChange={(e) => setSerach_item(e.target.value)}
+                        value={searchItem}
+                        onChange={(e) => setSerachItem(e.target.value)}
                       />
                       <div className="input-group-append" />
                       <button className="btns" type="button">
@@ -171,37 +168,32 @@ function AllExams() {
           </div>
 
           <div className="row">
-            {search_results.map((exam, key) => (
+            {searchResults.map((exam) => (
               <div className="col-xl-4 col-lg-4 col-md-6">
                 <div style={{ padding: '40px' }}>
                   <div className="my-own-card">
                     <div className="my-own-name">
                       <div className="hero-cap hero-cap2 text-center">
-                        <h3 style={{ color: 'white' }}> 
-{' '}
-{exam.name}
-{' '}
- </h3>
+                        <h3 style={{ color: 'white' }}> {exam.name} </h3>
                       </div>
                     </div>
                     <div className="my-own-container">
                       <h5>
-                        <b>
-                          Max Marks :
-{exam.max_marks}
-                        </b>
+                        <b>Max Marks :{exam.max_marks}</b>
                       </h5>
                       <h5>
-                        Time Duration :
-{exam.time} 
-{' '}
-{exam.time !== 1 ? <>Hours</> : <>Hour</>}
+                        Time Duration :{exam.time} {exam.time !== 1 ? <>Hours</> : <>Hour</>}
                       </h5>
                       <p>{exam.details}</p>
-                      {token.role == 2 ? (
+                      {token.role === 2 ? (
                         <>
                           <div className="button-group-area mt-10">
-                            <button value={exam.id} onClick={Subscribe} className="genric-btn primary-border small">
+                            <button
+                              type="button"
+                              value={exam.id}
+                              onClick={Subscribe}
+                              className="genric-btn primary-border small"
+                            >
                               Subscribe
                             </button>
                           </div>
@@ -222,11 +214,7 @@ function AllExams() {
           </div>
         </div>
       )}
-      <br /> 
-{' '}
-<br /> 
-{' '}
-<br />
+      <br /> <br /> <br />
     </div>
   );
 }

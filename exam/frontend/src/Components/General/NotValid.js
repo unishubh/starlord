@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
-import { UserContext } from '../UserContext';
+import React from 'react';
+// import { UserContext } from '../UserContext';
 
 function Admin() {
-  const { token, setToken } = useContext(UserContext);
+  // const { token, setToken } = useContext(UserContext);
 
   return (
     <div>

@@ -1,33 +1,34 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState, useRef, useContext } from 'react';
 import { useHistory, useParams, Prompt } from 'react-router-dom';
 import swal from 'sweetalert';
-import { Next } from 'react-bootstrap/PageItem';
-import NavigationPrompt from 'react-router-navigation-prompt';
-import { Modal } from 'react-modal';
+// import { Next } from 'react-bootstrap/PageItem';
+// import NavigationPrompt from 'react-router-navigation-prompt';
+// import { Modal } from 'react-modal';
 import { UserContext } from '../UserContext';
 import config from '../config';
 
 function AttemptPaper() {
   const history = useHistory();
-  const { token, setToken, isExamStarted, setIsExamStarted } = useContext(UserContext);
+  const { isExamStarted, setIsExamStarted } = useContext(UserContext);
   const { paperID, paperName } = useParams();
   const [isLoading, setIsLoading] = useState(false);
-  const [exam_ended, setExam_ended] = useState(false);
-  const [isStarted, setIsStarted] = useState(true);
+  const [examEnded, setExamEnded] = useState(false);
+  const [isStarted] = useState(true);
   const accessToken = localStorage.getItem('token');
-  const [startTime, setStartTime] = useState(null);
+  const [_startTime, setStartTime] = useState(null);
   const [totalQns, setTotalQns] = useState(0);
   const [leftHours, setLeftHours] = useState(null);
   const [leftMins, setLeftMins] = useState(null);
   const [leftSecs, setLeftSecs] = useState(null);
-  const [question_no, setQuestion_no] = useState(null);
+  const [questionNo, setQuestionNo] = useState(null);
   const [question, setQuestion] = useState('');
   const [options, setOptions] = useState([]);
   const [posMark, setPosMark] = useState(null);
   const [negMark, setNegMark] = useState(null);
   const [type, setType] = useState(null);
   const [userPaperResponse, setUserPaperResponse] = useState({});
-  const [userResponse, setUserResponse] = useState([]);
+  // const [userResponse, setUserResponse] = useState([]);
   const [move, setMove] = useState(false);
   const [duration, setDuration] = useState(null);
   const [endTime, setEndTime] = useState(null);
@@ -35,64 +36,6 @@ function AttemptPaper() {
   const [onEndExam, setOnEndExam] = useState(false);
 
   let interval = useRef();
-
-  const startTimer = () => {
-    const finish = endTime;
-
-    interval = setInterval(() => {
-      const now = new Date().getTime();
-      const dis = finish - now;
-      const hours = Math.floor(dis / (1000 * 60 * 60));
-      const mins = Math.floor((dis % (1000 * 60 * 60)) / (1000 * 60));
-      const secs = Math.floor((dis % (1000 * 60)) / 1000);
-
-      if (finish != null && dis <= 0 && exam_ended == false) {
-        EndExam();
-        clearInterval(interval);
-        setExam_ended(true);
-        // console.log("this is happening");
-        setExam_ended(true);
-      } else if (dis < 0 && finish != null) {
-        clearInterval(interval);
-        setLeftHours(0);
-        setLeftMins(0);
-        setLeftSecs(0);
-        swal({
-          title: 'Already Attempted',
-          text: 'You have already attempted and time is up ',
-          icon: 'warning',
-          button: 'Got it',
-        });
-      } else if (finish != null) {
-        setLeftHours(hours);
-        setLeftMins(mins);
-        setLeftSecs(secs);
-      }
-    }, 1000);
-  };
-
-  useEffect(() => {
-    if (exam_ended == false) {
-      startTimer();
-    }
-    return () => {
-      clearInterval(interval);
-    };
-  });
-
-  useEffect(() => {
-    if (isStarted == true && exam_ended == false) {
-      // console.log("Exam Startes")
-      setIsExamStarted(true);
-      StartExam();
-    }
-  }, [isStarted]);
-
-  useEffect(() => {
-    if (onEndExam == false && exam_ended == true) {
-      EndExam();
-    }
-  }, [exam_ended]);
 
   const StartExam = () => {
     // localStorage.setItem("exam",true);
@@ -117,7 +60,7 @@ function AttemptPaper() {
       .then((data) => {
         setIsExamStarted(true);
         // console.log(data);
-        setQuestion_no(data.data.firstQuestion.iid);
+        setQuestionNo(data.data.firstQuestion.iid);
         setQuestion(data.data.firstQuestion.qnJSON.question);
         setType(data.data.firstQuestion.qnJSON.type);
         setPosMark(data.data.firstQuestion.qnJSON.posMark);
@@ -129,27 +72,27 @@ function AttemptPaper() {
         // ALL TIMER
 
         // Duration
-        const duration_mili = data.data.duration * 3600000;
-        setDuration(duration_mili);
+        const durationMili = data.data.duration * 3600000;
+        setDuration(durationMili);
 
         // start time
         const dt = new Date(data.data.startTime);
-        const start_mili = dt.getTime();
+        const startMili = dt.getTime();
         // console.log("start time fetched ",start_mili);
-        setStartTime(start_mili);
+        setStartTime(startMili);
 
         // end time
-        const finish_mili = start_mili + duration_mili;
-        setEndTime(finish_mili);
+        const finishMili = startMili + durationMili;
+        setEndTime(finishMili);
 
         // Current Time
-        const current_mili = new Date().getTime();
+        const currentMili = new Date().getTime();
 
         // console.log(data.startTime);
         // console.log(finish_dt);
 
-        if (current_mili > finish_mili) {
-          setExam_ended(true);
+        if (currentMili > finishMili) {
+          setExamEnded(true);
 
           swal({
             title: 'Already Attempted',
@@ -169,7 +112,7 @@ function AttemptPaper() {
         // ALL TIME THING
         setIsLoading(false);
       })
-      .catch((error) => {
+      .catch(() => {
         // swal({
         //   title: "Oops",
         //   text: "You have already attempted paper " ,
@@ -206,8 +149,8 @@ function AttemptPaper() {
     //   lastQnAns : answer,
 
     // }));
-    if (answer != '') {
-      const key = question_no;
+    if (answer !== '') {
+      const key = questionNo;
       // console.log("In Another key is ",key)
       // console.log(JSON.stringify({
       //     qnID:key,
@@ -227,7 +170,7 @@ function AttemptPaper() {
         body: JSON.stringify({
           qnID: key,
           paperID,
-          lastQnID: question_no,
+          lastQnID: questionNo,
           lastQnAns: answer,
         }),
       })
@@ -241,7 +184,7 @@ function AttemptPaper() {
         })
         .then((data) => {
           // console.log(data);
-          setQuestion_no(key);
+          setQuestionNo(key);
           setQuestion(data.data.question.question);
           //   setType(data.firstQuestion.qnJSON.type);
           setPosMark(data.data.question.posMark);
@@ -256,27 +199,27 @@ function AttemptPaper() {
           // ALL TIMER
 
           // Duration
-          const duration_mili = data.data.duration * 3600000;
-          setDuration(duration_mili);
+          const durationMili = data.data.duration * 3600000;
+          setDuration(durationMili);
 
           // start time
           const dt = new Date(data.data.startTime);
-          const start_mili = dt.getTime();
+          const startMili = dt.getTime();
           // console.log("start time fetched ",start_mili);
-          setStartTime(start_mili);
+          setStartTime(startMili);
 
           // end time
-          const finish_mili = start_mili + duration_mili;
-          setEndTime(finish_mili);
+          const finishMili = startMili + durationMili;
+          setEndTime(finishMili);
 
           // Current Time
-          const current_mili = new Date().getTime();
+          const currentMili = new Date().getTime();
 
           // console.log(data.startTime);
           // console.log(finish_dt);
 
-          if (current_mili > finish_mili) {
-            setExam_ended(true);
+          if (currentMili > finishMili) {
+            setExamEnded(true);
             swal({
               title: 'Already Attempted',
               text: 'You have already attempted and time is up ',
@@ -328,7 +271,7 @@ function AttemptPaper() {
         // alert(response.status)
         throw new Error(response.status);
       })
-      .then((data) => {
+      .then(() => {
         // console.log(data);
         swal({
           title: 'Well !',
@@ -374,7 +317,7 @@ function AttemptPaper() {
       body: JSON.stringify({
         qnID: key,
         paperID,
-        lastQnID: question_no,
+        lastQnID: questionNo,
         lastQnAns: answer,
       }),
     })
@@ -388,7 +331,7 @@ function AttemptPaper() {
       })
       .then((data) => {
         // console.log(data);
-        setQuestion_no(key);
+        setQuestionNo(key);
         setQuestion(data.data.question.question);
         //   setType(data.firstQuestion.qnJSON.type);
         setPosMark(data.data.question.posMark);
@@ -403,27 +346,27 @@ function AttemptPaper() {
         // ALL TIMER
 
         // Duration
-        const duration_mili = data.data.duration * 3600000;
-        setDuration(duration_mili);
+        const durationMili = data.data.duration * 3600000;
+        setDuration(durationMili);
 
         // start time
         const dt = new Date(data.data.startTime);
-        const start_mili = dt.getTime();
+        const startMili = dt.getTime();
         // console.log("start time fetched ",start_mili);
-        setStartTime(start_mili);
+        setStartTime(startMili);
 
         // end time
-        const finish_mili = start_mili + duration_mili;
-        setEndTime(finish_mili);
+        const finishMili = startMili + durationMili;
+        setEndTime(finishMili);
 
         // Current Time
-        const current_mili = new Date().getTime();
+        const currentMili = new Date().getTime();
 
         // console.log(data.startTime);
         // console.log(finish_dt);
 
-        if (current_mili > finish_mili) {
-          setExam_ended(true);
+        if (currentMili > finishMili) {
+          setExamEnded(true);
           swal({
             title: 'Already Attempted',
             text: 'You have already attempted and time is up ',
@@ -467,15 +410,73 @@ function AttemptPaper() {
     []
   );
 
+  const startTimer = () => {
+    const finish = endTime;
+
+    interval = setInterval(() => {
+      const now = new Date().getTime();
+      const dis = finish - now;
+      const hours = Math.floor(dis / (1000 * 60 * 60));
+      const mins = Math.floor((dis % (1000 * 60 * 60)) / (1000 * 60));
+      const secs = Math.floor((dis % (1000 * 60)) / 1000);
+
+      if (finish !== null && dis <= 0 && examEnded === false) {
+        EndExam();
+        clearInterval(interval);
+        setExamEnded(true);
+        // console.log("this is happening");
+        setExamEnded(true);
+      } else if (dis < 0 && finish !== null) {
+        clearInterval(interval);
+        setLeftHours(0);
+        setLeftMins(0);
+        setLeftSecs(0);
+        swal({
+          title: 'Already Attempted',
+          text: 'You have already attempted and time is up ',
+          icon: 'warning',
+          button: 'Got it',
+        });
+      } else if (finish !== null) {
+        setLeftHours(hours);
+        setLeftMins(mins);
+        setLeftSecs(secs);
+      }
+    }, 1000);
+  };
+
+  useEffect(() => {
+    if (examEnded === false) {
+      startTimer();
+    }
+    return () => {
+      clearInterval(interval);
+    };
+  });
+
+  useEffect(() => {
+    if (isStarted === true && examEnded === false) {
+      // console.log("Exam Startes")
+      setIsExamStarted(true);
+      StartExam();
+    }
+  }, [isStarted]);
+
+  useEffect(() => {
+    if (onEndExam === false && examEnded === true) {
+      EndExam();
+    }
+  }, [examEnded]);
+
   //  window.addEventListener('beforeunload',(event)=>{
   //    event.preventDefault();
 
   //    event.returnValue = "Your Exam will be Ended";
   //  })
-  const Hi = () => {
-    const f = 0;
-    // console.log("hi called")
-  };
+  // const Hi = () => {
+  //   const f = 0;
+  //   // console.log("hi called")
+  // };
   // window.addEventListener('beforeunload', (event) => {
   //   // Cancel the event as stated by the standard.
 
@@ -500,9 +501,9 @@ function AttemptPaper() {
   // EndExam();
 
   // });
-  const onConfirm = () => {
-    // console.log("confrim")
-  };
+  // const onConfirm = () => {
+  //   // console.log("confrim")
+  // };
 
   return (
     <div>
@@ -525,24 +526,18 @@ function AttemptPaper() {
             {!isStarted ? (
               <></>
             ) : (
-              <button onClick={EndExam} className="genric-btn danger-border circle">
+              <button type="button" onClick={EndExam} className="genric-btn danger-border circle">
                 End Exam
               </button>
             )}
           </div>
-          <h1 align="center">
-            Paper -
-{paperName}
-          </h1>
+          <h1 align="center">Paper -{paperName}</h1>
           <h3 align="right" style={{ paddingRight: '20px' }}>
-            Time Left -
-{leftHours} :
-{leftMins} :
-{leftSecs}
+            Time Left -{leftHours} :{leftMins} :{leftSecs}
           </h3>
           {!isStarted ? (
             <div align="center">
-              <button onClick={StartExam} className="genric-btn success-border circle">
+              <button type="button" onClick={StartExam} className="genric-btn success-border circle">
                 Start Exam
               </button>
             </div>
@@ -560,13 +555,11 @@ function AttemptPaper() {
                 <div className="section-top-border">
                   <h3 className="mb-30">
                     Question No.
-                    {question_no}
+                    {questionNo}
                   </h3>
                   <p align="right">
                     {' '}
-                    Pos Mark :
-{posMark} &nbsp;&nbsp; Neg Mark : -
-{negMark}
+                    Pos Mark :{posMark} &nbsp;&nbsp; Neg Mark : -{negMark}
                   </p>
                   <div className="row">
                     <div className="col-lg-12">
@@ -577,7 +570,7 @@ function AttemptPaper() {
 
                         {type === 'MCQ' ? (
                           <div>
-                            {options.map((option, key) => (
+                            {options.map((option) => (
                               <div className="col-lg-3 col-md-4 mt-sm-30">
                                 <div className="switch-wrap d-flex justify-content-between">
                                   <p>{option}</p>
@@ -586,8 +579,8 @@ function AttemptPaper() {
                                       type="checkbox"
                                       id="primary-checkbox"
                                       checked={answer === option}
-                                      onChange={(e) => {
-                                        if (answer != option) {
+                                      onChange={() => {
+                                        if (answer !== option) {
                                           setAnswer(option);
                                         } else {
                                           setAnswer('');
@@ -635,10 +628,11 @@ function AttemptPaper() {
                       <div>
                         <section className="button-area">
                           <div className="container box_1170 border-top-generic">
-                            {Number(question_no) !== 1 ? (
+                            {Number(questionNo) !== 1 ? (
                               <button
+                                type="button"
                                 onClick={AnotherQuestion}
-                                value={Number(question_no) - 1}
+                                value={Number(questionNo) - 1}
                                 className="genric-btn primary-border"
                               >
                                 Prev
@@ -647,10 +641,11 @@ function AttemptPaper() {
                               <></>
                             )}
                             &nbsp;&nbsp;&nbsp;&nbsp;
-                            {Number(question_no) !== totalQns ? (
+                            {Number(questionNo) !== totalQns ? (
                               <button
+                                type="button"
                                 onClick={AnotherQuestion}
-                                value={Number(question_no) + 1}
+                                value={Number(questionNo) + 1}
                                 className="genric-btn primary-border"
                               >
                                 Next
@@ -663,6 +658,7 @@ function AttemptPaper() {
                                 <>
                                   {userPaperResponse[key] === '' ? (
                                     <button
+                                      type="button"
                                       value={key}
                                       onClick={AnotherQuestion}
                                       className="genric-btn danger-border small"
@@ -670,7 +666,12 @@ function AttemptPaper() {
                                       {key}
                                     </button>
                                   ) : (
-                                    <button value={key} onClick={AnotherQuestion} className="genric-btn primary small">
+                                    <button
+                                      type="button"
+                                      value={key}
+                                      onClick={AnotherQuestion}
+                                      className="genric-btn primary small"
+                                    >
                                       {key}
                                     </button>
                                   )}

@@ -11,16 +11,14 @@ function MyAttemptedPapers() {
   const [isLoading, setIsLoading] = useState(false);
   const [papers, setPapers] = useState([]);
   const [total, setTotal] = useState(0);
-  const [search_item, setSerach_item] = useState('');
-  const [search_results, setSearch_result] = useState([]);
+  const [searchItem, setSerachItem] = useState('');
+  const [searchResults, setSearchResult] = useState([]);
   useEffect(() => {
-    {
-      const results = papers.filter((paper) =>
-        paper['mockpaper.name'].toLowerCase().includes(search_item.toLocaleLowerCase())
-      );
-      setSearch_result(results);
-    }
-  }, [search_item, papers]);
+    const results = papers.filter((paper) =>
+      paper['mockpaper.name'].toLowerCase().includes(searchItem.toLocaleLowerCase())
+    );
+    setSearchResult(results);
+  }, [searchItem, papers]);
   useEffect(() => {
     setIsLoading(true);
     // console.log("uius");
@@ -47,7 +45,7 @@ function MyAttemptedPapers() {
         setIsLoading(false);
       })
       .catch((error) => {
-        if (error == 403) {
+        if (error === 403) {
           swal({
             title: 'Oh Ohhh',
             text: 'Please Login Again',
@@ -90,11 +88,11 @@ function MyAttemptedPapers() {
                     <div className="hero-cap hero-cap2 text-center">
                       <h2>
                         Your Attempted Papers
-                        {isLoading ? <>IS LOADING..</> : <>
-:{total}</>}
+                        {isLoading ? <>IS LOADING..</> : <>:{total}</>}
                       </h2>
                       <button
-                        onClick={(e) => history.push('/')}
+                        type="button"
+                        onClick={() => history.push('/')}
                         className="btn hero-btn"
                         data-animation="fadeInLeft"
                         data-delay=".8s"
@@ -118,8 +116,8 @@ function MyAttemptedPapers() {
                         type="text"
                         className="form-control"
                         placeholder="Search Your Attempted Papers"
-                        value={search_item}
-                        onChange={(e) => setSerach_item(e.target.value)}
+                        value={searchItem}
+                        onChange={(e) => setSerachItem(e.target.value)}
                       />
                       <div className="input-group-append" />
                       <button className="btns" type="button">
@@ -134,17 +132,13 @@ function MyAttemptedPapers() {
           </div>
 
           <div className="row">
-            {search_results.map((paper, key) => (
+            {searchResults.map((paper) => (
               <div className="col-xl-4 col-lg-4 col-md-6">
                 <div style={{ padding: '40px' }}>
                   <div className="my-own-card">
                     <div className="my-own-name">
                       <div className="hero-cap hero-cap2 text-center">
-                        <h3 style={{ color: 'white' }}> 
-{' '}
-{paper['mockpaper.name']}
-{' '}
- </h3>
+                        <h3 style={{ color: 'white' }}> {paper['mockpaper.name']} </h3>
                       </div>
                     </div>
                     <div className="my-own-container">
@@ -160,16 +154,14 @@ function MyAttemptedPapers() {
                                 to={`/result/${paper.paperID}/${paper['mockpaper.name']}`}
                                 className="genric-btn primary-border small"
                               >
-                                Result
-{' '}
+                                Result{' '}
                               </Link>
                             ) : (
                               <Link
                                 to={`/attemptpaper/${paper.paperID}/${paper['mockpaper.name']}`}
                                 className="genric-btn primary-border small"
                               >
-                                Resume
-{' '}
+                                Resume{' '}
                               </Link>
                             )}
                           </div>

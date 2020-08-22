@@ -1,22 +1,23 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Link, useParams, useHistory } from 'react-router-dom';
+/* eslint-disable no-nested-ternary */
+import React, { useEffect, useState } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
 import swal from 'sweetalert';
-import Select from 'react-select';
-import { UserContext } from '../UserContext';
+// import Select from 'react-select';
+// import { UserContext } from '../UserContext';
 import config from '../config';
 
 function PaperResult() {
-  const { token, setToken } = useContext(UserContext);
-  const [options, setOptions] = useState([]);
+  // const { token, setToken } = useContext(UserContext);
+  // const [options, setOptions] = useState([]);
   // const [examID,setExamID] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [examName, setExamName] = useState('');
+  // const [examName, setExamName] = useState('');
   const [correctResponse, setCorrectResponse] = useState({});
   const [userResponse, setUserResponse] = useState({});
   const { paperID, paperName } = useParams();
   const [totalMarks, setTotalMarks] = useState(0);
   const [marksObtained, setMarksObtained] = useState(0);
-  const [compare, setCompare] = useState([]);
+  // const [compare, setCompare] = useState([]);
   const accessToken = localStorage.getItem('token');
   const history = useHistory();
 
@@ -53,8 +54,8 @@ function PaperResult() {
           //  console.log(user.response[i]);
           t += Number(correct[i].posMark);
           //  console.log(t);
-          if (user.response[i] != '') {
-            if (correct[i].correctAns == user.response[i]) {
+          if (user.response[i] !== '') {
+            if (correct[i].correctAns === user.response[i]) {
               g += Number(correct[i].posMark);
             } else {
               g -= Number(correct[i].negMark);
@@ -67,7 +68,7 @@ function PaperResult() {
         setIsLoading(false);
       })
       .catch((error) => {
-        if (error == 403) {
+        if (error === 403) {
           swal({
             title: 'Oh Ohhh',
             text: 'Please Login Again',
@@ -103,18 +104,13 @@ function PaperResult() {
       ) : (
         <div>
           <div className="button-group-area mt-10" style={{ paddingtop: '10px', paddingLeft: '50px' }}>
-            <button onClick={(e) => window.history.back()} className="genric-btn danger-border circle">
+            <button type="button" onClick={() => window.history.back()} className="genric-btn danger-border circle">
               Back
             </button>
           </div>
-          <h1 align="center">
-            Result -
-{paperName}
-          </h1>
+          <h1 align="center">Result -{paperName}</h1>
           <h2 align="center">
-            Marks :
-{marksObtained}/
-{totalMarks}
+            Marks :{marksObtained}/{totalMarks}
           </h2>
 
           <div className="whole-wrap">
@@ -128,10 +124,7 @@ function PaperResult() {
                     </h5>
                     <p align="right">
                       {' '}
-                      Pos Mark :
-{correctResponse[key].posMark} &nbsp;&nbsp; Neg Mark : -
-{correctResponse[key].negMark}
-                      {' '}
+                      Pos Mark :{correctResponse[key].posMark} &nbsp;&nbsp; Neg Mark : -{correctResponse[key].negMark}{' '}
                     </p>
                     <div className="row">
                       <div className="col-lg-12">
@@ -140,25 +133,19 @@ function PaperResult() {
                             {correctResponse[key].question}
                             <br />
                             <p>
-                              Your Answer :
-{userResponse[key]}
+                              Your Answer :{userResponse[key]}
                               <br />
-                              Correct Answer : 
-{' '}
-{correctResponse[key].correctAns}
+                              Correct Answer : {correctResponse[key].correctAns}
                             </p>
                           </blockquote>
-                        ) : userResponse[key] != '' ? (
+                        ) : userResponse[key] !== '' ? (
                           <blockquote className="generic-blockquote" style={{ background: '#90ee90' }}>
                             {correctResponse[key].question}
                             <br />
                             <p>
-                              Your Answer :
-{userResponse[key]}
+                              Your Answer :{userResponse[key]}
                               <br />
-                              Correct Answer : 
-{' '}
-{correctResponse[key].correctAns}
+                              Correct Answer : {correctResponse[key].correctAns}
                             </p>
                           </blockquote>
                         ) : (
@@ -166,11 +153,9 @@ function PaperResult() {
                             {correctResponse[key].question}
                             <br />
                             <p>
-                              Your Didn't Attempt
+                              Your Didn&apos;t Attempt
                               <br />
-                              Correct Answer : 
-{' '}
-{correctResponse[key].correctAns}
+                              Correct Answer : {correctResponse[key].correctAns}
                             </p>
                           </blockquote>
                         )}
@@ -187,11 +172,7 @@ function PaperResult() {
           </div>
         </div>
       )}
-      <br /> 
-{' '}
-<br /> 
-{' '}
-<br />
+      <br /> <br /> <br />
     </div>
   );
 }

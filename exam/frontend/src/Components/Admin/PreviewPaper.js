@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import React, { useEffect } from 'react';
+// import { useHistory, useParams } from 'react-router-dom';
 
 function PreviewPaper() {
-  const history = useHistory();
-  const { paperID } = useParams();
-  const [isLoading, setIsLoding] = useState(false);
+  // const { paperID } = useParams();
+  // const [isLoading, setIsLoding] = useState(false);
   useEffect(() => {}, []);
   return (
     <div>
@@ -32,8 +31,8 @@ function PreviewPaper() {
                   <div className="col-lg-3 col-md-4 mt-sm-30">
                     <div className="switch-wrap d-flex justify-content-between">
                       <div className="primary-checkox">
-                        <input type="checkbox" id="primary-checkbox" checked />
-                        <label htmlFor="primary-checkbox" />
+                        <input type="checkbox" id="primary-checkbox-1" checked />
+                        <label htmlFor="primary-checkbox-1" />
                       </div>
                       <p>02. Primary Color radio</p>
                     </div>

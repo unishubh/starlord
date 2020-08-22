@@ -1,9 +1,8 @@
 import React, { useContext } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { UserContext } from '../UserContext';
 
 function Home() {
-  const history = useHistory();
   const { token, setToken } = useContext(UserContext);
   const handleLogout = () => {
     console.log('hi');
@@ -35,12 +34,18 @@ function Home() {
                           {!token ? (
                             <Link to="/signin">
                               {' '}
-                              <button className="btn hero-btn" data-animation="fadeInLeft" data-delay=".8s">
+                              <button
+                                type="button"
+                                className="btn hero-btn"
+                                data-animation="fadeInLeft"
+                                data-delay=".8s"
+                              >
                                 Login
                               </button>
                             </Link>
                           ) : (
                             <button
+                              type="button"
                               onClick={handleLogout}
                               className="btn hero-btn"
                               data-animation="fadeInLeft"
@@ -66,7 +71,7 @@ function Home() {
         </>
       ) : (
         <>
-          {token && token.role == 1 ? (
+          {token && token.role === 1 ? (
             <>
               <div className="categories-area section-padding10">
                 <div className="container">
@@ -197,11 +202,9 @@ function Home() {
           )}
         </>
       )}
-      <br /> 
-{' '}
-<br /> 
-{' '}
-<br />
+      <br />
+      <br />
+      <br />
     </div>
   );
 }

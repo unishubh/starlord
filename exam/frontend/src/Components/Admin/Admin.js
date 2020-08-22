@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { UserContext } from '../UserContext';
 
 function Admin() {
-  const { token, setToken } = useContext(UserContext);
+  const { token } = useContext(UserContext);
 
   return (
     <div>

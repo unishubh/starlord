@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 export default function SignIn() {
   const history = useHistory();
   const classes = useStyles();
-  const { token, setToken } = useContext(UserContext);
+  const { setToken } = useContext(UserContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -50,18 +50,18 @@ export default function SignIn() {
   const [passwordError, setPasswordError] = useState('');
   const [count, setCount] = useState(-1);
   useEffect(() => {
-    let f = 0;
+    // let f = 0;
     setCount((c) => c + 1);
 
     if (!email.includes('@') || !email.includes('.')) {
       setEmailError('Please provide valid email');
-      f = 1;
+      // f = 1;
     } else {
       setEmailError('');
     }
-    if (password == '') {
+    if (password === '') {
       setPasswordError('Please provide a password');
-      f = 1;
+      // f = 1;
     } else {
       setPasswordError('');
     }
@@ -76,14 +76,14 @@ export default function SignIn() {
     } else {
       setEmailError('');
     }
-    if (password == '') {
+    if (password === '') {
       setPasswordError('Please provide a password');
       f = 1;
     } else {
       setPasswordError('');
     }
 
-    if (f == 1) return false;
+    if (f === 1) return false;
     return true;
   };
 
@@ -202,13 +202,13 @@ export default function SignIn() {
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2">
+                  <Link href="#forgot" variant="body2">
                     Forgot password?
                   </Link>
                 </Grid>
                 <Grid item>
                   <Link href="/register" variant="body2">
-                    Don't have an account? Sign Up
+                    Don&apos;t have an account? Sign Up
                   </Link>
                 </Grid>
               </Grid>

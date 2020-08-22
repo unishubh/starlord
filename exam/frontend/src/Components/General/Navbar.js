@@ -27,23 +27,23 @@ function Navbar() {
           <div className="header-left-social">
             <ul className="header-social">
               <li>
-                <a href="#">
+                <a href="#twitter">
                   <i className="fab fa-twitter" />
                 </a>
               </li>
               <li>
-                <a href="#">
+                <a href="#fb">
                   <i className="fab fa-facebook-f" />
                 </a>
               </li>
               <li>
-                <a href="#">
+                <a href="#lkdin">
                   <i className="fab fa-linkedin-in" />
                 </a>
               </li>
               <li>
                 {' '}
-                <a href="#">
+                <a href="#gp">
                   <i className="fab fa-google-plus-g" />
                 </a>
               </li>
@@ -114,11 +114,11 @@ function Navbar() {
               {/* <!-- Logo --> */}
               <div className="logo logo2 d-block d-lg-none">
                 {token ? (
-                  <button onClick={handleLogout} className="genric-btn primary-border">
+                  <button type="button" onClick={handleLogout} className="genric-btn primary-border">
                     Logout
                   </button>
                 ) : (
-                  <button className="genric-btn primary-border" onClick={handleLogin}>
+                  <button type="button" className="genric-btn primary-border" onClick={handleLogin}>
                     Login/Register
                   </button>
                 )}

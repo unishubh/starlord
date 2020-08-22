@@ -1,13 +1,13 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Select from 'react-select';
 import swal from 'sweetalert';
-import { UserContext } from '../UserContext';
 import config from '../config';
 
-function CreatePaper(props) {
-  const { token, setToken } = useContext(UserContext);
-  const [options, setOptions] = useState([]);
+function CreatePaper() {
+  const [options] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   const accessToken = localStorage.getItem('token');
   useEffect(() => {
     fetch(`${config.apiUrl}api/exam/byAgency/`, {
@@ -26,7 +26,7 @@ function CreatePaper(props) {
       })
       .then((data) => {
         // console.log(data);
-        data.data.examdata.map((exam, key) => {
+        data.data.examdata.forEach((exam) => {
           options.push({ value: exam.id, label: exam.name });
         });
 
@@ -49,7 +49,6 @@ function CreatePaper(props) {
   const [examID, setExamID] = useState('');
   const [totalQns, setTotalQns] = useState(null);
   const history = useHistory();
-  const [isLoading, setIsLoading] = useState(true);
   const [nameError, setNameError] = useState('');
   const [examError, setExamError] = useState('');
   const [totalqError, setTotalqError] = useState('');
@@ -58,22 +57,22 @@ function CreatePaper(props) {
   useEffect(() => {
     setCount((c) => c + 1);
 
-    let f = 0;
-    if (name == '') {
+    // let f = 0;
+    if (name === '') {
       setNameError('Write Exam Name');
-      f = 1;
+      // f = 1;
     } else {
       setNameError('');
     }
-    if (isNaN(totalQns) || Number(totalQns) <= 0) {
+    if (Number.isNaN(totalQns) || Number(totalQns) <= 0) {
       setTotalqError('Please provide no. of questions');
-      f = 1;
+      // f = 1;
     } else {
       setTotalqError('');
     }
-    if (examID == '') {
+    if (examID === '') {
       setExamError('Please provide details');
-      f = 1;
+      // f = 1;
     } else {
       setExamError('');
     }
@@ -81,25 +80,25 @@ function CreatePaper(props) {
 
   const Validate = () => {
     let f = 0;
-    if (name == '') {
+    if (name === '') {
       setNameError('Write Exam Name');
       f = 1;
     } else {
       setNameError('');
     }
-    if (isNaN(totalQns) || Number(totalQns) <= 0) {
+    if (Number.isNaN(totalQns) || Number(totalQns) <= 0) {
       setTotalqError('Please provide no. of questions');
       f = 1;
     } else {
       setTotalqError('');
     }
-    if (examID == '') {
+    if (examID === '') {
       setExamError('Please provide details');
       f = 1;
     } else {
       setExamError('');
     }
-    if (f == 1) return false;
+    if (f === 1) return false;
     return true;
   };
   const handleSubmit = (event) => {
@@ -113,7 +112,7 @@ function CreatePaper(props) {
       //  console.log(name);
       //  console.log(examID);
       //  console.log(totalQns);
-      const accessToken = localStorage.getItem('token');
+      // const accessToken = localStorage.getItem('token');
       fetch(`${config.apiUrl}api/paper`, {
         method: 'POST',
         headers: {
@@ -144,7 +143,7 @@ function CreatePaper(props) {
           history.push(`/addquestion/${data.data.id}`);
         })
         .catch((error) => {
-          if (error == 403) {
+          if (error === 403) {
             swal({
               title: 'Oh Ohhh',
               text: 'Please Login Again',

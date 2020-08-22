@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
-import { Switch, Route, useHistory } from 'react-router-dom';
-import swal from 'sweetalert';
+import { Switch, Route } from 'react-router-dom';
+import jwtDecode from 'jwt-decode';
+// import swal from 'sweetalert';
 import Main from './Components/General/Main';
 
 import SignIn from './Components/General/SignIn';
@@ -35,7 +36,6 @@ function App() {
   const [token, setToken] = useState(null);
   const [isExamStarted, setIsExamStarted] = useState(null);
 
-  const history = useHistory();
   // useEffect ( async () => {
   //   const istoken = await localStorage.getItem("token");
   // if(istoken ){
@@ -54,7 +54,6 @@ function App() {
     if (localStorage.getItem('token')) {
       console.log(' ha ye toh h ');
       const istoken = localStorage.getItem('token');
-      const jwtDecode = require('jwt-decode');
       const decoded = jwtDecode(istoken);
       setToken(decoded);
       console.log(decoded);

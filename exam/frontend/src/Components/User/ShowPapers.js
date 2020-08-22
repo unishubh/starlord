@@ -1,16 +1,16 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Link, useParams, useHistory } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams, useHistory } from 'react-router-dom';
 import swal from 'sweetalert';
-import Select from 'react-select';
-import { UserContext } from '../UserContext';
+// import Select from 'react-select';
+// import { UserContext } from '../UserContext';
 import config from '../config';
 
 function ShowPapers() {
-  const { token, setToken } = useContext(UserContext);
-  const [options, setOptions] = useState([]);
+  // const { token, setToken } = useContext(UserContext);
+  // const [options, setOptions] = useState([]);
   // const [examID,setExamID] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [examName, setExamName] = useState('');
+  // const [examName, setExamName] = useState('');
   const [papers, setPapers] = useState([]);
   const [papercount, setPapercount] = useState(null);
   const { examID } = useParams();
@@ -44,7 +44,7 @@ function ShowPapers() {
         setIsLoading(false);
       })
       .catch((error) => {
-        if (error == 403) {
+        if (error === 403) {
           swal({
             title: 'Oh Ohhh',
             text: 'Please Login Again',
@@ -65,7 +65,7 @@ function ShowPapers() {
   }, []);
   const Subscribe = (event) => {
     setIsLoading(true);
-    const accessToken = localStorage.getItem('token');
+    // const accessToken = localStorage.getItem('token');
     fetch(`${config.apiUrl}api/subscribe/${event.target.value}`, {
       method: 'POST',
       headers: {
@@ -79,7 +79,7 @@ function ShowPapers() {
 
         throw new Error(response.status);
       })
-      .then((data) => {
+      .then(() => {
         // console.log(data);
         // console.log(data.message);
         swal({
@@ -92,7 +92,7 @@ function ShowPapers() {
         history.push('/myexams');
       })
       .catch((error) => {
-        if (error == 403) {
+        if (error === 403) {
           swal({
             title: 'Oh Ohhh',
             text: 'Please Login Again',
@@ -134,11 +134,10 @@ function ShowPapers() {
                       <h2>
                         {' '}
                         Papers
-                        {isLoading ? <>IS LOADING..</> : <>
-{' '}
-:{papercount}</>}
+                        {isLoading ? <>IS LOADING..</> : <> :{papercount}</>}
                       </h2>
                       <button
+                        type="button"
                         value={examID}
                         onClick={Subscribe}
                         className="btn hero-btn"
@@ -148,7 +147,8 @@ function ShowPapers() {
                         Subscribe
                       </button>
                       <button
-                        onClick={(e) => window.history.back()}
+                        type="button"
+                        onClick={() => window.history.back()}
                         className="btn hero-btn"
                         data-animation="fadeInLeft"
                         data-delay=".8s"
@@ -164,25 +164,18 @@ function ShowPapers() {
           <div className="about-details section-padding10" />
 
           <div className="row">
-            {papers.map((paper, key) => (
+            {papers.map((paper) => (
               <div className="col-xl-4 col-lg-4 col-md-6">
                 <div style={{ padding: '40px' }}>
                   <div className="my-own-card">
                     <div className="my-own-name">
                       <div className="hero-cap hero-cap2 text-center">
-                        <h3 style={{ color: 'white' }}> 
-{' '}
-{paper.name}
-{' '}
- </h3>
+                        <h3 style={{ color: 'white' }}> {paper.name} </h3>
                       </div>
                     </div>
                     <div className="my-own-container">
                       <h5>
-                        <b>
-                          Total Qns :
-{paper.totalQns}
-                        </b>
+                        <b>Total Qns :{paper.totalQns}</b>
                       </h5>
                     </div>
                   </div>
@@ -192,11 +185,7 @@ function ShowPapers() {
           </div>
         </div>
       )}
-      <br /> 
-{' '}
-<br /> 
-{' '}
-<br />
+      <br /> <br /> <br />
     </div>
   );
 }

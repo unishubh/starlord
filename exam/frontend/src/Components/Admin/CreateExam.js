@@ -5,7 +5,7 @@ import { UserContext } from '../UserContext';
 import config from '../config';
 
 function CreateExam() {
-  const { token, setToken } = useContext(UserContext);
+  const { token } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState('');
   const [maxMarks, setMaxMarks] = useState(null);
@@ -33,36 +33,36 @@ function CreateExam() {
   useEffect(() => {
     setCount((c) => c + 1);
 
-    let f = 0;
-    if (name == '') {
+    // let f = 0;
+    if (name === '') {
       setNameError('Write Exam Name');
-      f = 1;
+      // f = 1;
     } else {
       setNameError('');
     }
-    if (isNaN(maxMarks) || Number(maxMarks) < 1) {
+    if (Number.isNaN(maxMarks) || Number(maxMarks) < 1) {
       setMaxMarksError('Please Provide Marks');
-      f = 1;
+      // f = 1;
     } else {
       setMaxMarksError('');
     }
-    if (isNaN(passMarks) || Number(passMarks) == 0 || Number(maxMarks) < Number(passMarks)) {
-      //  console.log(isNaN(passMarks))
+    if (Number.isNaN(passMarks) || Number(passMarks) === 0 || Number(maxMarks) < Number(passMarks)) {
+      //  console.log(Number.isNaN(passMarks))
       setPassMarksError('Passing marks should not be greater than maxMarks');
-      f = 1;
+      // f = 1;
     } else {
-      // console.log(isNaN(passMarks))
+      // console.log(Number.isNaN(passMarks))
       setPassMarksError('');
     }
-    if (details == '') {
+    if (details === '') {
       setDetailsError('Please provide details');
-      f = 1;
+      // f = 1;
     } else {
       setDetailsError('');
     }
-    if (isNaN(time) || Number(time) <= 0) {
+    if (Number.isNaN(time) || Number(time) <= 0) {
       setTimeError('Enter valid time');
-      f = 1;
+      // f = 1;
     } else {
       setTimeError('');
     }
@@ -70,39 +70,39 @@ function CreateExam() {
 
   const Validate = () => {
     let f = 0;
-    if (name == '') {
+    if (name === '') {
       setNameError('Write Exam Name');
       f = 1;
     } else {
       setNameError('');
     }
-    if (isNaN(maxMarks) || Number(maxMarks) < 1) {
+    if (Number.isNaN(maxMarks) || Number(maxMarks) < 1) {
       setMaxMarksError('Please Provide Marks');
       f = 1;
     } else {
       setMaxMarksError('');
     }
-    if (isNaN(passMarks) || Number(maxMarks) < Number(passMarks)) {
-      //  console.log(isNaN(passMarks))
+    if (Number.isNaN(passMarks) || Number(maxMarks) < Number(passMarks)) {
+      //  console.log(Number.isNaN(passMarks))
       setPassMarksError('Passing marks should not be greater than maxMarks');
       f = 1;
     } else {
-      // console.log(isNaN(passMarks))
+      // console.log(Number.isNaN(passMarks))
       setPassMarksError('');
     }
-    if (details == '') {
+    if (details === '') {
       setDetailsError('Please provide details');
       f = 1;
     } else {
       setDetailsError('');
     }
-    if (isNaN(time) || Number(time) <= 0) {
+    if (Number.isNaN(time) || Number(time) <= 0) {
       setTimeError('Enter valid time');
       f = 1;
     } else {
       setTimeError('');
     }
-    if (f == 1) return false;
+    if (f === 1) return false;
     return true;
   };
   // Submission Start Here//
@@ -141,7 +141,7 @@ function CreateExam() {
 
           throw new Error(response.status);
         })
-        .then((data) => {
+        .then(() => {
           // console.log(data);
           // console.log(data.message);
           swal({
@@ -153,7 +153,7 @@ function CreateExam() {
           history.push('/createpaper');
         })
         .catch((error) => {
-          if (error == 403) {
+          if (error === 403) {
             swal({
               title: 'Oh Ohhh',
               text: 'Please Login Again',

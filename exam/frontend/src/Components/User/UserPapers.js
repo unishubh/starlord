@@ -1,17 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, useParams, useHistory } from 'react-router-dom';
 import swal from 'sweetalert';
-import Select from 'react-select';
 import { UserContext } from '../UserContext';
 import config from '../config';
 
 function UserPapers() {
-  const { token, setToken } = useContext(UserContext);
-  const [options, setOptions] = useState([]);
+  const { token } = useContext(UserContext);
+  // const [options, setOptions] = useState([]);
   // const [examID,setExamID] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [examName, setExamName] = useState('');
-  const [papers, setPapers] = useState([]);
+  // const [examName, setExamName] = useState('');
+  const [papers] = useState([]);
   const [papercount, setPapercount] = useState(null);
   const { examID } = useParams();
   const accessToken = localStorage.getItem('token');
@@ -41,21 +40,21 @@ function UserPapers() {
         let c = 0;
         const attempted = data.attemptedPapers;
         const papers1 = data.paperdata;
-        papers1.map((paper, i) => {
+        papers1.forEach((paper) => {
           let f = 0;
-          attempted.map((attempt, key) => {
-            if (attempt.paperID == paper.id) {
+          attempted.forEach((attempt) => {
+            if (attempt.paperID === paper.id) {
               f = 1;
             }
           });
-          if (f == 0) {
+          if (f === 0) {
             papers.push(paper);
             c += 1;
           }
         });
 
         setPapercount(c);
-        if (c == 0) {
+        if (c === 0) {
           swal({
             title: 'Oh',
             text: 'There is no paper left to attempt ',
@@ -67,7 +66,7 @@ function UserPapers() {
         setIsLoading(false);
       })
       .catch((error) => {
-        if (error == 403) {
+        if (error === 403) {
           swal({
             title: 'Oh Ohhh',
             text: 'Please Login Again',
@@ -109,12 +108,11 @@ function UserPapers() {
                     <div className="hero-cap hero-cap2 text-center">
                       <h2>
                         Your Papers
-                        {isLoading ? <>IS LOADING..</> : <>
-{' '}
-:{papercount}</>}
+                        {isLoading ? <>IS LOADING..</> : <> :{papercount}</>}
                       </h2>
                       <button
-                        onClick={(e) => window.history.back()}
+                        type="button"
+                        onClick={() => window.history.back()}
                         className="btn hero-btn"
                         data-animation="fadeInLeft"
                         data-delay=".8s"
@@ -130,28 +128,21 @@ function UserPapers() {
           <div className="about-details section-padding10" />
 
           <div className="row">
-            {papers.map((paper, key) => (
+            {papers.map((paper) => (
               <div className="col-xl-4 col-lg-4 col-md-6">
                 <div style={{ padding: '40px' }}>
                   <div className="my-own-card">
                     <div className="my-own-name">
                       <div className="hero-cap hero-cap2 text-center">
-                        <h3 style={{ color: 'white' }}> 
-{' '}
-{paper.name}
-{' '}
- </h3>
+                        <h3 style={{ color: 'white' }}> {paper.name} </h3>
                       </div>
                     </div>
                     <div className="my-own-container">
                       <h5>
-                        <b>
-                          Total Qns :
-{paper.totalQns}
-                        </b>
+                        <b>Total Qns :{paper.totalQns}</b>
                       </h5>
 
-                      {token.role == 2 ? (
+                      {token.role === 2 ? (
                         <>
                           <div className="button-group-area mt-10">
                             <Link
