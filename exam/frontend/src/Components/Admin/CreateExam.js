@@ -5,7 +5,7 @@ import { UserContext } from '../UserContext';
 import config from '../config';
 
 function CreateExam() {
-  const { token, setToken } = useContext(UserContext);
+  const { token } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState('');
   const [maxMarks, setMaxMarks] = useState(null);
@@ -30,81 +30,79 @@ function CreateExam() {
   // );
   // useEffect(()=>{console.log(agencies)},[agencies]);
 
-  useEffect(
-    () => {
-      setCount((c) => c + 1);
+  useEffect(() => {
+    setCount((c) => c + 1);
 
-      let f = 0;
-      if (name == '') {
-        setNameError('Write Exam Name');
-        f = 1;
-      } else {
-        setNameError('');
-      }
-      if (isNaN(maxMarks) || Number(maxMarks) < 1) {
-        setMaxMarksError('Please Provide Marks');
-        f = 1;
-      } else {
-        setMaxMarksError('');
-      }
-      if (isNaN(passMarks) || Number(passMarks) == 0 || ((Number(maxMarks) < Number(passMarks)))) {
-        //  console.log(isNaN(passMarks))
-        setPassMarksError('Passing marks should not be greater than maxMarks');
-        f = 1;
-      } else {
-        // console.log(isNaN(passMarks))
-        setPassMarksError('');
-      }
-      if (details == '') {
-        setDetailsError('Please provide details');
-        f = 1;
-      } else {
-        setDetailsError('');
-      }
-      if (isNaN(time) || Number(time) <= 0) {
-        setTimeError('Enter valid time');
-        f = 1;
-      } else {
-        setTimeError('');
-      }
-    }, [name, maxMarks, details, time, passMarks],
-  );
+    // let f = 0;
+    if (name === '') {
+      setNameError('Write Exam Name');
+      // f = 1;
+    } else {
+      setNameError('');
+    }
+    if (Number.isNaN(maxMarks) || Number(maxMarks) < 1) {
+      setMaxMarksError('Please Provide Marks');
+      // f = 1;
+    } else {
+      setMaxMarksError('');
+    }
+    if (Number.isNaN(passMarks) || Number(passMarks) === 0 || Number(maxMarks) < Number(passMarks)) {
+      //  console.log(Number.isNaN(passMarks))
+      setPassMarksError('Passing marks should not be greater than maxMarks');
+      // f = 1;
+    } else {
+      // console.log(Number.isNaN(passMarks))
+      setPassMarksError('');
+    }
+    if (details === '') {
+      setDetailsError('Please provide details');
+      // f = 1;
+    } else {
+      setDetailsError('');
+    }
+    if (Number.isNaN(time) || Number(time) <= 0) {
+      setTimeError('Enter valid time');
+      // f = 1;
+    } else {
+      setTimeError('');
+    }
+  }, [name, maxMarks, details, time, passMarks]);
 
   const Validate = () => {
     let f = 0;
-    if (name == '') {
+    if (name === '') {
       setNameError('Write Exam Name');
       f = 1;
     } else {
       setNameError('');
     }
-    if (isNaN(maxMarks) || Number(maxMarks) < 1) {
+    if (Number.isNaN(maxMarks) || Number(maxMarks) < 1) {
       setMaxMarksError('Please Provide Marks');
       f = 1;
     } else {
       setMaxMarksError('');
     }
-    if (isNaN(passMarks) || ((Number(maxMarks) < Number(passMarks)))) {
-      //  console.log(isNaN(passMarks))
+    if (Number.isNaN(passMarks) || Number(maxMarks) < Number(passMarks)) {
+      //  console.log(Number.isNaN(passMarks))
       setPassMarksError('Passing marks should not be greater than maxMarks');
       f = 1;
     } else {
-      // console.log(isNaN(passMarks))
+      // console.log(Number.isNaN(passMarks))
       setPassMarksError('');
     }
-    if (details == '') {
+    if (details === '') {
       setDetailsError('Please provide details');
       f = 1;
     } else {
       setDetailsError('');
     }
-    if (isNaN(time) || Number(time) <= 0) {
+    if (Number.isNaN(time) || Number(time) <= 0) {
       setTimeError('Enter valid time');
       f = 1;
     } else {
       setTimeError('');
     }
-    if (f == 1) return false;
+    if (f === 1) return false;
     return true;
   };
   // Submission Start Here//
@@ -114,7 +112,7 @@ function CreateExam() {
     setCount(1);
     // console.log(isValid)
     if (isValid) {
-    // console.log("create exam");
+      // console.log("create exam");
       setIsLoading(true);
 
       //  console.log(name);
@@ -143,9 +141,9 @@ function CreateExam() {
 
           throw new Error(response.status);
         })
-        .then((data) => {
-        // console.log(data);
-        // console.log(data.message);
+        .then(() => {
+          // console.log(data);
+          // console.log(data.message);
           swal({
             title: 'Hey Yaayy !!',
             text: 'Exam Has Been Created',
@@ -153,38 +151,34 @@ function CreateExam() {
             button: 'Got it',
           });
           history.push('/createpaper');
-        }).catch(
-          (error) => {
-            if (error == 403) {
-              swal({
-                title: 'Oh Ohhh',
-                text: 'Please Login Again',
-                icon: 'warn',
-                button: 'Got it',
-              });
-              history.push('/signin');
-            } else {
-              swal({
-                title: 'Oh Ohhh',
-                text: 'Check your details',
-                icon: 'error',
-                button: 'Got it',
-              });
-            }
-          },
-        );
-    // console.log("Exam Done");
+        })
+        .catch((error) => {
+          if (error === 403) {
+            swal({
+              title: 'Oh Ohhh',
+              text: 'Please Login Again',
+              icon: 'warn',
+              button: 'Got it',
+            });
+            history.push('/signin');
+          } else {
+            swal({
+              title: 'Oh Ohhh',
+              text: 'Check your details',
+              icon: 'error',
+              button: 'Got it',
+            });
+          }
+        });
+      // console.log("Exam Done");
     }
   };
 
   // Submission Ends Here
   return (
     <div>
-      {
-    isLoading
-      ? (
+      {isLoading ? (
         <div>
-
           <div className="preloader d-flex align-items-center justify-content-center">
             <div className="preloader-inner position-relative">
               <div className="preloader-circle" />
@@ -193,10 +187,8 @@ function CreateExam() {
               </div>
             </div>
           </div>
-
         </div>
-      )
-      : (
+      ) : (
         <section className="contact-section">
           <div className="container">
             <div className="row">
@@ -221,11 +213,7 @@ function CreateExam() {
                           value={name}
                           onChange={(e) => setName(e.target.value)}
                         />
-                        { count <= 0 ? <></> : (
-                          <div style={{ fontSize: 12, color: 'red' }}>
-                            {nameError}
-                          </div>
-                        )}
+                        {count <= 0 ? <></> : <div style={{ fontSize: 12, color: 'red' }}>{nameError}</div>}
                       </div>
                     </div>
                     <div className="col-sm-6">
@@ -237,11 +225,7 @@ function CreateExam() {
                           value={maxMarks}
                           onChange={(e) => setMaxMarks(e.target.value)}
                         />
-                        { count <= 0 ? <></> : (
-                          <div style={{ fontSize: 12, color: 'red' }}>
-                            {maxMarksError}
-                          </div>
-                        )}
+                        {count <= 0 ? <></> : <div style={{ fontSize: 12, color: 'red' }}>{maxMarksError}</div>}
                       </div>
                     </div>
                     <div className="col-sm-6">
@@ -253,11 +237,7 @@ function CreateExam() {
                           value={passMarks}
                           onChange={(e) => setPassMarks(e.target.value)}
                         />
-                        { count <= 0 ? <></> : (
-                          <div style={{ fontSize: 12, color: 'red' }}>
-                            {passMarksError}
-                          </div>
-                        )}
+                        {count <= 0 ? <></> : <div style={{ fontSize: 12, color: 'red' }}>{passMarksError}</div>}
                       </div>
                     </div>
                     <div className="col-sm-6">
@@ -269,11 +249,7 @@ function CreateExam() {
                           value={time}
                           onChange={(e) => setTime(e.target.value)}
                         />
-                        { count <= 0 ? <></> : (
-                          <div style={{ fontSize: 12, color: 'red' }}>
-                            {timeError}
-                          </div>
-                        )}
+                        {count <= 0 ? <></> : <div style={{ fontSize: 12, color: 'red' }}>{timeError}</div>}
                       </div>
                     </div>
                     <div className="col-12">
@@ -288,20 +264,12 @@ function CreateExam() {
                           value={details}
                           onChange={(e) => setDetails(e.target.value)}
                         />
-                        { count <= 0 ? <></> : (
-                          <div style={{ fontSize: 12, color: 'red' }}>
-                            {detailsError}
-                          </div>
-                        )}
+                        {count <= 0 ? <></> : <div style={{ fontSize: 12, color: 'red' }}>{detailsError}</div>}
                       </div>
                     </div>
                   </div>
                   <div className="form-group mt-3">
-                    <button
-                      type="submit"
-                      className="button button-contactForm boxed-btn"
-                      onClick={handleSubmit}
-                    >
+                    <button type="submit" className="button button-contactForm boxed-btn" onClick={handleSubmit}>
                       Save
                     </button>
                   </div>
@@ -310,8 +278,7 @@ function CreateExam() {
             </div>
           </div>
         </section>
-      )
-            }
+      )}
     </div>
   );
 }

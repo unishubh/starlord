@@ -1,12 +1,9 @@
-import React, {
-  useState, useEffect, useContext, useLayoutEffect,
-} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import jwtDecode from 'jwt-decode';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -14,7 +11,6 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import Select from 'react-select';
 import { useHistory } from 'react-router-dom';
 import swal from 'sweetalert';
 import { UserContext } from '../UserContext';
@@ -53,18 +49,11 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignUp() {
-  const jwtDecode = require('jwt-decode');
-  const options = [
-    { value: '1', label: 'ADMIN' },
-    { value: '2', label: 'STUDENT' },
-
-  ];
-  const [agencies, setAgencies] = useState([]);
   const history = useHistory();
-  const { token, setToken } = useContext(UserContext);
+  const { setToken } = useContext(UserContext);
   const classes = useStyles();
   const [name, setName] = useState('');
-  const [role, setRole] = useState(2);
+  const [role] = useState(2);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [agencyID, setAgencyID] = useState('');
@@ -88,41 +77,39 @@ export default function SignUp() {
   // );
   // useEffect(()=>{console.log(agencies)},[agencies]);
 
-  useEffect(
-    () => {
-      let f = 0;
-      setCount((c) => c + 1);
+  useEffect(() => {
+    // let f = 0;
+    setCount((c) => c + 1);
 
-      if (name == '') {
-        setNameError('Please write your name');
-        f = 1;
-      } else {
-        setNameError('');
-      }
-      if (!email.includes('@') || !email.includes('.')) {
-        setEmailError('Please provide valid email');
-        f = 1;
-      } else {
-        setEmailError('');
-      }
-      if (password == '') {
-        setPasswordError('Please provide a password');
-        f = 1;
-      } else {
-        setPasswordError('');
-      }
-      if (password != confirmpassword) {
-        setPasswordMatchError('Password did not match');
-        f = 1;
-      } else {
-        setPasswordMatchError('');
-      }
-    }, [name, email, password, confirmpassword],
-  );
+    if (name === '') {
+      setNameError('Please write your name');
+      // f = 1;
+    } else {
+      setNameError('');
+    }
+    if (!email.includes('@') || !email.includes('.')) {
+      setEmailError('Please provide valid email');
+      // f = 1;
+    } else {
+      setEmailError('');
+    }
+    if (password === '') {
+      setPasswordError('Please provide a password');
+      // f = 1;
+    } else {
+      setPasswordError('');
+    }
+    if (password !== confirmpassword) {
+      setPasswordMatchError('Password did not match');
+      // f = 1;
+    } else {
+      setPasswordMatchError('');
+    }
+  }, [name, email, password, confirmpassword]);
 
   const Validate = () => {
     let f = 0;
-    if (name == '') {
+    if (name === '') {
       setNameError('Please write your name');
       f = 1;
     } else {
@@ -134,19 +121,19 @@ export default function SignUp() {
     } else {
       setEmailError('');
     }
-    if (password == '') {
+    if (password === '') {
       setPasswordError('Please provide a password');
       f = 1;
     } else {
       setPasswordError('');
     }
-    if (password != confirmpassword) {
+    if (password !== confirmpassword) {
       setPasswordMatchError('Password did not match');
       f = 1;
     } else {
       setPasswordMatchError('');
     }
-    if (f == 1) return false;
+    if (f === 1) return false;
     return true;
   };
 
@@ -159,7 +146,7 @@ export default function SignUp() {
       // console.log("Register Started");
 
       let bodydata;
-      if (role == 1) {
+      if (role === 1) {
         bodydata = JSON.stringify({
           name,
           email,
@@ -168,7 +155,7 @@ export default function SignUp() {
           confirmpassword,
           agencyID,
         });
-      // console.log("role is ", 1);
+        // console.log("role is ", 1);
       } else {
         bodydata = JSON.stringify({
           name,
@@ -176,9 +163,8 @@ export default function SignUp() {
           role,
           password,
           confirmpassword,
-
         });
-      // console.log("role is ", 2);
+        // console.log("role is ", 2);
       }
 
       fetch(`${config.apiUrl}api/register`, {
@@ -187,7 +173,6 @@ export default function SignUp() {
         headers: { 'Content-Type': 'application/json' },
 
         body: bodydata,
-
       })
         .then((response) => {
           // console.log(response);
@@ -206,70 +191,61 @@ export default function SignUp() {
           setToken(decoded);
           // console.log(token.role);
           history.push('/');
-        }).catch(
-          (error) => {
-            swal({
-              title: 'Oops',
-              text: 'Incorrect Details or You are already registered',
-              icon: 'error',
-              button: 'Got it',
-            });
-          },
-        );
+        })
+        .catch(() => {
+          swal({
+            title: 'Oops',
+            text: 'Incorrect Details or You are already registered',
+            icon: 'error',
+            button: 'Got it',
+          });
+        });
       // console.log("Registration ",token)
     }
   };
 
   return (
     <div>
-      { isLoading
-        ? (
-          <div>
-
-            <div className="preloader d-flex align-items-center justify-content-center">
-              <div className="preloader-inner position-relative">
-                <div className="preloader-circle" />
-                <div className="preloader-img pere-text">
-                  <img src="assets/img/logo/loder.png" alt="" />
-                </div>
+      {isLoading ? (
+        <div>
+          <div className="preloader d-flex align-items-center justify-content-center">
+            <div className="preloader-inner position-relative">
+              <div className="preloader-circle" />
+              <div className="preloader-img pere-text">
+                <img src="assets/img/logo/loder.png" alt="" />
               </div>
             </div>
-
           </div>
-        )
-        : (
-          <Container component="main" maxWidth="xs">
-            <CssBaseline />
-            <div className={classes.paper}>
-              <Avatar className={classes.avatar}>
-                <LockOutlinedIcon />
-              </Avatar>
-              <Typography component="h1" variant="h5">
-                Sign up
-              </Typography>
-              <form className={classes.form} noValidate>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      autoComplete="fname"
-                      name="name"
-                      variant="outlined"
-                      required
-                      fullWidth
-                      id="name"
-                      label="Name"
-                      autoFocus
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                    />
-                    { count <= 0 ? <></> : (
-                      <div style={{ fontSize: 12, color: 'red' }}>
-                        {nameError}
-                      </div>
-                    )}
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    {/* <Select
+        </div>
+      ) : (
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
+          <div className={classes.paper}>
+            <Avatar className={classes.avatar}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Sign up
+            </Typography>
+            <form className={classes.form} noValidate>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    autoComplete="fname"
+                    name="name"
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="name"
+                    label="Name"
+                    autoFocus
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                  {count <= 0 ? <></> : <div style={{ fontSize: 12, color: 'red' }}>{nameError}</div>}
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  {/* <Select
 
               onChange={e=>
                 {
@@ -284,80 +260,68 @@ export default function SignUp() {
                 }}
               options={options}
             /> */}
-                  </Grid>
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email Address"
+                    name="email"
+                    autoComplete="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                  {count <= 0 ? <></> : <div style={{ fontSize: 12, color: 'red' }}>{emailError}</div>}
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    name="password"
+                    label="Password"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                  {count <= 0 ? <></> : <div style={{ fontSize: 12, color: 'red' }}>{passwordError}</div>}
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    name="confirmpassword"
+                    label="Confirm Password"
+                    type="text"
+                    id="confirmpassword"
+                    autoComplete="current-password"
+                    value={confirmpassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                  />
+                  {count <= 0 ? <></> : <div style={{ fontSize: 12, color: 'red' }}>{passwordMatchError}</div>}
+                </Grid>
+                {role === 1 ? (
                   <Grid item xs={12}>
                     <TextField
                       variant="outlined"
                       required
                       fullWidth
-                      id="email"
-                      label="Email Address"
-                      name="email"
-                      autoComplete="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    />
-                    { count <= 0 ? <></> : (
-                      <div style={{ fontSize: 12, color: 'red' }}>
-                        {emailError}
-                      </div>
-                    )}
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      variant="outlined"
-                      required
-                      fullWidth
-                      name="password"
-                      label="Password"
-                      type="password"
-                      id="password"
-                      autoComplete="current-password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
-                    { count <= 0 ? <></> : (
-                      <div style={{ fontSize: 12, color: 'red' }}>
-                        {passwordError}
-                      </div>
-                    )}
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      variant="outlined"
-                      required
-                      fullWidth
-                      name="confirmpassword"
-                      label="Confirm Password"
+                      name="agencyID"
+                      label="Agency Id"
                       type="text"
-                      id="confirmpassword"
-                      autoComplete="current-password"
-                      value={confirmpassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      id="agencyID"
+                      value={agencyID}
+                      onChange={(e) => setAgencyID(e.target.value)}
                     />
-                    { count <= 0 ? <></> : (
-                      <div style={{ fontSize: 12, color: 'red' }}>
-                        {passwordMatchError}
-                      </div>
-                    )}
                   </Grid>
-                  { role == 1 ? (
-                    <Grid item xs={12}>
-                      <TextField
-                        variant="outlined"
-                        required
-                        fullWidth
-                        name="agencyID"
-                        label="Agency Id"
-                        type="text"
-                        id="agencyID"
-                        value={agencyID}
-                        onChange={(e) => setAgencyID(e.target.value)}
-                      />
-                    </Grid>
-                  ) : (
-                    <Grid item xs={12} sm={6}>
-                      {/* <Select
+                ) : (
+                  <Grid item xs={12} sm={6}>
+                    {/* <Select
 
               onChange={e=>
                 {
@@ -367,39 +331,30 @@ export default function SignUp() {
               options={agencies}
               placeholder="Select Your Agency"
             /> */}
-                    </Grid>
-                  )}
-                  <Grid item xs={12}>
-                    {/* <FormControlLabel
+                  </Grid>
+                )}
+                <Grid item xs={12}>
+                  {/* <FormControlLabel
                 control={<Checkbox value="allowExtraEmails" color="primary" />}
                 label="I want to receive inspiration, marketing promotions and updates via email."
               /> */}
-                  </Grid>
                 </Grid>
-                <Button
-
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  type="submit"
-                  onClick={handleSubmit}
-                >
-                  Sign Up
-                </Button>
-                <Grid container justify="flex-end">
-                  <Grid item>
-                    <Link href="/signin" variant="body2">
-                      Already have an account? Sign in
-                    </Link>
-                  </Grid>
+              </Grid>
+              <Button fullWidth variant="contained" color="primary" type="submit" onClick={handleSubmit}>
+                Sign Up
+              </Button>
+              <Grid container justify="flex-end">
+                <Grid item>
+                  <Link href="/signin" variant="body2">
+                    Already have an account? Sign in
+                  </Link>
                 </Grid>
-              </form>
-            </div>
-            <Box mt={5}>
-              {/* <Copyright /> */}
-            </Box>
-          </Container>
-        )}
+              </Grid>
+            </form>
+          </div>
+          <Box mt={5}>{/* <Copyright /> */}</Box>
+        </Container>
+      )}
     </div>
   );
 }

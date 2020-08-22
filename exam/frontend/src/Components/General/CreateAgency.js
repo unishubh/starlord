@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 // import FormControlLabel from '@material-ui/core/FormControlLabel';
 // import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
+// import Link from '@material-ui/core/Link';
+// import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
@@ -14,7 +14,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useHistory } from 'react-router-dom';
 import swal from 'sweetalert';
-import { UserContext } from '../UserContext';
 import config from '../config';
 
 const useStyles = makeStyles((theme) => ({
@@ -23,7 +22,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-
   },
   avatar: {
     margin: theme.spacing(1),
@@ -41,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
 export default function SignIn() {
   const history = useHistory();
   const classes = useStyles();
-  const { token, setToken } = useContext(UserContext);
+  // const { token, setToken } = useContext(UserContext);
   const [agency, setAgency] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -54,7 +52,6 @@ export default function SignIn() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         // agency: agency,
-
       }),
     })
       .then((response) => {
@@ -71,32 +68,31 @@ export default function SignIn() {
           icon: 'success',
           button: 'Got it',
         });
-      }).catch(
-        (error) => {
-          if (error == 403) {
-            swal({
-              title: 'Oh Ohhh',
-              text: 'Please Login Again',
-              icon: 'warn',
-              button: 'Got it',
-            });
-            history.push('/signin');
-          } else {
-            swal({
-              title: 'Oops',
-              text: `Something went wrong ${error}`,
-              icon: 'error',
-              button: 'Got it',
-            });
-          }
-        },
-      );
+      })
+      .catch((error) => {
+        if (error === 403) {
+          swal({
+            title: 'Oh Ohhh',
+            text: 'Please Login Again',
+            icon: 'warn',
+            button: 'Got it',
+          });
+          history.push('/signin');
+        } else {
+          swal({
+            title: 'Oops',
+            text: `Something went wrong ${error}`,
+            icon: 'error',
+            button: 'Got it',
+          });
+        }
+      });
     console.log('agency created');
   };
 
   return (
     <div>
-      { isLoading ? (
+      {isLoading ? (
         <div>
           <div className="preloader d-flex align-items-center justify-content-center">
             <div className="preloader-inner position-relative">
@@ -126,7 +122,7 @@ export default function SignIn() {
                 id="agency"
                 label="Enter Agency Name"
                 name="agency"
-            // autoComplete="email"
+                // autoComplete="email"
                 value={agency}
                 autoFocus
                 onChange={(e) => setAgency(e.target.value)}
@@ -136,17 +132,9 @@ export default function SignIn() {
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           /> */}
-              <Button
-
-                fullWidth
-                variant="contained"
-                color="primary"
-                type="submit"
-                onClick={handleSubmit}
-              >
+              <Button fullWidth variant="contained" color="primary" type="submit" onClick={handleSubmit}>
                 Create Agency
               </Button>
-
             </form>
           </div>
           <Box mt={8}>

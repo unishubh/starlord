@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { UserContext } from '../UserContext';
 
 function Admin() {
-  const { token, setToken } = useContext(UserContext);
+  const { token } = useContext(UserContext);
 
   return (
     <div>
@@ -16,16 +16,13 @@ function Admin() {
                     HI
                     {token ? <>Admin</> : <>Sign In</>}
                   </h2>
-
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
     </div>
-
   );
 }
 

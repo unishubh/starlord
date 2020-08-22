@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
-import { UserContext } from '../UserContext';
+import React from 'react';
+// import { UserContext } from '../UserContext';
 
 function Admin() {
-  const { token, setToken } = useContext(UserContext);
+  // const { token, setToken } = useContext(UserContext);
 
   return (
     <div>
@@ -13,16 +13,13 @@ function Admin() {
               <div className="col-xl-12">
                 <div className="hero-cap hero-cap2 text-center">
                   <h2>You are not a valid user </h2>
-
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
     </div>
-
   );
 }
 
