@@ -1,177 +1,67 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 import swal from 'sweetalert';
+import { useForm } from 'react-hook-form';
 import { UserContext } from '../UserContext';
 import config from '../config';
 
 function CreateExam() {
   const { token } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(false);
-  const [name, setName] = useState('');
-  const [maxMarks, setMaxMarks] = useState(null);
-  const [details, setDetails] = useState('');
-  const [time, setTime] = useState(null);
-  const [passMarks, setPassMarks] = useState(null);
+  const { register, errors, watch, handleSubmit } = useForm();
+  const watchMaxMarks = watch('maxMarks', 0);
+
   const history = useHistory();
-  const [nameError, setNameError] = useState('');
-  const [maxMarksError, setMaxMarksError] = useState('');
-  const [detailsError, setDetailsError] = useState('');
-  const [timeError, setTimeError] = useState('');
-  const [passMarksError, setPassMarksError] = useState('');
-  const [count, setCount] = useState(-1);
 
-  // useEffect(
-  //   () => {
-
-  //     console.log("USEEFFECT called isagency");
-  //     setAgencies([{ value: '', label: 'ALLEN' },
-  //     { value: '', label: 'FIITJEE' }])
-  //   },[isagency]
-  // );
-  // useEffect(()=>{console.log(agencies)},[agencies]);
-
-  useEffect(() => {
-    setCount((c) => c + 1);
-
-    // let f = 0;
-    if (name === '') {
-      setNameError('Write Exam Name');
-      // f = 1;
-    } else {
-      setNameError('');
-    }
-    if (Number.isNaN(maxMarks) || Number(maxMarks) < 1) {
-      setMaxMarksError('Please Provide Marks');
-      // f = 1;
-    } else {
-      setMaxMarksError('');
-    }
-    if (Number.isNaN(passMarks) || Number(passMarks) === 0 || Number(maxMarks) < Number(passMarks)) {
-      //  console.log(Number.isNaN(passMarks))
-      setPassMarksError('Passing marks should not be greater than maxMarks');
-      // f = 1;
-    } else {
-      // console.log(Number.isNaN(passMarks))
-      setPassMarksError('');
-    }
-    if (details === '') {
-      setDetailsError('Please provide details');
-      // f = 1;
-    } else {
-      setDetailsError('');
-    }
-    if (Number.isNaN(time) || Number(time) <= 0) {
-      setTimeError('Enter valid time');
-      // f = 1;
-    } else {
-      setTimeError('');
-    }
-  }, [name, maxMarks, details, time, passMarks]);
-
-  const Validate = () => {
-    let f = 0;
-    if (name === '') {
-      setNameError('Write Exam Name');
-      f = 1;
-    } else {
-      setNameError('');
-    }
-    if (Number.isNaN(maxMarks) || Number(maxMarks) < 1) {
-      setMaxMarksError('Please Provide Marks');
-      f = 1;
-    } else {
-      setMaxMarksError('');
-    }
-    if (Number.isNaN(passMarks) || Number(maxMarks) < Number(passMarks)) {
-      //  console.log(Number.isNaN(passMarks))
-      setPassMarksError('Passing marks should not be greater than maxMarks');
-      f = 1;
-    } else {
-      // console.log(Number.isNaN(passMarks))
-      setPassMarksError('');
-    }
-    if (details === '') {
-      setDetailsError('Please provide details');
-      f = 1;
-    } else {
-      setDetailsError('');
-    }
-    if (Number.isNaN(time) || Number(time) <= 0) {
-      setTimeError('Enter valid time');
-      f = 1;
-    } else {
-      setTimeError('');
-    }
-    if (f === 1) return false;
-    return true;
-  };
   // Submission Start Here//
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const isValid = Validate();
-    setCount(1);
-    // console.log(isValid)
-    if (isValid) {
-      // console.log("create exam");
-      setIsLoading(true);
+  const onSubmit = (values) => {
+    setIsLoading(true);
+    const accessToken = localStorage.getItem('token');
 
-      //  console.log(name);
-      //  console.log(maxMarks);
-      //  console.log(time);
+    fetch(`${config.apiUrl}api/exams`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({ agencyID: token.agencyID, ...values }),
+    })
+      .then((response) => {
+        setIsLoading(false);
+        if (response.ok) return response.json();
 
-      const accessToken = localStorage.getItem('token');
-      fetch(`${config.apiUrl}api/exams`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({
-          agencyID: token.agencyID,
-          name,
-          maxMarks,
-          details,
-          time,
-          passMarks,
-        }),
+        throw new Error(response.status);
       })
-        .then((response) => {
-          setIsLoading(false);
-          if (response.ok) return response.json();
-
-          throw new Error(response.status);
-        })
-        .then(() => {
-          // console.log(data);
-          // console.log(data.message);
+      .then(() => {
+        // console.log(data);
+        // console.log(data.message);
+        swal({
+          title: 'Hey Yaayy !!',
+          text: 'Exam Has Been Created',
+          icon: 'success',
+          button: 'Got it',
+        });
+        history.push('/createpaper');
+      })
+      .catch((error) => {
+        if (error === 403) {
           swal({
-            title: 'Hey Yaayy !!',
-            text: 'Exam Has Been Created',
-            icon: 'success',
+            title: 'Oh Ohhh',
+            text: 'Please Login Again',
+            icon: 'warn',
             button: 'Got it',
           });
-          history.push('/createpaper');
-        })
-        .catch((error) => {
-          if (error === 403) {
-            swal({
-              title: 'Oh Ohhh',
-              text: 'Please Login Again',
-              icon: 'warn',
-              button: 'Got it',
-            });
-            history.push('/signin');
-          } else {
-            swal({
-              title: 'Oh Ohhh',
-              text: 'Check your details',
-              icon: 'error',
-              button: 'Got it',
-            });
-          }
-        });
-      // console.log("Exam Done");
-    }
+          history.push('/signin');
+        } else {
+          swal({
+            title: 'Oh Ohhh',
+            text: 'Check your details',
+            icon: 'error',
+            button: 'Got it',
+          });
+        }
+      });
+    // console.log("Exam Done");
   };
 
   // Submission Ends Here
@@ -196,60 +86,92 @@ function CreateExam() {
                 <h2 className="contact-title">Create Exam</h2>
               </div>
               <div className="col-lg-8">
-                <form className="form-contact contact_form" id="contactForm" noValidate="novalidate">
+                <form className="form-contact contact_form" id="contactForm" onSubmit={handleSubmit(onSubmit)}>
                   <div className="row">
                     {/* <div class="col-12">
-                                    <div class="form-group">
-                                        <textarea className="form-control w-100" name="message" id="message" cols="30" rows="9" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Message'" placeholder=" Enter Message"></textarea>
-                                    </div>
-                                </div> */}
+                        <div class="form-group">
+                            <textarea className="form-control w-100" name="message" id="message" cols="30" rows="9" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Message'" placeholder=" Enter Message"></textarea>
+                        </div>
+                    </div> */}
                     <div className="col-sm-6">
                       <div className="form-group">
                         <input
                           className="form-control"
                           type="text"
                           id="message"
+                          name="name"
                           placeholder="Enter exam name"
-                          value={name}
-                          onChange={(e) => setName(e.target.value)}
+                          ref={register({
+                            required: 'Exam name is required',
+                          })}
                         />
-                        {count <= 0 ? <></> : <div style={{ fontSize: 12, color: 'red' }}>{nameError}</div>}
+                        {errors?.name?.message && (
+                          <div style={{ fontSize: 12, color: 'red' }}>{errors.name.message}</div>
+                        )}
                       </div>
                     </div>
                     <div className="col-sm-6">
                       <div className="form-group">
                         <input
                           className="form-control"
-                          type="text"
+                          type="number"
+                          name="maxMarks"
                           placeholder="Maximum Marks"
-                          value={maxMarks}
-                          onChange={(e) => setMaxMarks(e.target.value)}
+                          ref={register({
+                            required: 'Maximum marks are required',
+                            min: {
+                              value: 0,
+                              message: 'Maximum marks should be positive',
+                            },
+                          })}
                         />
-                        {count <= 0 ? <></> : <div style={{ fontSize: 12, color: 'red' }}>{maxMarksError}</div>}
+                        {errors?.maxMarks?.message && (
+                          <div style={{ fontSize: 12, color: 'red' }}>{errors.maxMarks.message}</div>
+                        )}
                       </div>
                     </div>
                     <div className="col-sm-6">
                       <div className="form-group">
                         <input
                           className="form-control"
-                          type="text"
+                          type="number"
+                          name="passMarks"
                           placeholder="Passing Marks"
-                          value={passMarks}
-                          onChange={(e) => setPassMarks(e.target.value)}
+                          ref={register({
+                            required: 'Passing marks are required',
+                            min: {
+                              value: 0,
+                              message: 'Passing marks should be positive',
+                            },
+                            max: {
+                              value: Number(watchMaxMarks),
+                              message: 'Should be lower than max marks',
+                            },
+                          })}
                         />
-                        {count <= 0 ? <></> : <div style={{ fontSize: 12, color: 'red' }}>{passMarksError}</div>}
+                        {errors?.passMarks?.message && (
+                          <div style={{ fontSize: 12, color: 'red' }}>{errors.passMarks.message}</div>
+                        )}
                       </div>
                     </div>
                     <div className="col-sm-6">
                       <div className="form-group">
                         <input
                           className="form-control"
-                          type="text"
+                          type="number"
+                          name="time"
                           placeholder="Time Limit In Hours"
-                          value={time}
-                          onChange={(e) => setTime(e.target.value)}
+                          ref={register({
+                            required: 'Time limit is required',
+                            min: {
+                              value: 1,
+                              message: 'Time limit should be greater than 0',
+                            },
+                          })}
                         />
-                        {count <= 0 ? <></> : <div style={{ fontSize: 12, color: 'red' }}>{timeError}</div>}
+                        {errors?.time?.message && (
+                          <div style={{ fontSize: 12, color: 'red' }}>{errors.time.message}</div>
+                        )}
                       </div>
                     </div>
                     <div className="col-12">
@@ -258,18 +180,21 @@ function CreateExam() {
                           className="form-control"
                           cols="30"
                           rows="9"
-                          name="description"
+                          name="details"
                           type="text"
                           placeholder="Enter Details"
-                          value={details}
-                          onChange={(e) => setDetails(e.target.value)}
+                          ref={register({
+                            required: 'Details cannot be empty',
+                          })}
                         />
-                        {count <= 0 ? <></> : <div style={{ fontSize: 12, color: 'red' }}>{detailsError}</div>}
+                        {errors?.details?.message && (
+                          <div style={{ fontSize: 12, color: 'red' }}>{errors.details.message}</div>
+                        )}
                       </div>
                     </div>
                   </div>
                   <div className="form-group mt-3">
-                    <button type="submit" className="button button-contactForm boxed-btn" onClick={handleSubmit}>
+                    <button type="submit" className="button button-contactForm boxed-btn">
                       Save
                     </button>
                   </div>
