@@ -12,7 +12,6 @@ function Main() {
       {/* <Navbar /> */}
 
       {/* <img src = {stu} alt = "bgimage" style={{zIndex:0,position: 'absolute' }} /> */}
-
     </div>
   );
 }

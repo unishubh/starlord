@@ -23,7 +23,6 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-
   },
   avatar: {
     margin: theme.spacing(1),
@@ -54,7 +53,6 @@ export default function SignIn() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         // agency: agency,
-
       }),
     })
       .then((response) => {
@@ -71,32 +69,31 @@ export default function SignIn() {
           icon: 'success',
           button: 'Got it',
         });
-      }).catch(
-        (error) => {
-          if (error == 403) {
-            swal({
-              title: 'Oh Ohhh',
-              text: 'Please Login Again',
-              icon: 'warn',
-              button: 'Got it',
-            });
-            history.push('/signin');
-          } else {
-            swal({
-              title: 'Oops',
-              text: `Something went wrong ${error}`,
-              icon: 'error',
-              button: 'Got it',
-            });
-          }
-        },
-      );
+      })
+      .catch((error) => {
+        if (error == 403) {
+          swal({
+            title: 'Oh Ohhh',
+            text: 'Please Login Again',
+            icon: 'warn',
+            button: 'Got it',
+          });
+          history.push('/signin');
+        } else {
+          swal({
+            title: 'Oops',
+            text: `Something went wrong ${error}`,
+            icon: 'error',
+            button: 'Got it',
+          });
+        }
+      });
     console.log('agency created');
   };
 
   return (
     <div>
-      { isLoading ? (
+      {isLoading ? (
         <div>
           <div className="preloader d-flex align-items-center justify-content-center">
             <div className="preloader-inner position-relative">
@@ -126,7 +123,7 @@ export default function SignIn() {
                 id="agency"
                 label="Enter Agency Name"
                 name="agency"
-            // autoComplete="email"
+                // autoComplete="email"
                 value={agency}
                 autoFocus
                 onChange={(e) => setAgency(e.target.value)}
@@ -136,17 +133,9 @@ export default function SignIn() {
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
           /> */}
-              <Button
-
-                fullWidth
-                variant="contained"
-                color="primary"
-                type="submit"
-                onClick={handleSubmit}
-              >
+              <Button fullWidth variant="contained" color="primary" type="submit" onClick={handleSubmit}>
                 Create Agency
               </Button>
-
             </form>
           </div>
           <Box mt={8}>

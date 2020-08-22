@@ -39,72 +39,70 @@ function AddQestion() {
   const [count, setCount] = useState(-1);
   const [finishAddQuestion, setFinishAddQuestion] = useState(false);
 
-  useEffect(
-    () => {
-      // console.log(options);
-      // console.log(optionsfake);
-      setCount((c) => c + 1);
+  useEffect(() => {
+    // console.log(options);
+    // console.log(optionsfake);
+    setCount((c) => c + 1);
 
-      let f = 0;
-      if (question === '' || question == null) {
-        setQuestionError('Write a question');
-        f = 1;
-      } else {
-        setQuestionError('');
+    let f = 0;
+    if (question === '' || question == null) {
+      setQuestionError('Write a question');
+      f = 1;
+    } else {
+      setQuestionError('');
+    }
+    if (type === 'MCQ' && options.length <= 1) {
+      setOptionsError('Please provide atleast 2 options');
+      f = 1;
+    } else {
+      setOptionsError('');
+    }
+    if (correct === '' || correct == null) {
+      setCorrectError('Choose a correct option');
+      if (type === 'INT') setCorrectError('write the INT value');
+      f = 1;
+    } else {
+      setCorrectError('');
+    }
+    if (type === '') {
+      setTypeError('Choose a correct option');
+      f = 1;
+    } else {
+      setTypeError('');
+    }
+    if (isNaN(posMark) || Number(posMark) <= 0) {
+      setPosMarkError('Provide a Pos number');
+      f = 1;
+    } else {
+      setPosMarkError('');
+    }
+    if (isNaN(negMark) || Number(negMark) < 0) {
+      setNegMarkError('Provide a Pos number');
+      f = 1;
+    } else {
+      setNegMarkError('');
+    }
+    if (type == 'MCQ') {
+      let found = 0;
+      for (let index = 0; index < options.length; index++) {
+        if (options[index] == correct) {
+          found = 1;
+          break;
+        }
       }
-      if (type === 'MCQ' && options.length <= 1) {
-        setOptionsError('Please provide atleast 2 options');
-        f = 1;
-      } else {
-        setOptionsError('');
-      }
-      if (correct === '' || correct == null) {
-        setCorrectError('Choose a correct option');
-        if (type === 'INT') setCorrectError('write the INT value');
+      if (found == 0) {
+        setCorrectError('Select Correct Answer from options');
         f = 1;
       } else {
         setCorrectError('');
       }
-      if (type === '') {
-        setTypeError('Choose a correct option');
-        f = 1;
-      } else {
-        setTypeError('');
-      }
-      if (isNaN(posMark) || Number(posMark) <= 0) {
-        setPosMarkError('Provide a Pos number');
-        f = 1;
-      } else {
-        setPosMarkError('');
-      }
-      if (isNaN(negMark) || Number(negMark) < 0) {
-        setNegMarkError('Provide a Pos number');
-        f = 1;
-      } else {
-        setNegMarkError('');
-      }
-      if (type == 'MCQ') {
-        let found = 0;
-        for (let index = 0; index < options.length; index++) {
-          if (options[index] == correct) {
-            found = 1;
-            break;
-          }
-        }
-        if (found == 0) {
-          setCorrectError('Select Correct Answer from options');
-          f = 1;
-        } else {
-          setCorrectError('');
-        }
-      } else if (correct == null || isNaN(correct)) {
-        setCorrectError('write the INT value');
-        f = 1;
-      } else {
-        setCorrectError('');
-      }
-    }, [question, type, correct, options, posMark, negMark, option, optionsfake],
-  );
+    } else if (correct == null || isNaN(correct)) {
+      setCorrectError('write the INT value');
+      f = 1;
+    } else {
+      setCorrectError('');
+    }
+  }, [question, type, correct, options, posMark, negMark, option, optionsfake]);
 
   const fetcher = async () => {
     try {
@@ -124,9 +122,7 @@ function AddQestion() {
           text: 'Maximum Questions filled',
           icon: 'error',
           button: 'Got it',
-        }).then(
-          history.push('/'),
-        );
+        }).then(history.push('/'));
       }
       // setAllowance(!(data.data.maxQuestions === data.data.currentQuestions));
       // { console.log(data.data, isAllowed); }
@@ -135,11 +131,9 @@ function AddQestion() {
     }
   };
 
-  useEffect(
-    () => {
-      fetcher();
-    }, [],
-  );
+  useEffect(() => {
+    fetcher();
+  }, []);
   const Validate = () => {
     let f = 0;
     if (question == '' || question == null) {
@@ -273,257 +267,222 @@ function AddQestion() {
           throw new Error(response.status);
         })
         .then((data) => {
-        // console.log("reply",data);
+          // console.log("reply",data);
 
           swal({
             title: 'Hayy',
             text: 'Question Has Been Added Successfully! ',
             icon: 'success',
             button: 'Got it',
-          }).then(
-            history.go(0),
-          );
-        }).catch(
-          (error) => {
-            if (error == 403) {
-              swal({
-                title: 'Oh Ohhh',
-                text: 'Please Login Again',
-                icon: 'warn',
-                button: 'Got it',
-              });
-              history.push('/signin');
-            } else {
-              swal({
-                title: 'Oops',
-                text: `Something went wrong ${error}`,
-                icon: 'error',
-                button: 'Got it',
-              });
-            }
-          },
-        );
+          }).then(history.go(0));
+        })
+        .catch((error) => {
+          if (error == 403) {
+            swal({
+              title: 'Oh Ohhh',
+              text: 'Please Login Again',
+              icon: 'warn',
+              button: 'Got it',
+            });
+            history.push('/signin');
+          } else {
+            swal({
+              title: 'Oops',
+              text: `Something went wrong ${error}`,
+              icon: 'error',
+              button: 'Got it',
+            });
+          }
+        });
     }
   };
 
   return (
     <div>
-
       {
         // eslint-disable-next-line no-nested-ternary
-    isLoading
-      ? (
-        <div>
-
-          <div className="preloader d-flex align-items-center justify-content-center">
-            <div className="preloader-inner position-relative">
-              <div className="preloader-circle" />
-              <div className="preloader-img pere-text">
-                <img src="assets/img/logo/loder.png" alt="" />
+        isLoading ? (
+          <div>
+            <div className="preloader d-flex align-items-center justify-content-center">
+              <div className="preloader-inner position-relative">
+                <div className="preloader-circle" />
+                <div className="preloader-img pere-text">
+                  <img src="assets/img/logo/loder.png" alt="" />
+                </div>
               </div>
             </div>
           </div>
-
-        </div>
-      )
-      : (
-        !isAllowed
-          ? swal({
+        ) : !isAllowed ? (
+          swal({
             title: 'Oops',
             text: 'Maximum Questions filled',
             icon: 'error',
             button: 'Got it',
-          }) : (
-            <section className="contact-section">
-              <div className="container">
-                <div className="row">
-                  <div className="col-12">
-                    <div className=" mt-3">
-                      <button
-                        className="button button-contactForm boxed-btn"
-                        onClick={handleSubmit}
-                      >
-                        Preview Papaer
-                      </button>
-                                &nbsp;&nbsp;
-                      <button
-                        className="button button-contactForm boxed-btn"
-                        onClick={(e) => { history.push('/'); }}
-                      >
-                        Finish
-                      </button>
-                    </div>
-                    <br />
-                    <h1 className="contact-title"> Add Question </h1>
-
-                    {/* <h2 className="contact-title"> Total Questions to be added : {questions.length}</h2> */}
+          })
+        ) : (
+          <section className="contact-section">
+            <div className="container">
+              <div className="row">
+                <div className="col-12">
+                  <div className=" mt-3">
+                    <button className="button button-contactForm boxed-btn" onClick={handleSubmit}>
+                      Preview Papaer
+                    </button>
+                    &nbsp;&nbsp;
+                    <button
+                      className="button button-contactForm boxed-btn"
+                      onClick={(e) => {
+                        history.push('/');
+                      }}
+                    >
+                      Finish
+                    </button>
                   </div>
-                  <div className="col-lg-8">
-                    <form className="form-contact contact_form">
-                      <div className="row">
-                        <div className="col-6">
-                          <div className="form-group">
-                            <Select
-                              placeholder="Select Type of Question"
-                              onChange={(e) => setType(e.value)}
-                              options={types}
-                            />
-                            { count <= 0 ? <></> : (
-                              <div style={{ fontSize: 12, color: 'red' }}>
-                                {typeError}
-                              </div>
-                            )}
-                            {/* <textarea className="form-control w-100" name="message" id="message" cols="30" rows="9" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Message'" placeholder=" Enter Message"></textarea> */}
-                          </div>
+                  <br />
+                  <h1 className="contact-title"> Add Question </h1>
+
+                  {/* <h2 className="contact-title"> Total Questions to be added : {questions.length}</h2> */}
+                </div>
+                <div className="col-lg-8">
+                  <form className="form-contact contact_form">
+                    <div className="row">
+                      <div className="col-6">
+                        <div className="form-group">
+                          <Select
+                            placeholder="Select Type of Question"
+                            onChange={(e) => setType(e.value)}
+                            options={types}
+                          />
+                          {count <= 0 ? <></> : <div style={{ fontSize: 12, color: 'red' }}>{typeError}</div>}
+                          {/* <textarea className="form-control w-100" name="message" id="message" cols="30" rows="9" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Enter Message'" placeholder=" Enter Message"></textarea> */}
                         </div>
+                      </div>
 
-                        {/* </div> */}
-                        <div className="col-12">
-                          <div className="form-group">
-                            <textarea
-                              className="form-control"
-                              cols="30"
-                              rows="9"
-                              name="question"
-                              type="text"
-                              placeholder="Enter Question"
-                              value={question}
-                              onChange={(e) => setQuestion(e.target.value)}
-                            />
-                            { count <= 0 ? <></> : (
-                              <div style={{ fontSize: 12, color: 'red' }}>
-                                {questionError}
-                              </div>
-                            )}
-                          </div>
+                      {/* </div> */}
+                      <div className="col-12">
+                        <div className="form-group">
+                          <textarea
+                            className="form-control"
+                            cols="30"
+                            rows="9"
+                            name="question"
+                            type="text"
+                            placeholder="Enter Question"
+                            value={question}
+                            onChange={(e) => setQuestion(e.target.value)}
+                          />
+                          {count <= 0 ? <></> : <div style={{ fontSize: 12, color: 'red' }}>{questionError}</div>}
                         </div>
-                        { type !== 'INT' && finishAddQuestion === false
-                          ? (
-                            <>
-                              <div className="col-sm-6">
-                                <div className="form-group">
-                                  <input
-                                    className="form-control"
-                                    name="option"
-                                    type="text"
-                                    placeholder="Enter Option"
-                                    value={option}
-                                    onChange={(e) => setOption(e.target.value)}
-                                  />
-                                  <div className="button-group-area mt-10">
-                                    { count <= 0 ? <></> : (
-                                      <div style={{ fontSize: 12, color: 'red' }}>
-                                        {optionsError}
-                                      </div>
-                                    )}
-                                    <button
-                                      className="genric-btn primary-border small"
-                                      onClick={(e) => {
-                                        e.preventDefault();
-                                        if (option != '') {
-                                          options.push(option);
-                                          optionsfake.push({ value: option, label: option });
-                                        } else {
-                                          setCount(1);
-                                          setOptionsError("Option Can't be null");
-                                        }
-                                        // console.log(optionsfake);
-                                        setOption('');
-                                      }}
-                                    >
-                                      Add Option
-                                    </button>
-                                    <button
-                                      className="genric-btn primary-border small"
-                                      onClick={(e) => {
-                                        e.preventDefault();
-                                        if (options.length >= 2) setFinishAddQuestion(true);
-                                        else {
-                                          setOptionsError('Please provide atleast 2 options');
-                                        }
-                                      }}
-                                    >
-                                      Finish Add Option
-                                    </button>
-                                  </div>
-                                </div>
-
-                              </div>
-
-                            </>
-                          ) : <></>}
-                        <div className="col-sm-6">
-                          { type === 'INT' ? (
+                      </div>
+                      {type !== 'INT' && finishAddQuestion === false ? (
+                        <>
+                          <div className="col-sm-6">
                             <div className="form-group">
                               <input
                                 className="form-control"
-                                name="correct"
+                                name="option"
                                 type="text"
-                                placeholder="Enter Correct Answer"
-                                value={correct}
-                                onChange={(e) => setCorrect(e.target.value)}
+                                placeholder="Enter Option"
+                                value={option}
+                                onChange={(e) => setOption(e.target.value)}
                               />
-                              { count <= 0 ? <></> : (
-                                <div style={{ fontSize: 12, color: 'red' }}>
-                                  {correctError}
-                                </div>
-                              )}
+                              <div className="button-group-area mt-10">
+                                {count <= 0 ? <></> : <div style={{ fontSize: 12, color: 'red' }}>{optionsError}</div>}
+                                <button
+                                  className="genric-btn primary-border small"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    if (option != '') {
+                                      options.push(option);
+                                      optionsfake.push({ value: option, label: option });
+                                    } else {
+                                      setCount(1);
+                                      setOptionsError("Option Can't be null");
+                                    }
+                                    // console.log(optionsfake);
+                                    setOption('');
+                                  }}
+                                >
+                                  Add Option
+                                </button>
+                                <button
+                                  className="genric-btn primary-border small"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    if (options.length >= 2) setFinishAddQuestion(true);
+                                    else {
+                                      setOptionsError('Please provide atleast 2 options');
+                                    }
+                                  }}
+                                >
+                                  Finish Add Option
+                                </button>
+                              </div>
                             </div>
-                          ) : <></> }
-
-                          {type === 'MCQ' && finishAddQuestion === true
-                            ? (
-                              <>
-                                <Select
-                                  onChange={(e) => setCorrect(e.value)}
-                                  options={optionsfake}
-                                  placeholder="select correct option"
-                                />
-                                { count <= 0 ? <div /> : (
-                                  <div style={{ fontSize: 12, color: 'red' }}>
-                                    {correctError}
-                                  </div>
-                                )}
-
-                              </>
-                            )
-                            : <></>}
-                        </div>
-                        <div className="col-sm-6">
+                          </div>
+                        </>
+                      ) : (
+                        <></>
+                      )}
+                      <div className="col-sm-6">
+                        {type === 'INT' ? (
                           <div className="form-group">
                             <input
                               className="form-control"
-                              name="posMark"
+                              name="correct"
                               type="text"
-                              placeholder="Postive Mark"
-                              value={posMark}
-                              onChange={(e) => { setPosMark(e.target.value); }}
+                              placeholder="Enter Correct Answer"
+                              value={correct}
+                              onChange={(e) => setCorrect(e.target.value)}
                             />
-                            { count <= 0 ? <></> : (
-                              <div style={{ fontSize: 12, color: 'red' }}>
-                                {posMarkError}
-                              </div>
-                            )}
+                            {count <= 0 ? <></> : <div style={{ fontSize: 12, color: 'red' }}>{correctError}</div>}
                           </div>
-                        </div>
-                        <div className="col-sm-6">
-                          <div className="form-group">
-                            <input
-                              className="form-control"
-                              name="negMark"
-                              type="text"
-                              placeholder="Negative Mark"
-                              value={negMark}
-                              onChange={(e) => setNegMark(e.target.value)}
+                        ) : (
+                          <></>
+                        )}
+
+                        {type === 'MCQ' && finishAddQuestion === true ? (
+                          <>
+                            <Select
+                              onChange={(e) => setCorrect(e.value)}
+                              options={optionsfake}
+                              placeholder="select correct option"
                             />
-                            { count <= 0 ? <></> : (
-                              <div style={{ fontSize: 12, color: 'red' }}>
-                                {negMarkError}
-                              </div>
-                            )}
-                          </div>
+                            {count <= 0 ? <div /> : <div style={{ fontSize: 12, color: 'red' }}>{correctError}</div>}
+                          </>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                      <div className="col-sm-6">
+                        <div className="form-group">
+                          <input
+                            className="form-control"
+                            name="posMark"
+                            type="text"
+                            placeholder="Postive Mark"
+                            value={posMark}
+                            onChange={(e) => {
+                              setPosMark(e.target.value);
+                            }}
+                          />
+                          {count <= 0 ? <></> : <div style={{ fontSize: 12, color: 'red' }}>{posMarkError}</div>}
                         </div>
-                        {/* <div className="col-sm-6">
+                      </div>
+                      <div className="col-sm-6">
+                        <div className="form-group">
+                          <input
+                            className="form-control"
+                            name="negMark"
+                            type="text"
+                            placeholder="Negative Mark"
+                            value={negMark}
+                            onChange={(e) => setNegMark(e.target.value)}
+                          />
+                          {count <= 0 ? <></> : <div style={{ fontSize: 12, color: 'red' }}>{negMarkError}</div>}
+                        </div>
+                      </div>
+                      {/* <div className="col-sm-6">
                                     <div className="form-group">
                                         <select className="form-control"  name="type"
                                         placeholder="Enter Type" value={type} onChange = {e => {setType(e.target.value);console.log(e.target.value)}}>
@@ -532,26 +491,20 @@ function AddQestion() {
                                         </select>
 
                                     </div> */}
-                        {/* </div>  */}
-
-                      </div>
-                      <div className=" mt-3">
-                        <button
-                          className="button button-contactForm boxed-btn"
-                          onClick={handleAdd}
-                        >
-                          Add
-                        </button>
-                      </div>
-                    </form>
-                  </div>
+                      {/* </div>  */}
+                    </div>
+                    <div className=" mt-3">
+                      <button className="button button-contactForm boxed-btn" onClick={handleAdd}>
+                        Add
+                      </button>
+                    </div>
+                  </form>
                 </div>
               </div>
-            </section>
-          ))
-
-            }
-
+            </div>
+          </section>
+        )
+      }
     </div>
   );
 }

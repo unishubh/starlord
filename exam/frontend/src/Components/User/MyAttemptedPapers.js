@@ -14,67 +14,63 @@ function MyAttemptedPapers() {
   const [search_item, setSerach_item] = useState('');
   const [search_results, setSearch_result] = useState([]);
   useEffect(() => {
-    { const results = papers.filter((paper) => paper['mockpaper.name'].toLowerCase().includes(search_item.toLocaleLowerCase()));
-      setSearch_result(results); }
+    {
+      const results = papers.filter((paper) =>
+        paper['mockpaper.name'].toLowerCase().includes(search_item.toLocaleLowerCase())
+      );
+      setSearch_result(results);
+    }
   }, [search_item, papers]);
-  useEffect(
+  useEffect(() => {
+    setIsLoading(true);
+    // console.log("uius");
+    fetch(`${config.apiUrl}api/paper/attempted `, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+      .then((response) => {
+        // console.log(response);
+        setIsLoading(false);
+        if (response.ok) return response.json();
 
-    () => {
-      setIsLoading(true);
-      // console.log("uius");
-      fetch(`${config.apiUrl}api/paper/attempted `, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-
+        // alert(response.status)
+        throw new Error(response.status);
       })
-        .then((response) => {
-          // console.log(response);
-          setIsLoading(false);
-          if (response.ok) return response.json();
+      .then((data) => {
+        //   console.log(data.data.attemptedPapers);
+        setPapers(data.data.attemptedPapers);
+        setTotal(data.data.attemptedPapers.length);
 
-          // alert(response.status)
-          throw new Error(response.status);
-        })
-        .then((data) => {
-          //   console.log(data.data.attemptedPapers);
-          setPapers(data.data.attemptedPapers);
-          setTotal(data.data.attemptedPapers.length);
-
-          setIsLoading(false);
-        }).catch(
-          (error) => {
-            if (error == 403) {
-              swal({
-                title: 'Oh Ohhh',
-                text: 'Please Login Again',
-                icon: 'warn',
-                button: 'Got it',
-              });
-              history.push('/signin');
-            } else {
-              swal({
-                title: 'Oops',
-                text: `Something went wrong ${error}`,
-                icon: 'error',
-                button: 'Got it',
-              });
-            }
-            //   history.push('/');
-          },
-        );
-    }, [],
-  );
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        if (error == 403) {
+          swal({
+            title: 'Oh Ohhh',
+            text: 'Please Login Again',
+            icon: 'warn',
+            button: 'Got it',
+          });
+          history.push('/signin');
+        } else {
+          swal({
+            title: 'Oops',
+            text: `Something went wrong ${error}`,
+            icon: 'error',
+            button: 'Got it',
+          });
+        }
+        //   history.push('/');
+      });
+  }, []);
 
   return (
     <div>
-      {
-    isLoading
-      ? (
+      {isLoading ? (
         <div>
-
           <div className="preloader d-flex align-items-center justify-content-center">
             <div className="preloader-inner position-relative">
               <div className="preloader-circle" />
@@ -83,10 +79,8 @@ function MyAttemptedPapers() {
               </div>
             </div>
           </div>
-
         </div>
-      )
-      : (
+      ) : (
         <div>
           <div className="slider-area">
             <div className="slider-height2 d-flex align-items-center">
@@ -96,14 +90,17 @@ function MyAttemptedPapers() {
                     <div className="hero-cap hero-cap2 text-center">
                       <h2>
                         Your Attempted Papers
-                        {isLoading ? <>IS LOADING..</> : (
-                          <>
-                            :
-                            {total}
-                          </>
-                        )}
+                        {isLoading ? <>IS LOADING..</> : <>
+:{total}</>}
                       </h2>
-                      <button onClick={(e) => history.push('/')} className="btn hero-btn" data-animation="fadeInLeft" data-delay=".8s">Home</button>
+                      <button
+                        onClick={(e) => history.push('/')}
+                        className="btn hero-btn"
+                        data-animation="fadeInLeft"
+                        data-delay=".8s"
+                      >
+                        Home
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -125,61 +122,69 @@ function MyAttemptedPapers() {
                         onChange={(e) => setSerach_item(e.target.value)}
                       />
                       <div className="input-group-append" />
-                      <button className="btns" type="button"><i className="ti-search" /></button>
+                      <button className="btns" type="button">
+                        <i className="ti-search" />
+                      </button>
                     </div>
                   </div>
                   {/* </div> */}
-
                 </form>
               </aside>
             </div>
           </div>
 
           <div className="row">
-
             {search_results.map((paper, key) => (
               <div className="col-xl-4 col-lg-4 col-md-6">
                 <div style={{ padding: '40px' }}>
                   <div className="my-own-card">
-
                     <div className="my-own-name">
                       <div className="hero-cap hero-cap2 text-center">
-                        <h3 style={{ color: 'white' }}>
-                          {' '}
-                          {paper['mockpaper.name']}
-                          {' '}
-                        </h3>
+                        <h3 style={{ color: 'white' }}> 
+{' '}
+{paper['mockpaper.name']}
+{' '}
+ </h3>
                       </div>
                     </div>
                     <div className="my-own-container">
-                      <h5><b /></h5>
+                      <h5>
+                        <b />
+                      </h5>
 
-                      { token.role === 2
-                        ? (
-                          <>
-                            <div className="button-group-area mt-10">
-                              { paper.finished === 1
-                                ? <Link to={`/result/${paper.paperID}/${paper['mockpaper.name']}`} className="genric-btn primary-border small">Result </Link>
-                                : <Link to={`/attemptpaper/${paper.paperID}/${paper['mockpaper.name']}`} className="genric-btn primary-border small">Resume </Link>}
-                            </div>
-
-                          </>
-                        )
-                        : <></>}
-
+                      {token.role === 2 ? (
+                        <>
+                          <div className="button-group-area mt-10">
+                            {paper.finished === 1 ? (
+                              <Link
+                                to={`/result/${paper.paperID}/${paper['mockpaper.name']}`}
+                                className="genric-btn primary-border small"
+                              >
+                                Result
+{' '}
+                              </Link>
+                            ) : (
+                              <Link
+                                to={`/attemptpaper/${paper.paperID}/${paper['mockpaper.name']}`}
+                                className="genric-btn primary-border small"
+                              >
+                                Resume
+{' '}
+                              </Link>
+                            )}
+                          </div>
+                        </>
+                      ) : (
+                        <></>
+                      )}
                     </div>
-
                   </div>
                 </div>
               </div>
             ))}
-
           </div>
-
         </div>
-      )
-
-}
+      )}
     </div>
   );
 }

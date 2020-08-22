@@ -13,16 +13,13 @@ function Admin() {
               <div className="col-xl-12">
                 <div className="hero-cap hero-cap2 text-center">
                   <h2>You are not a valid user </h2>
-
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
     </div>
-
   );
 }
 

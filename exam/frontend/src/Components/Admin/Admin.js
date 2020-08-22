@@ -16,16 +16,13 @@ function Admin() {
                     HI
                     {token ? <>Admin</> : <>Sign In</>}
                   </h2>
-
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
     </div>
-
   );
 }
 
