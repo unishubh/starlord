@@ -32,12 +32,12 @@ function Navbar() {
                 </a>
               </li>
               <li>
-                <a href="#fb">
+                <a href="https://www.facebook.com/prosperityjunction">
                   <i className="fab fa-facebook-f" />
                 </a>
               </li>
               <li>
-                <a href="#lkdin">
+                <a href="https://www.linkedin.com/company/prosperityjunction">
                   <i className="fab fa-linkedin-in" />
                 </a>
               </li>
@@ -54,8 +54,8 @@ function Navbar() {
               <div className="row d-flex justify-content-between align-items-center">
                 <div className="header-info-left">
                   <ul>
-                    <li>needhelp@gmail.com</li>
-                    <li>666 7475 25252</li>
+                    <li>admin@prosperityjunction.com</li>
+                    <li>+919307610900</li>
                   </ul>
                 </div>
                 <div className="header-info-right">
