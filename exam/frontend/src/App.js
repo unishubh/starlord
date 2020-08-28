@@ -52,11 +52,9 @@ function App() {
   // ,[]);
   useEffect(() => {
     if (localStorage.getItem('token')) {
-      console.log(' ha ye toh h ');
       const istoken = localStorage.getItem('token');
       const decoded = jwtDecode(istoken);
       setToken(decoded);
-      console.log(decoded);
     }
   }, []);
 
