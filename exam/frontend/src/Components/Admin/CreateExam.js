@@ -1,20 +1,24 @@
 import React, { useState, useContext } from 'react';
+import AsyncCreatableSelect from 'react-select/async-creatable';
+
 import { useHistory } from 'react-router-dom';
 import swal from 'sweetalert';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { UserContext } from '../UserContext';
 import config from '../config';
 
 function CreateExam() {
   const { token } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(false);
-  const { register, errors, watch, handleSubmit } = useForm();
+  const { register, errors, watch, handleSubmit, control } = useForm();
   const watchMaxMarks = watch('maxMarks', 0);
 
   const history = useHistory();
 
   // Submission Start Here//
   const onSubmit = (values) => {
+    console.log(values);
+    // return;
     setIsLoading(true);
     const accessToken = localStorage.getItem('token');
 
@@ -64,6 +68,43 @@ function CreateExam() {
     // console.log("Exam Done");
   };
 
+  // function to fetch subject list
+
+  const mapOptionsToValues = (options) => {
+    return options.map((option) => ({
+      value: option.id,
+      label: option.name,
+    }));
+  };
+
+  const fetchCategories = (inputValue, callback) => {
+    if (!inputValue) {
+      return callback([]);
+    }
+
+    const fetchURL = `${config.apiUrl}api/category/${inputValue}`;
+    fetch(fetchURL).then((response) => {
+      response.json().then((resp) => {
+        const { data } = resp;
+        if (mapOptionsToValues) callback(mapOptionsToValues(data));
+        else callback(mapOptionsToValues(data));
+      });
+    });
+  };
+  const fetchExams = (inputValue, callback) => {
+    if (!inputValue) {
+      return callback([]);
+    }
+
+    const fetchURL = `${config.apiUrl}api/subject/${inputValue}`;
+    fetch(fetchURL).then((response) => {
+      response.json().then((resp) => {
+        const { data } = resp;
+        if (mapOptionsToValues) callback(mapOptionsToValues(data));
+        else callback(mapOptionsToValues(data));
+      });
+    });
+  };
   // Submission Ends Here
   return (
     <div>
@@ -174,6 +215,37 @@ function CreateExam() {
                         )}
                       </div>
                     </div>
+                    <div className="col-sm-6">
+                      <div className="form-group">
+                        <Controller
+                          as={AsyncCreatableSelect}
+                          name="subject"
+                          control={control}
+                          loadOptions={fetchExams}
+                          placeholder="Choose Subject"
+                          cacheOptions
+                          ref={register({
+                            required: '',
+                          })}
+                        />
+                      </div>
+                    </div>
+                    <div className="col-sm-6">
+                      <div className="form-group">
+                        <Controller
+                          as={AsyncCreatableSelect}
+                          name="category"
+                          control={control}
+                          loadOptions={fetchCategories}
+                          placeholder="Choose Category"
+                          cacheOptions
+                          ref={register({
+                            required: '',
+                          })}
+                        />
+                      </div>
+                    </div>
+
                     <div className="col-12">
                       <div className="form-group">
                         <textarea

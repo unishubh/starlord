@@ -1,12 +1,12 @@
-const db = require('../models') ;
-const sequelize = require('sequelize') ;
-const jwt = require('jsonwebtoken') ;
+const sequelize = require("sequelize");
+const jwt = require("jsonwebtoken");
+const db = require("../models");
 
 async function authenticate({ username, password }) {
-    let user = await db.user.findOne({where: {email}});
-    
-    if (user) {
-        const { password, ...userWithoutPassword } = user;
-        return userWithoutPassword;
-    }
+  const user = await db.user.findOne({ where: { email } });
+
+  if (user) {
+    const { password, ...userWithoutPassword } = user;
+    return userWithoutPassword;
+  }
 }
