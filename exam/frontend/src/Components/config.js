@@ -1,4 +1,4 @@
-const apiUrl = 'http://localhost:5001/';
+const apiUrl = 'https://www.mutualfundcalculator.in/starlord/';
 
 const config = {
   apiUrl,
