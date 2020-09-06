@@ -3,6 +3,7 @@ const db = require("../models");
 const utilities = require("../helpers/utilities");
 const createJSON = require("../helpers/createJSONresponse");
 const paperAttempted = require("../helpers/isAttempted");
+const { calculateResult } = require("../helpers/api-utillities");
 
 exports.createPaper = async (req, res) => {
   const newExamID = req.body.examID;
@@ -135,6 +136,7 @@ exports.endExam = async (req, res) => {
   try {
     const { paperID } = req.params;
     const { userID } = req.user;
+    const totalMarks = 0;
     await db.attemptedPapers.update(
       { finished: true },
       {
@@ -144,7 +146,33 @@ exports.endExam = async (req, res) => {
         },
       }
     );
-    utilities.sendSuccess("Exam Ended", res, paperID);
+
+    const evaluationObj = {};
+    evaluationObj.userRespnse = await db.userPaperResponse.findOne({
+      where: {
+        paperID,
+        userID,
+      },
+      attributes: ["response"],
+      raw: true,
+    });
+    const qnData = await db.questions.findAll({
+      where: { paperID },
+      attributes: ["iid", "qnJSON"],
+      raw: true,
+    });
+    const correctResponse = {};
+    // eslint-disable-next-line no-undef,guard-for-in
+    for (const qn in qnData) {
+      correctResponse[qnData[qn].iid] = qnData[qn].qnJSON;
+    }
+    evaluationObj.correctResponse = correctResponse;
+    evaluationObj.totalMarks = await calculateResult(
+      evaluationObj.correctResponse,
+      evaluationObj.userRespnse.response
+    );
+
+    utilities.sendSuccess("Exam Ended", res, evaluationObj);
   } catch (err) {
     utilities.sendError(`Error :${err}`, res);
   }
@@ -169,10 +197,18 @@ exports.showResults = async (req, res) => {
       raw: true,
     });
     const correctResponse = {};
-    for (qn in qnData) {
+    // eslint-disable-next-line no-undef,guard-for-in
+    for (const qn in qnData) {
       correctResponse[qnData[qn].iid] = qnData[qn].qnJSON;
     }
+
     compare.correctResponse = correctResponse;
+
+    compare.totalMarks = await calculateResult(
+      compare.correctResponse,
+      compare.userRespnse.response
+    );
+
     utilities.sendSuccess("Got responses to compare ", res, compare);
   } catch (err) {
     console.log(err);

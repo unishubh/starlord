@@ -26,6 +26,7 @@ exports.createExam = async (req, res) => {
   const newDetails = req.body.details;
   const newMaxMarks = req.body.maxMarks;
   const newTime = req.body.time;
+  const { passingMarks } = req.body;
   const { subject } = req.body;
   const { category } = req.body;
   console.log(newAgencyID);
@@ -55,6 +56,7 @@ exports.createExam = async (req, res) => {
       name: newName,
       details: newDetails,
       max_marks: newMaxMarks,
+      passingMarks,
       time: newTime,
       subjectID,
       categoryID,

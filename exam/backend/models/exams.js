@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
       time: DataTypes.INTEGER,
       subjectID: DataTypes.UUID,
       categoryID: DataTypes.UUID,
+      passingMarks: DataTypes.INTEGER,
     },
     {}
   );

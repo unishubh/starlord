@@ -141,26 +141,10 @@ function AttemptPaper() {
     setIsLoading(true);
     setIsExamStarted(false);
     clearInterval(interval);
-    // console.log("key ",key);
-    // console.log(JSON.stringify({
-
-    //   paperID:paperID,
-    //   lastQnID:question_no,
-    //   lastQnAns : answer,
-
-    // }));
+    // hitting the question api again to save the answer of last question, not good way, just a hack.
     if (answer !== '') {
       const key = questionNo;
-      // console.log("In Another key is ",key)
-      // console.log(JSON.stringify({
-      //     qnID:key,
-      //     paperID:paperID,
-      //     lastQnID:question_no,
-      //     lastQnAns : answer,
-
-      //   }))
       setIsLoading(true);
-      // console.log("key ",key);
       fetch(`${config.apiUrl}api/question/`, {
         method: 'POST',
         headers: {
@@ -175,15 +159,11 @@ function AttemptPaper() {
         }),
       })
         .then((response) => {
-          // console.log(response);
           setIsLoading(false);
           if (response.ok) return response.json();
-
-          // alert(response.status)
           throw new Error(response.status);
         })
         .then((data) => {
-          // console.log(data);
           setQuestionNo(key);
           setQuestion(data.data.question.question);
           //   setType(data.firstQuestion.qnJSON.type);
@@ -199,49 +179,37 @@ function AttemptPaper() {
           // ALL TIMER
 
           // Duration
-          const durationMili = data.data.duration * 3600000;
-          setDuration(durationMili);
-
-          // start time
-          const dt = new Date(data.data.startTime);
-          const startMili = dt.getTime();
-          // console.log("start time fetched ",start_mili);
-          setStartTime(startMili);
+          // const durationMili = data.data.duration * 3600000;
+          // setDuration(durationMili);
+          //
+          // // start time
+          // const dt = new Date(data.data.startTime);
+          // const startMili = dt.getTime();
+          // // console.log("start time fetched ",start_mili);
+          // setStartTime(startMili);
 
           // end time
-          const finishMili = startMili + durationMili;
-          setEndTime(finishMili);
-
-          // Current Time
-          const currentMili = new Date().getTime();
-
-          // console.log(data.startTime);
-          // console.log(finish_dt);
-
-          if (currentMili > finishMili) {
-            setExamEnded(true);
-            swal({
-              title: 'Already Attempted',
-              text: 'You have already attempted and time is up ',
-              icon: 'warning',
-              button: 'Got it',
-            });
-
-            history.push('/myattemptedpapers');
-          }
+          // const finishMili = startMili + durationMili;
+          // setEndTime(finishMili);
+          //
+          // // Current Time
+          // const currentMili = new Date().getTime();
+          // if (currentMili > finishMili) {
+          //   setExamEnded(true);
+          //   swal({
+          //     title: 'Already Attempted',
+          //     text: 'You have already attempted and time is up ',
+          //     icon: 'warning',
+          //     button: 'Got it',
+          //   });
+          //
+          //   history.push('/myattemptedpapers');
+          // }
           // All Timer
 
-          setMove(false);
-          setUserPaperResponse(data.data.userResponse);
-          setAnswer(data.data.userResponse[key]);
-
-          // Object.keys(userPaperResponse).map((key)=>{
-          //   userPaperResponse[key] = "true";
-          // })
-
-          // Object.keys(data.userResponse).map((key)=>{
-          //   userPaperResponse[key] = "";
-          // })
+          // setMove(false);
+          // setUserPaperResponse(data.data.userResponse);
+          // setAnswer(data.data.userResponse[key]);
         })
         .catch((error) => {
           swal({
@@ -264,18 +232,17 @@ function AttemptPaper() {
       }),
     })
       .then((response) => {
-        // console.log(response);
         setIsLoading(false);
         if (response.ok) return response.json();
 
         // alert(response.status)
         throw new Error(response.status);
       })
-      .then(() => {
-        // console.log(data);
+      .then((data) => {
+        console.log(data);
         swal({
-          title: 'Well !',
-          text: 'Exam is ended',
+          title: 'Exam Ended',
+          text: `Marks Scored : ${data.data.totalMarks}`,
           icon: 'success',
           button: 'Got it',
         });
@@ -330,7 +297,6 @@ function AttemptPaper() {
         throw new Error(response.status);
       })
       .then((data) => {
-        // console.log(data);
         setQuestionNo(key);
         setQuestion(data.data.question.question);
         //   setType(data.firstQuestion.qnJSON.type);
@@ -362,9 +328,6 @@ function AttemptPaper() {
         // Current Time
         const currentMili = new Date().getTime();
 
-        // console.log(data.startTime);
-        // console.log(finish_dt);
-
         if (currentMili > finishMili) {
           setExamEnded(true);
           swal({
@@ -379,14 +342,6 @@ function AttemptPaper() {
         setMove(false);
         setUserPaperResponse(data.data.userResponse);
         setAnswer(data.data.userResponse[key]);
-
-        // Object.keys(userPaperResponse).map((key)=>{
-        //   userPaperResponse[key] = "true";
-        // })
-
-        // Object.keys(data.userResponse).map((key)=>{
-        //   userPaperResponse[key] = "";
-        // })
       })
       .catch((error) => {
         swal({
@@ -468,43 +423,6 @@ function AttemptPaper() {
     }
   }, [examEnded]);
 
-  //  window.addEventListener('beforeunload',(event)=>{
-  //    event.preventDefault();
-
-  //    event.returnValue = "Your Exam will be Ended";
-  //  })
-  // const Hi = () => {
-  //   const f = 0;
-  //   // console.log("hi called")
-  // };
-  // window.addEventListener('beforeunload', (event) => {
-  //   // Cancel the event as stated by the standard.
-
-  //   event.preventDefault();
-  //   event.returnValue = 'Are You sure ?';
-  //   swal({
-  //     title: "Are you sure?",
-  //     text: "If you leave, your exam will be ended",
-  //     icon: "warning",
-  //     buttons: true,
-  //     dangerMode: true,
-  //   })
-  //   .then((willDelete) => {
-  //     if (willDelete) {
-  //       EndExam();
-  //     } else {
-  //       swal("Continue with your exam!");
-  //     }
-  //   });
-
-  // Chrome requires returnValue to be set.
-  // EndExam();
-
-  // });
-  // const onConfirm = () => {
-  //   // console.log("confrim")
-  // };
-
   return (
     <div>
       <Prompt when={isExamStarted} message="Are you sure ? Your Exam will be ended" />
@@ -527,7 +445,7 @@ function AttemptPaper() {
               <></>
             ) : (
               <button type="button" onClick={EndExam} className="genric-btn danger-border circle">
-                End Exam
+                Submit Exam
               </button>
             )}
           </div>
