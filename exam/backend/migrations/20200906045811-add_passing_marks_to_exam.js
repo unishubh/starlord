@@ -1,17 +1,18 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
+    await queryInterface.addColumn("exams", "passingMarks", {
+      type: Sequelize.INTEGER,
+    });
     /**
      * Add altering commands here.
      *
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-    await queryInterface.changeColumn("exams", "details", {
-      type: Sequelize.TEXT,
-    });
   },
 
   down: async (queryInterface, Sequelize) => {
+    await queryInterface.removeColumn("exams", "passingMarks");
     /**
      * Add reverting commands here.
      *

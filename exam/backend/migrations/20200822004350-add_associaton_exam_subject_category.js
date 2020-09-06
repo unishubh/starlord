@@ -1,5 +1,3 @@
-'use strict';
-
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     /**
@@ -8,36 +6,27 @@ module.exports = {
      * Example:
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
-  try {
-    await queryInterface.addColumn(
-      'exams',
-      'subjectID',
-      {
-        type:Sequelize.UUID,
-        allowNull:true,
-        references:{
-          model:'subjects',
-          key:'id',
-        }
-      }
-    );
+    try {
+      await queryInterface.addColumn("exams", "subjectID", {
+        type: Sequelize.UUID,
+        allowNull: true,
+        references: {
+          model: "subjects",
+          key: "id",
+        },
+      });
 
-    await queryInterface.addColumn(
-      'exams',
-      'categoryID',
-      {
-        type:Sequelize.UUID,
-        allowNull:true,
-        references:{
-          model:'categories',
-          key:'id',
-        }
-      }
-    );
-  } catch (e) {
-    console.log(e);
-  }
-
+      await queryInterface.addColumn("exams", "categoryID", {
+        type: Sequelize.UUID,
+        allowNull: true,
+        references: {
+          model: "categories",
+          key: "id",
+        },
+      });
+    } catch (e) {
+      console.log(e);
+    }
   },
 
   down: async (queryInterface, Sequelize) => {
@@ -48,19 +37,11 @@ module.exports = {
      * await queryInterface.dropTable('users');
      */
     try {
-      await queryInterface.removeColumn(
-        'exams',
-        'subjectID',
-      )
+      await queryInterface.removeColumn("exams", "subjectID");
 
-      await queryInterface.removeColumn(
-        'exams',
-        'categoryID',
-      )
+      await queryInterface.removeColumn("exams", "categoryID");
     } catch (e) {
       console.log(e);
     }
-
-
-  }
+  },
 };

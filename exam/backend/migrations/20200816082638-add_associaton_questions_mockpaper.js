@@ -1,9 +1,7 @@
-'use strict';
-
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    let s = await queryInterface.getForeignKeysForTables(['mockpapers']) ;
-    console.log(s)
+    const s = await queryInterface.getForeignKeysForTables(["mockpapers"]);
+    console.log(s);
   },
 
   down: async (queryInterface, Sequelize) => {
@@ -13,5 +11,5 @@ module.exports = {
      * Example:
      * await queryInterface.dropTable('users');
      */
-  }
+  },
 };

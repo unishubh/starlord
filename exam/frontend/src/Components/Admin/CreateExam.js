@@ -176,7 +176,7 @@ function CreateExam() {
                         <input
                           className="form-control"
                           type="number"
-                          name="passMarks"
+                          name="passingMarks"
                           placeholder="Passing Marks"
                           ref={register({
                             required: 'Passing marks are required',

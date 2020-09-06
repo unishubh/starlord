@@ -1,32 +1,31 @@
-'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('subscriptions', {
+    return queryInterface.createTable("subscriptions", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       userID: {
         type: Sequelize.UUID,
-        allowNull: false
+        allowNull: false,
       },
       examID: {
         type: Sequelize.UUID,
-        allowNull: false
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('subscriptions');
-  } 
+    return queryInterface.dropTable("subscriptions");
+  },
 };
