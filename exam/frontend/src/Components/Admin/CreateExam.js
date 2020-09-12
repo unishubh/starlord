@@ -6,6 +6,7 @@ import swal from 'sweetalert';
 import { useForm, Controller } from 'react-hook-form';
 import { UserContext } from '../UserContext';
 import config from '../config';
+import { fetchCategories, fetchExams } from '../../utils/fetcher';
 
 function CreateExam() {
   const { token } = useContext(UserContext);
@@ -77,34 +78,6 @@ function CreateExam() {
     }));
   };
 
-  const fetchCategories = (inputValue, callback) => {
-    if (!inputValue) {
-      return callback([]);
-    }
-
-    const fetchURL = `${config.apiUrl}api/category/${inputValue}`;
-    fetch(fetchURL).then((response) => {
-      response.json().then((resp) => {
-        const { data } = resp;
-        if (mapOptionsToValues) callback(mapOptionsToValues(data));
-        else callback(mapOptionsToValues(data));
-      });
-    });
-  };
-  const fetchExams = (inputValue, callback) => {
-    if (!inputValue) {
-      return callback([]);
-    }
-
-    const fetchURL = `${config.apiUrl}api/subject/${inputValue}`;
-    fetch(fetchURL).then((response) => {
-      response.json().then((resp) => {
-        const { data } = resp;
-        if (mapOptionsToValues) callback(mapOptionsToValues(data));
-        else callback(mapOptionsToValues(data));
-      });
-    });
-  };
   // Submission Ends Here
   return (
     <div>

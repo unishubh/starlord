@@ -1,13 +1,27 @@
 const uuid = require("uuid");
+const Sequelize = require("sequelize");
 const db = require("../models");
+
+const { Op } = Sequelize;
 const utilities = require("../helpers/utilities");
 const { adderUtil } = require("../helpers/api-utillities");
 const paperAttempted = require("../helpers/isAttempted");
 
 exports.getAllExams = async (req, res) => {
+  const { subjectID } = req.body;
+  const { categoryID } = req.body;
   try {
-    const { count, rows } = await db.exams.findAndCountAll();
-    const subscribedExams = await db.subscriptions.findAndCountAll();
+    const condition = {};
+    if (subjectID) {
+      condition[Op.and] = { subjectID };
+    }
+    if (categoryID) {
+      condition[Op.and] = { categoryID };
+    }
+    const { count, rows } = await db.exams.findAndCountAll({
+      where: condition,
+    });
+    const subscribedExams = await db.subscriptions.findAndCountAll(condition);
     const exams = {};
     exams.examcount = count;
     exams.examdata = rows;

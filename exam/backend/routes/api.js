@@ -49,7 +49,7 @@ router.get(
   examController.getExamsByAgencyID
 );
 // getAll exams
-router.get("/exam", examController.getAllExams);
+router.post("/getExams/", examController.getAllExams);
 
 // create a paper in the given examID
 router.post(

@@ -18,7 +18,10 @@ exports.addSubject = async (req, res) => {
 };
 
 module.exports.getSubjects = async (req, res) => {
-  const { query } = req.params;
+  let { query } = req.params;
+  if (query === "trick") {
+    query = "";
+  }
 
   try {
     const sub = await db.subjects.findAll({

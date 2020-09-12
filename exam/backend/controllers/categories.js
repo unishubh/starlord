@@ -18,8 +18,10 @@ exports.addCategory = async (req, res) => {
 };
 
 module.exports.getCategories = async (req, res) => {
-  const { query } = req.params;
-
+  let { query } = req.params;
+  if (query === "trick") {
+    query = "";
+  }
   try {
     const sub = await db.categories.findAll({
       where: {

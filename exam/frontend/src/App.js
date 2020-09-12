@@ -36,20 +36,6 @@ function App() {
   const [token, setToken] = useState(null);
   const [isExamStarted, setIsExamStarted] = useState(null);
 
-  // useEffect ( async () => {
-  //   const istoken = await localStorage.getItem("token");
-  // if(istoken ){
-  //   var jwtDecode = require('jwt-decode');
-  //   var decoded = await jwtDecode(istoken);
-
-  //   setToken(decoded);
-
-  // }
-  // else{
-  // console.log("token is yhhh  ",token);
-  // }
-  // }
-  // ,[]);
   useEffect(() => {
     if (localStorage.getItem('token')) {
       const istoken = localStorage.getItem('token');
@@ -58,13 +44,6 @@ function App() {
     }
   }, []);
 
-  // useEffect (
-  //   () => {
-  //     console.log("token is " ,token);
-  //     if(token)
-  //     console.log("token role ", token.role);
-  //   },[token]
-  // );
   return (
     <div>
       <UserContext.Provider value={{ token, setToken, isExamStarted, setIsExamStarted }}>
