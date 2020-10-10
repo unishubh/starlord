@@ -1,4 +1,5 @@
 # Starlord
+![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square) [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
 
 Starlord is a full fledged online examination solution. It holds the functionality to create as well as attempt examinations.
 
@@ -13,7 +14,7 @@ Starlord is a full fledged online examination solution. It holds the functionali
   - You can register as a student and then login with the same credentials
 
 
-
+    
 
 ### Tech
 
