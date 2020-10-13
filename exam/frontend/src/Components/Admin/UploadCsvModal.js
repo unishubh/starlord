@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { useDropzone } from 'react-dropzone';
+import createQuestionsFromCsv from '../../utils/createQuestionsFromCsv';
 
 export default function UploadCsvModal() {
   const [visible, setVisibility] = useState(false);
@@ -25,7 +26,8 @@ export default function UploadCsvModal() {
       console.log(acceptedFiles);
 
       if (acceptedFiles.length > 1 || acceptedFiles.length === 0) {
-        alert('ruh roh');
+        // do something here, based on your preference
+        // e.g. tell them files were not compatible
         return;
       }
 
@@ -39,14 +41,17 @@ export default function UploadCsvModal() {
         // Do whatever you want with the file contents
         const binaryStr = reader.result;
         setCsvData(binaryStr);
+        const questions = createQuestionsFromCsv(binaryStr);
 
-        alert(binaryStr);
+        // TODO: do what you want with this, this is an array of question objects based on the structure of the
+        // csv format.
+        console.log(questions);
       };
       reader.readAsText(file);
     },
     [setCsvData]
   );
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, accept: ['text/CSV', 'text/csv'] });
 
   return (
     <React.Fragment>
