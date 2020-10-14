@@ -11,7 +11,6 @@ function YouLost() {
       icon: 'warning',
       button: 'Got it',
     });
-    history.push('/');
   }, []);
   return <div />;
 }
