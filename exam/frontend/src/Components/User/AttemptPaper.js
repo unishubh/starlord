@@ -245,8 +245,7 @@ function AttemptPaper() {
           text: `Marks Scored : ${data.data.totalMarks}`,
           icon: 'success',
           button: 'Got it',
-        });
-        history.push('/');
+        }).then(history.push(`/result/${paperID}/${paperName}`));
       })
       .catch((error) => {
         swal({
