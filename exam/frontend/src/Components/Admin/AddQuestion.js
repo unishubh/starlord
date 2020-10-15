@@ -3,6 +3,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import swal from 'sweetalert';
 import Select from 'react-select';
 import config from '../config';
+import UploadCsvModal from './UploadCsvModal';
 
 function AddQestion() {
   const types = [
@@ -327,6 +328,8 @@ function AddQestion() {
                     <button type="button" className="button button-contactForm boxed-btn" onClick={handleSubmit}>
                       Preview Papaer
                     </button>
+                    &nbsp;&nbsp;
+                    <UploadCsvModal />
                     &nbsp;&nbsp;
                     <button
                       type="button"
