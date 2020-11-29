@@ -1,47 +1,41 @@
-import React, { useEffect, useContext, useState } from "react";
-import { useHistory, Link } from "react-router-dom";
-import { UserContext } from "../UserContext";
-import swal from "sweetalert";
-import { TableSortLabel } from "@material-ui/core";
-import config from "../config";
+import React, { useEffect, useContext, useState } from 'react';
+import { useHistory, Link } from 'react-router-dom';
+import swal from 'sweetalert';
+import { UserContext } from '../UserContext';
+import config from '../config';
 
 function MyAttemptedPapers() {
-  const accessToken = localStorage.getItem("token");
-  const { token, setToken } = useContext(UserContext);
+  const accessToken = localStorage.getItem('token');
+  const { token } = useContext(UserContext);
   const history = useHistory();
   const [isLoading, setIsLoading] = useState(false);
   const [papers, setPapers] = useState([]);
   const [total, setTotal] = useState(0);
-  const [search_item, setSerach_item] = useState("");
-  const [search_results, setSearch_result] = useState([]);
+  const [searchItem, setSerachItem] = useState('');
+  const [searchResults, setSearchResult] = useState([]);
   useEffect(() => {
-    {
-      const results = papers.filter((paper) =>
-        paper["mockpaper.name"]
-          .toLowerCase()
-          .includes(search_item.toLocaleLowerCase())
-      );
-      setSearch_result(results);
-    }
-  }, [search_item, papers]);
+    const results = papers.filter((paper) =>
+      paper['mockpaper.name'].toLowerCase().includes(searchItem.toLocaleLowerCase())
+    );
+    setSearchResult(results);
+  }, [searchItem, papers]);
   useEffect(() => {
     setIsLoading(true);
     // console.log("uius");
-    fetch(config.apiUrl + "api/paper/attempted ", {
-      method: "GET",
+    fetch(`${config.apiUrl}api/paper/attempted `, {
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + accessToken,
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
       },
     })
       .then((response) => {
         // console.log(response);
         setIsLoading(false);
         if (response.ok) return response.json();
-        else {
-          // alert(response.status)
-          throw new Error(response.status);
-        }
+
+        // alert(response.status)
+        throw new Error(response.status);
       })
       .then((data) => {
         //   console.log(data.data.attemptedPapers);
@@ -51,20 +45,20 @@ function MyAttemptedPapers() {
         setIsLoading(false);
       })
       .catch((error) => {
-        if (error == 403) {
+        if (error === 403) {
           swal({
-            title: "Oh Ohhh",
-            text: "Please Login Again",
-            icon: "warn",
-            button: "Got it",
+            title: 'Oh Ohhh',
+            text: 'Please Login Again',
+            icon: 'warn',
+            button: 'Got it',
           });
-          history.push("/signin");
+          history.push('/signin');
         } else {
           swal({
-            title: "Oops",
-            text: "Something went wrong " + error,
-            icon: "error",
-            button: "Got it",
+            title: 'Oops',
+            text: `Something went wrong ${error}`,
+            icon: 'error',
+            button: 'Got it',
           });
         }
         //   history.push('/');
@@ -77,7 +71,7 @@ function MyAttemptedPapers() {
         <div>
           <div className="preloader d-flex align-items-center justify-content-center">
             <div className="preloader-inner position-relative">
-              <div className="preloader-circle"></div>
+              <div className="preloader-circle" />
               <div className="preloader-img pere-text">
                 <img src="assets/img/logo/loder.png" alt="" />
               </div>
@@ -94,10 +88,11 @@ function MyAttemptedPapers() {
                     <div className="hero-cap hero-cap2 text-center">
                       <h2>
                         Your Attempted Papers
-                        {isLoading ? <>IS LOADING..</> : <>: {total}</>}
+                        {isLoading ? <>IS LOADING..</> : <>:{total}</>}
                       </h2>
                       <button
-                        onClick={(e) => history.push("/")}
+                        type="button"
+                        onClick={() => history.push('/')}
                         className="btn hero-btn"
                         data-animation="fadeInLeft"
                         data-delay=".8s"
@@ -110,23 +105,23 @@ function MyAttemptedPapers() {
               </div>
             </div>
           </div>
-          <div className="about-details section-padding10"></div>
-          <div class="col-lg-4">
-            <div class="blog_right_sidebar">
-              <aside class="single_sidebar_widget search_widget">
+          <div className="about-details section-padding10" />
+          <div className="col-lg-4">
+            <div className="blog_right_sidebar">
+              <aside className="single_sidebar_widget search_widget">
                 <form>
-                  <div class="form-group">
-                    <div class="input-group mb-3">
+                  <div className="form-group">
+                    <div className="input-group mb-3">
                       <input
                         type="text"
-                        class="form-control"
+                        className="form-control"
                         placeholder="Search Your Attempted Papers"
-                        value={search_item}
-                        onChange={(e) => setSerach_item(e.target.value)}
+                        value={searchItem}
+                        onChange={(e) => setSerachItem(e.target.value)}
                       />
-                      <div class="input-group-append"></div>
-                      <button class="btns" type="button">
-                        <i class="ti-search"></i>
+                      <div className="input-group-append" />
+                      <button className="btns" type="button">
+                        <i className="ti-search" />
                       </button>
                     </div>
                   </div>
@@ -137,49 +132,36 @@ function MyAttemptedPapers() {
           </div>
 
           <div className="row">
-            {search_results.map((paper, key) => (
+            {searchResults.map((paper) => (
               <div className="col-xl-4 col-lg-4 col-md-6">
-                <div style={{ padding: "40px" }}>
+                <div style={{ padding: '40px' }}>
                   <div className="my-own-card">
                     <div className="my-own-name">
                       <div className="hero-cap hero-cap2 text-center">
-                        <h3 style={{ color: "white" }}>
-                          {" "}
-                          {paper["mockpaper.name"]}{" "}
-                        </h3>
+                        <h3 style={{ color: 'white' }}> {paper['mockpaper.name']} </h3>
                       </div>
                     </div>
                     <div className="my-own-container">
                       <h5>
-                        <b></b>
+                        <b />
                       </h5>
 
-                      {token.role == 2 ? (
+                      {token.role === 2 ? (
                         <>
                           <div className="button-group-area mt-10">
                             {paper.finished === 1 ? (
                               <Link
-                                to={
-                                  "/result/" +
-                                  paper["paperID"] +
-                                  "/" +
-                                  paper["mockpaper.name"]
-                                }
+                                to={`/result/${paper.paperID}/${paper['mockpaper.name']}`}
                                 className="genric-btn primary-border small"
                               >
-                                Result{" "}
+                                Result{' '}
                               </Link>
                             ) : (
                               <Link
-                                to={
-                                  "/attemptpaper/" +
-                                  paper["paperID"] +
-                                  "/" +
-                                  paper["mockpaper.name"]
-                                }
+                                to={`/attemptpaper/${paper.paperID}/${paper['mockpaper.name']}`}
                                 className="genric-btn primary-border small"
                               >
-                                Resume{" "}
+                                Resume{' '}
                               </Link>
                             )}
                           </div>

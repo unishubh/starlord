@@ -1,0 +1,13 @@
+{
+  "name": "starlord",
+  "version": "1.0.0",
+  "description": "![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square) [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)",
+  "scripts": {
+    "dev": "concurrently \"cd exam/backend && npm run dev\"  \"cd exam/frontend && npm start\""
+  },
+  "keywords": [],
+  "author": "",
+  "devDependencies": {
+    "concurrently": "^5.3.0"
+  }
+}

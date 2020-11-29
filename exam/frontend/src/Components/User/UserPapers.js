@@ -1,40 +1,38 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Link, useParams, useHistory } from "react-router-dom";
-import { UserContext } from "../UserContext";
-import swal from "sweetalert";
-import Select from "react-select";
-import config from "../config";
+import React, { useContext, useEffect, useState } from 'react';
+import { Link, useParams, useHistory } from 'react-router-dom';
+import swal from 'sweetalert';
+import { UserContext } from '../UserContext';
+import config from '../config';
 
 function UserPapers() {
-  const { token, setToken } = useContext(UserContext);
-  const [options, setOptions] = useState([]);
+  const { token } = useContext(UserContext);
+  // const [options, setOptions] = useState([]);
   // const [examID,setExamID] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [examName, setExamName] = useState("");
-  const [papers, setPapers] = useState([]);
+  // const [examName, setExamName] = useState('');
+  const [papers] = useState([]);
   const [papercount, setPapercount] = useState(null);
   const { examID } = useParams();
-  const accessToken = localStorage.getItem("token");
+  const accessToken = localStorage.getItem('token');
   const history = useHistory();
   useEffect(() => {
     setIsLoading(true);
     // console.log("uius");
     //  console.log(examID);
-    fetch(config.apiUrl + "api/paper/exam/" + examID, {
-      method: "GET",
+    fetch(`${config.apiUrl}api/paper/exam/${examID}`, {
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + accessToken,
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
       },
     })
       .then((response) => {
         // console.log(response);
         setIsLoading(false);
         if (response.ok) return response.json();
-        else {
-          // alert(response.status)
-          throw new Error(response.status);
-        }
+
+        // alert(response.status)
+        throw new Error(response.status);
       })
       .then((data) => {
         // console.log(data);
@@ -42,25 +40,25 @@ function UserPapers() {
         let c = 0;
         const attempted = data.attemptedPapers;
         const papers1 = data.paperdata;
-        papers1.map((paper, i) => {
+        papers1.forEach((paper) => {
           let f = 0;
-          attempted.map((attempt, key) => {
-            if (attempt.paperID == paper.id) {
+          attempted.forEach((attempt) => {
+            if (attempt.paperID === paper.id) {
               f = 1;
             }
           });
-          if (f == 0) {
+          if (f === 0) {
             papers.push(paper);
-            c = c + 1;
+            c += 1;
           }
         });
 
         setPapercount(c);
-        if (c == 0) {
+        if (c === 0) {
           swal({
-            title: "Oh",
-            text: "There is no paper left to attempt ",
-            icon: "warning",
+            title: 'Oh',
+            text: 'There is no paper left to attempt ',
+            icon: 'warning',
           });
           window.history.back();
         }
@@ -68,20 +66,20 @@ function UserPapers() {
         setIsLoading(false);
       })
       .catch((error) => {
-        if (error == 403) {
+        if (error === 403) {
           swal({
-            title: "Oh Ohhh",
-            text: "Please Login Again",
-            icon: "warn",
-            button: "Got it",
+            title: 'Oh Ohhh',
+            text: 'Please Login Again',
+            icon: 'warn',
+            button: 'Got it',
           });
-          history.push("/signin");
+          history.push('/signin');
         } else {
           swal({
-            title: "Oops",
-            text: "This exam have no papers yet ",
-            icon: "error",
-            button: "Got it",
+            title: 'Oops',
+            text: 'This exam have no papers yet ',
+            icon: 'error',
+            button: 'Got it',
           });
         }
         //   history.push('/');
@@ -93,7 +91,7 @@ function UserPapers() {
         <div>
           <div className="preloader d-flex align-items-center justify-content-center">
             <div className="preloader-inner position-relative">
-              <div className="preloader-circle"></div>
+              <div className="preloader-circle" />
               <div className="preloader-img pere-text">
                 <img src="assets/img/logo/loder.png" alt="" />
               </div>
@@ -110,10 +108,11 @@ function UserPapers() {
                     <div className="hero-cap hero-cap2 text-center">
                       <h2>
                         Your Papers
-                        {isLoading ? <>IS LOADING..</> : <> : {papercount}</>}
+                        {isLoading ? <>IS LOADING..</> : <> :{papercount}</>}
                       </h2>
                       <button
-                        onClick={(e) => window.history.back()}
+                        type="button"
+                        onClick={() => window.history.back()}
                         className="btn hero-btn"
                         data-animation="fadeInLeft"
                         data-delay=".8s"
@@ -126,30 +125,28 @@ function UserPapers() {
               </div>
             </div>
           </div>
-          <div className="about-details section-padding10"></div>
+          <div className="about-details section-padding10" />
 
           <div className="row">
-            {papers.map((paper, key) => (
+            {papers.map((paper) => (
               <div className="col-xl-4 col-lg-4 col-md-6">
-                <div style={{ padding: "40px" }}>
+                <div style={{ padding: '40px' }}>
                   <div className="my-own-card">
                     <div className="my-own-name">
                       <div className="hero-cap hero-cap2 text-center">
-                        <h3 style={{ color: "white" }}> {paper.name} </h3>
+                        <h3 style={{ color: 'white' }}> {paper.name} </h3>
                       </div>
                     </div>
                     <div className="my-own-container">
                       <h5>
-                        <b>Total Qns : {paper.totalQns}</b>
+                        <b>Total Qns :{paper.totalQns}</b>
                       </h5>
 
-                      {token.role == 2 ? (
+                      {token.role === 2 ? (
                         <>
                           <div className="button-group-area mt-10">
                             <Link
-                              to={
-                                "/attemptpaper/" + paper.id + "/" + paper.name
-                              }
+                              to={`/attemptpaper/${paper.id}/${paper.name}`}
                               className="genric-btn primary-border small"
                             >
                               Attempt Now
@@ -167,8 +164,8 @@ function UserPapers() {
           </div>
         </div>
       )}
-      <br></br>
-      <br></br>
+      <br />
+      <br />
     </div>
   );
 }
