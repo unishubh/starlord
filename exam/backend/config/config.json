@@ -1,8 +1,8 @@
 
 {
   "development": {
-    "username": "newuser",
-    "password": "Password123",
+    "username": "root",
+    "password": "arpitarpit",
     "database": "starlord",
     "host": "127.0.0.1",
     "dialect": "mysql",
