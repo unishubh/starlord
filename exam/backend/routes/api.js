@@ -11,6 +11,18 @@ const cateoryController = require("../controllers/categories");
 
 const router = express.Router();
 
+// Used for uploading question image
+const bodyparser = require('body-parser');
+const morgan = require('morgan');
+const multiparty = require("connect-multiparty");
+const MultipartyMiddleware = multiparty({uploadDir:'../images'});
+const path = require('path');
+const app = express();
+const fs = require("fs");
+
+
+//
+
 // register
 router.post("/register/", userController.addUser);
 // login
@@ -99,6 +111,16 @@ router.post(
   admin_auth.basicAuth,
   questionController.InsertQuestions
 );
+
+// add image to the question
+
+
+router.post(
+  "/uploads",
+  MultipartyMiddleware,
+  questionController.insertQuestionImage
+ )
+
 // get next question of the exam currently being attempted
 router.post(
   "/question",

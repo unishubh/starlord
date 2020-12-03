@@ -7,6 +7,12 @@ const app = express();
 const port = process.env.PORT || 5001;
 const uuid = require("uuid");
 
+
+const path = require('path');
+var path_upload = path.join(__dirname,"../uploads");
+console.log("Hiii", path_upload);
+app.use("/q",express.static(path_upload));
+
 app.use(express.json());
 app.use(cors());
 
@@ -24,6 +30,17 @@ db.sequelize
 const apiRouter = require("./routes/api");
 
 app.use("/api", apiRouter);
+app.get("/",(req,res)=>{
+  const hi = process.env.JWT_SECRET;
+  console.log(process.env);
+  res.status(200).json({
+    "message": hi
+  })
+});
+// app.post("/uploads",MultipartyMiddleware,(req,res)=>{
+//   console.log(req.files.upload);
+//   res.status(200).json({"message":"Image Uploaded"});
+// })
 
 Umzug.UzmugClient.pending().then(function (migrations) {
   // "migrations" will be an Array with the names of

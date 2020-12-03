@@ -4,6 +4,9 @@ import swal from 'sweetalert';
 import Select from 'react-select';
 import config from '../config';
 import UploadCsvModal from './UploadCsvModal';
+import {CKEditor} from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+// import ImageResize from '@ckeditor/ckeditor5-image/src/imageresize'
 
 function AddQestion() {
   const types = [
@@ -15,6 +18,7 @@ function AddQestion() {
   // console.log(paperid);
   // const [questions,setQuestions] = useState([]);
   const [question, setQuestion] = useState('');
+  const [imageHtml,setImageHtml] = useState('');
   const [options, setOptions] = useState([]);
   const [optionsfake, setOptionsfake] = useState([]);
   const [option, setOption] = useState('');
@@ -131,6 +135,12 @@ function AddQestion() {
     }
   };
 
+  const handleEditorChange = (event,editor) => {
+    const data = editor.getData();
+
+    setImageHtml(data);
+  };
+
   useEffect(() => {
     fetcher();
   }, []);
@@ -231,6 +241,7 @@ function AddQestion() {
           type,
           posMark,
           negMark,
+          imageHtml
         });
       } else {
         bodydata = JSON.stringify({
@@ -240,6 +251,7 @@ function AddQestion() {
           type,
           posMark,
           negMark,
+          imageHtml
         });
       }
       setCorrect(null);
@@ -375,6 +387,37 @@ function AddQestion() {
                             onChange={(e) => setQuestion(e.target.value)}
                           />
                           {count <= 0 ? <></> : <div style={{ fontSize: 12, color: 'red' }}>{questionError}</div>}
+                        </div>
+                      </div>
+                      <div className="col-12">
+                          <div className="form-group">
+                         
+                          <h5> Upload Image </h5>
+                          
+                        <CKEditor
+                          editor = {ClassicEditor}
+                          onInit = { editor => {
+
+                          }}
+                          config = {
+                            {
+                              // plugins: [ImageResize],
+                              toolbar: {
+                                items: [
+                                  
+                                  '|',
+                                  'imageUpload',
+                                  'undo',
+                                  'redo'
+                                ]
+                              },
+                              ckfinder: {
+                                uploadUrl:"http://localhost:5001/api/uploads/"
+                              }
+                            }
+                          }
+                        onChange = {handleEditorChange}
+                        />
                         </div>
                       </div>
                       {type !== 'INT' && finishAddQuestion === false ? (

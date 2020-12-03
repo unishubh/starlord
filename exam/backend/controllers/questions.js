@@ -3,6 +3,13 @@ const validators = require("../utilities/validations/admin_authorize");
 const utilities = require("../helpers/utilities");
 const db = require("../models");
 const updateResponse = require("../helpers/updateUserResponse");
+const bodyparser = require('body-parser');
+const morgan = require('morgan');
+const multiparty = require("connect-multiparty");
+const MultipartyMiddleware = multiparty({uploadDir:'../images'});
+const path = require('path');
+const fs = require("fs");
+import config from '../config'
 
 module.exports.InsertQuestions = async (req, res) => {
   const { paperID } = req.params;
@@ -124,3 +131,24 @@ module.exports.getNumberOfQuestions = async (req, res) => {
     utilities.sendError(e, res);
   }
 };
+
+module.exports.insertQuestionImage =  (req,res)=>{
+  var TempFile = req.files.upload;
+  var TempPathfile = TempFile.path;
+  var date = new Date();
+  var date_string = date.toString();
+  const targetPathUrl = path.join(__dirname,"../../uploads/"+date_string+TempFile.name);
+
+  if(path.extname(TempFile.originalFilename).toLowerCase()=== ".png" || ".jpeg" || ".jpg" || ".svg"){
+    
+    fs.rename(TempPathfile,targetPathUrl, err=>{
+      res.status(200).json({
+        uploaded:true,
+        url:`${config.apiUrl}`+"q/"+date_string+`${TempFile.originalFilename}`
+      });
+      if(err) return console.log(err);
+    })
+
+  }
+ 
+}
