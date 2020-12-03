@@ -9,6 +9,7 @@ const multiparty = require("connect-multiparty");
 const MultipartyMiddleware = multiparty({uploadDir:'../images'});
 const path = require('path');
 const fs = require("fs");
+import config from '../config'
 
 module.exports.InsertQuestions = async (req, res) => {
   const { paperID } = req.params;
@@ -143,7 +144,7 @@ module.exports.insertQuestionImage =  (req,res)=>{
     fs.rename(TempPathfile,targetPathUrl, err=>{
       res.status(200).json({
         uploaded:true,
-        url:"http://localhost:5001/q/"+date_string+`${TempFile.originalFilename}`
+        url:`${config.apiUrl}`+"q/"+date_string+`${TempFile.originalFilename}`
       });
       if(err) return console.log(err);
     })
