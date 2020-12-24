@@ -25,20 +25,24 @@ const apiRouter = require("./routes/api");
 
 app.use("/api", apiRouter);
 
-Umzug.UzmugClient.pending().then(function (migrations) {
-  // "migrations" will be an Array with the names of
-  // pending migrations.
-  Umzug.UzmugClient.execute({
-    migrations,
-    method: "up",
-  }).then(function (migrations) {
-    // "migrations" will be an Array of all executed/reverted migrations.
-    // start the server
-    app.listen(port, () => {
-      console.log(`Server is running on port : ${port}`);
-    });
-    // do your stuff
-  });
+// Umzug.UzmugClient.pending().then(function (migrations) {
+//   // "migrations" will be an Array with the names of
+//   // pending migrations.
+//   Umzug.UzmugClient.execute({
+//     migrations,
+//     method: "up",
+//   }).then(function (migrations) {
+//     // "migrations" will be an Array of all executed/reverted migrations.
+//     // start the server
+//     app.listen(port, () => {
+//       console.log(`Server is running on port : ${port}`);
+//     });
+//     // do your stuff
+//   });
+// });
+
+app.listen(port, () => {
+  console.log(`Server is running on port : ${port}`);
 });
 
 // 358ab7f0-b758-11ea-97e5-87ba4b5fa945

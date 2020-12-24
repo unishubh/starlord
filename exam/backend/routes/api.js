@@ -8,6 +8,7 @@ const examController = require("../controllers/exams");
 const paperController = require("../controllers/paper");
 const subjectController = require("../controllers/subjects");
 const cateoryController = require("../controllers/categories");
+const planController = require("../controllers/plan");
 
 const router = express.Router();
 
@@ -123,5 +124,15 @@ router.post("/category", cateoryController.addCategory);
 router.get("/category/:query", cateoryController.getCategories);
 // verify categories
 router.post("/category/verify/:categoryID", cateoryController.verifyCategory);
+
+
+//plans
+router.post("/plan", planController.addPlan);
+//get plans
+router.get("/plan", planController.getPlans);
+//get plan by id
+router.get("/plan/:planId", planController.getPlanById);
+//update a plan
+router.put("/plan/:query", planController.updatePlan);
 
 module.exports = router;
